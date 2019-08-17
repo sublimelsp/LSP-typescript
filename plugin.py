@@ -19,10 +19,10 @@ server_path = os.path.join(
 
 
 def plugin_loaded():
-    print('LSP-typescript: Server {} installed.'.format('is' if os.path.isfile(server_path) else 'is not' ))
+    print('LSP-typescript: Server {} installed.'.format('is' if os.path.exists(server_path) else 'is not' ))
 
     # install the node_modules if not installed
-    if not os.path.isdir(os.path.isfile(server_path)):
+    if not os.path.isdir(os.path.join(package_path, 'node_modules')):
         # this will be called only when the plugin gets:
         # - installed for the first time,
         # - or when updated on package control
@@ -82,7 +82,9 @@ class LspTypescriptPlugin(LanguageHandler):
             binary_args=[
                 'node',
                 server_path,
-                '--stdio'
+                '--stdio',
+                "--globalPlugins", "typescript-eslint-language-service",
+                "--traceToConsole", "true"
             ],
             tcp_port=None,
             enabled=True,

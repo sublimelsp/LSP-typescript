@@ -9,6 +9,7 @@
   "author": "Предраг Николић",
   "license": "MIT",
   "dependencies": {
-    "lsp-tsserver": "0.0.4"
+    "lsp-tsserver": "0.0.4",
+    "typescript-eslint-language-service": "^1.4.0"
   }
 }
