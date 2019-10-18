@@ -5,24 +5,41 @@ import threading
 import subprocess
 
 from LSP.plugin.core.handlers import LanguageHandler
-from LSP.plugin.core.settings import ClientConfig, LanguageConfig
+from LSP.plugin.core.settings import ClientConfig, LanguageConfig, read_client_config
 
 
 package_path = os.path.dirname(__file__)
 server_path = os.path.join(
     package_path,
     'node_modules',
-    'lsp-tsserver',
-    'dist',
-    'server.js'
+    'typescript-language-server',
+    'lib',
+    'cli.js'
+)
+
+ts_server_path = os.path.join(
+    package_path,
+    'node_modules',
+    'typescript',
+    'bin',
+    'tsserver'
+)
+
+eslint_path = os.path.join(
+    package_path,
+    'node_modules',
+    'typescript-eslint-language-service',
+    'lib',
+    'index.js'
 )
 
 
 def plugin_loaded():
-    print('LSP-typescript: Server {} installed.'.format('is' if os.path.exists(server_path) else 'is not' ))
+    is_server_installed = os.path.isfile(server_path)
+    print('LSP-typescript: Server {} installed.'.format('is' if is_server_installed else 'is not' ))
 
     # install the node_modules if not installed
-    if not os.path.isdir(os.path.join(package_path, 'node_modules')):
+    if not is_server_installed:
         # this will be called only when the plugin gets:
         # - installed for the first time,
         # - or when updated on package control
@@ -70,47 +87,109 @@ def logAndShowMessage(msg, additional_logs=None):
     sublime.active_window().status_message(msg)
 
 
-class LspTypescriptPlugin(LanguageHandler):
+class LspTypeScriptPlugin(LanguageHandler):
     @property
     def name(self) -> str:
         return 'lsp-typescript'
 
     @property
     def config(self) -> ClientConfig:
-        return ClientConfig(
-            name='lsp-typescript',
-            binary_args=[
+        settings = sublime.load_settings("LSP-typescript.sublime-settings")
+        client_configuration = settings.get('client')
+
+        default_configuration = {
+            "command": [
                 'node',
                 server_path,
                 '--stdio',
-                "--globalPlugins", "typescript-eslint-language-service",
-                "--traceToConsole", "true"
+                '--tsserver-path',
+                ts_server_path,
+                '--tsserver-log-verbosity',
+                'verbose'
             ],
-            tcp_port=None,
-            enabled=True,
-            init_options=dict(),
-            settings=dict(),
-            env=dict(),
-            languages=[
-                LanguageConfig(
-                    'javascript',
-                    ["source.js", "source.jsx"],
-                    [
+            "languages": [
+                {
+                    "languageId": "typescript",
+                    "scopes": [
+                        "source.ts",
+                        "source.tsx"
+                    ],
+                    "syntaxes": [
+                        "Packages/TypeScript Syntax/TypeScript.tmLanguage",
+                        "Packages/TypeScript Syntax/TypeScriptReact.tmLanguage",
+                        "Packages/User/TypeScriptReactGraphQL.sublime-syntax"
+                    ]
+                }
+            ],
+            "initializationOptions": {
+                # "plugins": [
+                #     {
+                #         "name": "typescript-eslint-language-service",
+                #         "location": eslint_path
+                #     }
+                # ]
+            }
+        }
+
+        default_configuration.update(client_configuration)
+        return read_client_config('lsp-typescript', default_configuration)
+
+    def on_start(self, window) -> bool:
+        if not is_node_installed():
+            sublime.status_message('Please install Node.js for the TypeScript Language Server to work.')
+            return False
+        return True
+
+    def on_initialized(self, client) -> None:
+        pass   # extra initialization here.
+
+
+class LspJavaScriptPlugin(LanguageHandler):
+    @property
+    def name(self) -> str:
+        return 'lsp-javascript'
+
+    @property
+    def config(self) -> ClientConfig:
+        settings = sublime.load_settings("LSP-javascript.sublime-settings")
+        client_configuration = settings.get('client')
+
+        default_configuration = {
+            "command": [
+                'node',
+                server_path,
+                '--stdio',
+                '--tsserver-path',
+                ts_server_path,
+                '--tsserver-log-verbosity',
+                'verbose'
+            ],
+            "languages": [
+                {
+                    "languageId": "JavaScript",
+                    "scopes": [
+                        "source.js",
+                        "source.jsx"
+                    ],
+                    "syntaxes": [
                         "Packages/User/JS Custom/Syntaxes/React.sublime-syntax",
                         "Packages/JavaScript/JavaScript.sublime-syntax",
-                        "Packages/Babel/JavaScript (Babel).sublime-syntax",
+                        "Packages/Babel/JavaScript (Babel).sublime-syntax"
                     ]
-                ),
-                LanguageConfig(
-                    'typescript',
-                    ["source.ts", "source.tsx"],
-                    [
-                        "Packages/TypeScript Syntax/TypeScript.tmLanguage",
-                        "Packages/TypeScript Syntax/TypeScriptReact.tmLanguage"
-                    ]
-                ),
-            ]
-        )
+                }
+            ],
+            "initializationOptions": {
+                # "plugins": [
+                #     {
+                #         "name": "typescript-eslint-language-service",
+                #         "location": eslint_path
+                #     }
+                # ]
+            }
+        }
+
+        default_configuration.update(client_configuration)
+        return read_client_config('lsp-javascript', default_configuration)
 
     def on_start(self, window) -> bool:
         if not is_node_installed():

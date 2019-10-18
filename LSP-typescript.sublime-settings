@@ -1,0 +1,21 @@
+{
+	"client" : {
+		"enabled": true,
+		"languages": [
+			{
+				"languageId": "typescript",
+				"scopes": [
+					"source.ts",
+					"source.tsx"
+				],
+				"syntaxes": [
+					"Packages/TypeScript Syntax/TypeScript.tmLanguage",
+					"Packages/TypeScript Syntax/TypeScriptReact.tmLanguage",
+					"Packages/User/TypeScriptReactGraphQL.sublime-syntax"
+				]
+			}
+		],
+		"initializationOptions": {},
+		"settings": {}
+	}
+}

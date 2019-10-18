@@ -1,0 +1,21 @@
+{
+	"client" : {
+		"enabled": true,
+		"languages": [
+			{
+				"languageId": "javascript",
+				"scopes": [
+					"source.js",
+					"source.jsx"
+				],
+				"syntaxes": [
+					"Packages/User/JS Custom/Syntaxes/React.sublime-syntax",
+					"Packages/JavaScript/JavaScript.sublime-syntax",
+					"Packages/Babel/JavaScript (Babel).sublime-syntax"
+				]
+			}
+		],
+		"initializationOptions": {},
+		"settings": {}
+	}
+}
