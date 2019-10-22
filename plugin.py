@@ -91,7 +91,8 @@ class LspTypeScriptPlugin(LanguageHandler):
 
         default_configuration = {
             "command": [
-                "typescript-language-server",
+                "node",
+                server_path,
                 '--stdio'
             ],
             "languages": [
