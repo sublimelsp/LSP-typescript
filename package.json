@@ -10,7 +10,6 @@
   "license": "MIT",
   "dependencies": {
     "typescript": "^3.6.4",
-    "typescript-eslint-language-service": "^1.4.0",
     "typescript-language-server": "^0.4.0"
   }
 }

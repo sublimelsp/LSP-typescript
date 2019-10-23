@@ -17,15 +17,6 @@ server_path = os.path.join(
     'cli.js'
 )
 
-eslint_path = os.path.join(
-    package_path,
-    'node_modules',
-    'typescript-eslint-language-service',
-    'lib',
-    'index.js'
-)
-
-
 def plugin_loaded():
     is_server_installed = os.path.isfile(server_path)
     print('LSP-typescript: Server {} installed.'.format('is' if is_server_installed else 'is not' ))
@@ -114,14 +105,7 @@ class LspTypeScriptPlugin(LanguageHandler):
                     ]
                 }
             ],
-            "initializationOptions": {
-                # "plugins": [
-                #     {
-                #         "name": "typescript-eslint-language-service",
-                #         "location": eslint_path
-                #     }
-                # ]
-            }
+            "initializationOptions": {}
         }
 
         default_configuration.update(client_configuration)
