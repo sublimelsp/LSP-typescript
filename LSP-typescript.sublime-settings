@@ -5,18 +5,12 @@
 			{
 				"languageId": "typescript",
 				"scopes": [
-					"source.js",
-					"source.jsx",
 					"source.ts",
 					"source.tsx"
 				],
 				"syntaxes": [
-					"Packages/User/JS Custom/Syntaxes/React.sublime-syntax",
-					"Packages/JavaScript/JavaScript.sublime-syntax",
-					"Packages/Babel/JavaScript (Babel).sublime-syntax",
 					"Packages/TypeScript Syntax/TypeScript.tmLanguage",
-					"Packages/TypeScript Syntax/TypeScriptReact.tmLanguage",
-					"Packages/User/TypeScriptReactGraphQL.sublime-syntax"
+					"Packages/TypeScript Syntax/TypeScriptReact.tmLanguage"
 				]
 			}
 		],

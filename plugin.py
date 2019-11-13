@@ -90,18 +90,12 @@ class LspTypeScriptPlugin(LanguageHandler):
                 {
                     "languageId": "typescript",
                     "scopes": [
-                        "source.js",
-                        "source.jsx",
                         "source.ts",
                         "source.tsx"
                     ],
                     "syntaxes": [
-                        "Packages/User/JS Custom/Syntaxes/React.sublime-syntax",
-                        "Packages/JavaScript/JavaScript.sublime-syntax",
-                        "Packages/Babel/JavaScript (Babel).sublime-syntax",
                         "Packages/TypeScript Syntax/TypeScript.tmLanguage",
-                        "Packages/TypeScript Syntax/TypeScriptReact.tmLanguage",
-                        "Packages/User/TypeScriptReactGraphQL.sublime-syntax"
+                        "Packages/TypeScript Syntax/TypeScriptReact.tmLanguage"
                     ]
                 }
             ],
@@ -114,6 +108,52 @@ class LspTypeScriptPlugin(LanguageHandler):
     def on_start(self, window) -> bool:
         if not is_node_installed():
             sublime.status_message('Please install Node.js for the TypeScript Language Server to work.')
+            return False
+        return True
+
+    def on_initialized(self, client) -> None:
+        pass   # extra initialization here.
+
+
+class LspJavaScriptPlugin(LanguageHandler):
+    @property
+    def name(self) -> str:
+        return 'lsp-javascript'
+
+    @property
+    def config(self) -> ClientConfig:
+        settings = sublime.load_settings("LSP-javascript.sublime-settings")
+        client_configuration = settings.get('client')
+
+        default_configuration = {
+            "command": [
+                "node",
+                server_path,
+                '--stdio'
+            ],
+            "languages": [
+                {
+                    "languageId": "javascript",
+                    "scopes": [
+                        "source.js",
+                        "source.jsx"
+                    ],
+                    "syntaxes": [
+                        "Packages/User/JS Custom/Syntaxes/React.sublime-syntax",
+                        "Packages/JavaScript/JavaScript.sublime-syntax",
+                        "Packages/Babel/JavaScript (Babel).sublime-syntax"
+                    ]
+                }
+            ],
+            "initializationOptions": {}
+        }
+
+        default_configuration.update(client_configuration)
+        return read_client_config('lsp-javascript', default_configuration)
+
+    def on_start(self, window) -> bool:
+        if not is_node_installed():
+            sublime.status_message('Please install Node.js for the JavaScript Language Server to work.')
             return False
         return True
 
