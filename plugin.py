@@ -5,7 +5,11 @@ import threading
 import subprocess
 
 from LSP.plugin.core.handlers import LanguageHandler
-from LSP.plugin.core.settings import ClientConfig, LanguageConfig, read_client_config
+from LSP.plugin.core.settings import ClientConfig, read_client_config
+from LSP.plugin.core.rpc import Client
+from LSP.plugin.core.views import point_to_offset
+from LSP.plugin.core.protocol import Point
+from LSP.plugin.core.url import uri_to_filename
 
 
 package_path = os.path.dirname(__file__)
@@ -70,7 +74,39 @@ def logAndShowMessage(msg, additional_logs=None):
     sublime.active_window().status_message(msg)
 
 
-class LspTypeScriptPlugin(LanguageHandler):
+def on_typescript_rename(textDocumentPositionParams, cancellationToken):
+    view = sublime.active_window().open_file(
+        uri_to_filename(
+            textDocumentPositionParams['textDocument']['uri']
+        )
+    )
+
+    if not view:
+        return
+
+    lsp_point = Point.from_lsp(textDocumentPositionParams['position'])
+    point = point_to_offset(lsp_point, view)
+
+    sel = view.sel()
+    sel.clear()
+    sel.add_all([point])
+    view.run_command('lsp_symbol_rename')
+
+
+class SharedState:
+    def on_start(self, window) -> bool:
+        if not is_node_installed():
+            sublime.status_message('Please install Node.js for the TypeScript Language Server to work.')
+            return False
+        return True
+
+    def on_initialized(self, client: Client) -> None:
+        client.on_request(
+            "_typescript.rename",
+            lambda params, token: on_typescript_rename(params, token))
+
+
+class LspTypeScriptPlugin(SharedState, LanguageHandler):
     @property
     def name(self) -> str:
         return 'lsp-typescript'
@@ -105,17 +141,8 @@ class LspTypeScriptPlugin(LanguageHandler):
         default_configuration.update(client_configuration)
         return read_client_config('lsp-typescript', default_configuration)
 
-    def on_start(self, window) -> bool:
-        if not is_node_installed():
-            sublime.status_message('Please install Node.js for the TypeScript Language Server to work.')
-            return False
-        return True
 
-    def on_initialized(self, client) -> None:
-        pass   # extra initialization here.
-
-
-class LspJavaScriptPlugin(LanguageHandler):
+class LspJavaScriptPlugin(SharedState, LanguageHandler):
     @property
     def name(self) -> str:
         return 'lsp-javascript'
@@ -151,11 +178,3 @@ class LspJavaScriptPlugin(LanguageHandler):
         default_configuration.update(client_configuration)
         return read_client_config('lsp-javascript', default_configuration)
 
-    def on_start(self, window) -> bool:
-        if not is_node_installed():
-            sublime.status_message('Please install Node.js for the JavaScript Language Server to work.')
-            return False
-        return True
-
-    def on_initialized(self, client) -> None:
-        pass   # extra initialization here.
