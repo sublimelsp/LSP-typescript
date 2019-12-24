@@ -9,7 +9,7 @@
   "author": "Предраг Николић",
   "license": "MIT",
   "dependencies": {
-    "typescript": "^3.7.3",
+    "typescript": "^3.7.4",
     "typescript-language-server": "^0.4.0"
   }
 }
