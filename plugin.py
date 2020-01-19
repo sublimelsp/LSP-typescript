@@ -93,20 +93,7 @@ def on_typescript_rename(textDocumentPositionParams, cancellationToken):
     view.run_command('lsp_symbol_rename')
 
 
-class SharedState:
-    def on_start(self, window) -> bool:
-        if not is_node_installed():
-            sublime.status_message('Please install Node.js for the TypeScript Language Server to work.')
-            return False
-        return True
-
-    def on_initialized(self, client: Client) -> None:
-        client.on_request(
-            "_typescript.rename",
-            lambda params, token: on_typescript_rename(params, token))
-
-
-class LspTypeScriptPlugin(SharedState, LanguageHandler):
+class LspTypeScriptPlugin(LanguageHandler):
     @property
     def name(self) -> str:
         return 'lsp-typescript'
@@ -124,15 +111,34 @@ class LspTypeScriptPlugin(SharedState, LanguageHandler):
             ],
             "languages": [
                 {
+                    "languageId": "javascript",
+                    "scopes": [
+                        "source.js",
+                        "source.jsx"
+                    ],
+                    "syntaxes": [
+                        "Packages/JavaScript/JavaScript.sublime-syntax",
+                        "Packages/Babel/JavaScript (Babel).sublime-syntax"
+                    ]
+                },
+                {
+                    "languageId": "javascriptreact",
+                    "scopes": ["source.jsx"],
+                    "syntaxes": ["Packages/User/JS Custom/Syntaxes/React.sublime-syntax"]
+                },
+                {
                     "languageId": "typescript",
                     "scopes": [
                         "source.ts",
-                        "source.tsx"
                     ],
                     "syntaxes": [
                         "Packages/TypeScript Syntax/TypeScript.tmLanguage",
-                        "Packages/TypeScript Syntax/TypeScriptReact.tmLanguage"
                     ]
+                },
+                {
+                    "scopes": ["source.tsx"],
+                    "syntaxes": ["Packages/TypeScript Syntax/TypeScriptReact.tmLanguage"],
+                    "languageId": "typescriptreact"
                 }
             ],
             "initializationOptions": {}
@@ -141,40 +147,13 @@ class LspTypeScriptPlugin(SharedState, LanguageHandler):
         default_configuration.update(client_configuration)
         return read_client_config('lsp-typescript', default_configuration)
 
+    def on_start(self, window) -> bool:
+        if not is_node_installed():
+            sublime.status_message('Please install Node.js for the TypeScript Language Server to work.')
+            return False
+        return True
 
-class LspJavaScriptPlugin(SharedState, LanguageHandler):
-    @property
-    def name(self) -> str:
-        return 'lsp-javascript'
-
-    @property
-    def config(self) -> ClientConfig:
-        settings = sublime.load_settings("LSP-javascript.sublime-settings")
-        client_configuration = settings.get('client')
-
-        default_configuration = {
-            "command": [
-                "node",
-                server_path,
-                '--stdio'
-            ],
-            "languages": [
-                {
-                    "languageId": "javascript",
-                    "scopes": [
-                        "source.js",
-                        "source.jsx"
-                    ],
-                    "syntaxes": [
-                        "Packages/User/JS Custom/Syntaxes/React.sublime-syntax",
-                        "Packages/JavaScript/JavaScript.sublime-syntax",
-                        "Packages/Babel/JavaScript (Babel).sublime-syntax"
-                    ]
-                }
-            ],
-            "initializationOptions": {}
-        }
-
-        default_configuration.update(client_configuration)
-        return read_client_config('lsp-javascript', default_configuration)
-
+    def on_initialized(self, client: Client) -> None:
+        client.on_request(
+            "_typescript.rename",
+            lambda params, token: on_typescript_rename(params, token))

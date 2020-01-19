@@ -3,15 +3,34 @@
 		"enabled": true,
 		"languages": [
 			{
+				"languageId": "javascript",
+				"scopes": [
+					"source.js",
+					"source.jsx"
+				],
+				"syntaxes": [
+					"Packages/JavaScript/JavaScript.sublime-syntax",
+					"Packages/Babel/JavaScript (Babel).sublime-syntax"
+				]
+			},
+			{
+				"languageId": "javascriptreact",
+				"scopes": ["source.jsx"],
+				"syntaxes": ["Packages/User/JS Custom/Syntaxes/React.sublime-syntax"]
+			},
+			{
 				"languageId": "typescript",
 				"scopes": [
 					"source.ts",
-					"source.tsx"
 				],
 				"syntaxes": [
 					"Packages/TypeScript Syntax/TypeScript.tmLanguage",
-					"Packages/TypeScript Syntax/TypeScriptReact.tmLanguage"
 				]
+			},
+			{
+				"scopes": ["source.tsx"],
+				"syntaxes": ["Packages/TypeScript Syntax/TypeScriptReact.tmLanguage"],
+				"languageId": "typescriptreact"
 			}
 		],
 		"initializationOptions": {},
