@@ -1,42 +1,43 @@
 {
-	"client" : {
-		"enabled": true,
-		"languages": [
-			{
-				"languageId": "javascript",
-				"scopes": [
-					"source.js"
-				],
-				"syntaxes": [
-					"Packages/JavaScript/JavaScript.sublime-syntax",
-					"Packages/Babel/JavaScript (Babel).sublime-syntax"
-				]
-			},
-			{
-				"languageId": "javascriptreact",
-				"scopes": [
-					"source.jsx"
-				],
-				"syntaxes": ["Packages/User/JS Custom/Syntaxes/React.sublime-syntax"]
-			},
-			{
-				"languageId": "typescript",
-				"scopes": [
-					"source.ts"
-				],
-				"syntaxes": [
-					"Packages/TypeScript Syntax/TypeScript.tmLanguage",
-				]
-			},
-			{
-				"scopes": [
-					"source.tsx"
-				],
-				"syntaxes": ["Packages/TypeScript Syntax/TypeScriptReact.tmLanguage"],
-				"languageId": "typescriptreact"
-			}
-		],
-		"initializationOptions": {},
-		"settings": {}
-	}
+	"languages": [
+		{
+			"languageId": "javascript",
+			"scopes": [
+				"source.js",
+			],
+			"syntaxes": [
+				"Packages/JavaScript/JavaScript.sublime-syntax",
+				"Packages/Babel/JavaScript (Babel).sublime-syntax",
+			],
+		},
+		{
+			"languageId": "javascriptreact",
+			"scopes": [
+				"source.jsx",
+			],
+			"syntaxes": [
+				"Packages/User/JS Custom/Syntaxes/React.sublime-syntax",
+			],
+		},
+		{
+			"languageId": "typescript",
+			"scopes": [
+				"source.ts",
+			],
+			"syntaxes": [
+				"Packages/TypeScript Syntax/TypeScript.tmLanguage",
+			],
+		},
+		{
+			"languageId": "typescriptreact",
+			"scopes": [
+				"source.tsx",
+			],
+			"syntaxes": [
+				"Packages/TypeScript Syntax/TypeScriptReact.tmLanguage",
+			],
+		},
+	],
+	"initializationOptions": {},
+	"settings": {},
 }

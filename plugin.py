@@ -1,151 +1,77 @@
 import shutil
 import os
 import sublime
-import threading
-import subprocess
 
 from LSP.plugin.core.handlers import LanguageHandler
 from LSP.plugin.core.settings import ClientConfig, read_client_config
 from LSP.plugin.core.rpc import Client
 from LSP.plugin.core.views import point_to_offset
 from LSP.plugin.core.protocol import Point
+from LSP.plugin.core.typing import Dict
 from LSP.plugin.core.url import uri_to_filename
+from lsp_utils import ServerNpmResource
 
 
-package_path = os.path.dirname(__file__)
-server_path = os.path.join(
-    package_path,
-    'node_modules',
-    'typescript-language-server',
-    'lib',
-    'cli.js'
-)
+PACKAGE_NAME = 'LSP-typescript'
+SETTINGS_FILENAME = 'LSP-typescript.sublime-settings'
+SERVER_DIRECTORY = 'typescript-language-server'
+SERVER_BINARY_PATH = os.path.join(SERVER_DIRECTORY, 'node_modules', 'typescript-language-server', 'lib', 'cli.js')
+
+server = ServerNpmResource(PACKAGE_NAME, SERVER_DIRECTORY, SERVER_BINARY_PATH)
+
 
 def plugin_loaded():
-    is_server_installed = os.path.isfile(server_path)
-    print('LSP-typescript: Server {} installed.'.format('is' if is_server_installed else 'is not' ))
-
-    # install the node_modules if not installed
-    if not is_server_installed:
-        # this will be called only when the plugin gets:
-        # - installed for the first time,
-        # - or when updated on package control
-        logAndShowMessage('LSP-typescript: Installing server.')
-
-        runCommand(
-            onCommandDone,
-            ["npm", "install", "--verbose", "--prefix", package_path, package_path]
-        )
+    server.setup()
 
 
-def onCommandDone():
-    logAndShowMessage('LSP-typescript: Server installed.')
-
-
-def runCommand(onExit, popenArgs):
-    """
-    Runs the given args in a subprocess.Popen, and then calls the function
-    onExit when the subprocess completes.
-    onExit is a callable object, and popenArgs is a list/tuple of args that
-    would give to subprocess.Popen.
-    """
-    def runInThread(onExit, popenArgs):
-        try:
-            if sublime.platform() == 'windows':
-                subprocess.check_call(popenArgs, shell=True)
-            else:
-                subprocess.check_call(popenArgs)
-            onExit()
-        except subprocess.CalledProcessError as error:
-            logAndShowMessage('LSP-typescript: Error while installing the server.', error)
-        return
-    thread = threading.Thread(target=runInThread, args=(onExit, popenArgs))
-    thread.start()
-    # returns immediately after the thread starts
-    return thread
+def plugin_unloaded():
+    server.cleanup()
 
 
 def is_node_installed():
     return shutil.which('node') is not None
 
 
-def logAndShowMessage(msg, additional_logs=None):
-    print(msg, '\n', additional_logs) if additional_logs else print(msg)
-    sublime.active_window().status_message(msg)
-
-
-def on_typescript_rename(textDocumentPositionParams, cancellationToken):
-    view = sublime.active_window().open_file(
-        uri_to_filename(
-            textDocumentPositionParams['textDocument']['uri']
-        )
-    )
-
-    if not view:
-        return
-
-    lsp_point = Point.from_lsp(textDocumentPositionParams['position'])
-    point = point_to_offset(lsp_point, view)
-
-    sel = view.sel()
-    sel.clear()
-    sel.add_all([point])
-    view.run_command('lsp_symbol_rename')
-
-
 class LspTypeScriptPlugin(LanguageHandler):
     @property
     def name(self) -> str:
-        return 'lsp-typescript'
+        return PACKAGE_NAME.lower()
 
     @property
     def config(self) -> ClientConfig:
-        settings = sublime.load_settings("LSP-typescript.sublime-settings")
-        client_configuration = settings.get('client')
+        # Calling setup() also here as this might run before `plugin_loaded`.
+        # Will be a no-op if already ran.
+        # See https://github.com/sublimelsp/LSP/issues/899
+        server.setup()
+
+        configuration = self.migrate_and_read_configuration()
 
         default_configuration = {
-            "command": [
-                "node",
-                server_path,
-                '--stdio'
-            ],
-            "languages": [
-                {
-                    "languageId": "javascript",
-                    "scopes": [
-                        "source.js",
-                        "source.jsx"
-                    ],
-                    "syntaxes": [
-                        "Packages/JavaScript/JavaScript.sublime-syntax",
-                        "Packages/Babel/JavaScript (Babel).sublime-syntax"
-                    ]
-                },
-                {
-                    "languageId": "javascriptreact",
-                    "scopes": ["source.jsx"],
-                    "syntaxes": ["Packages/User/JS Custom/Syntaxes/React.sublime-syntax"]
-                },
-                {
-                    "languageId": "typescript",
-                    "scopes": [
-                        "source.ts",
-                    ],
-                    "syntaxes": [
-                        "Packages/TypeScript Syntax/TypeScript.tmLanguage",
-                    ]
-                },
-                {
-                    "scopes": ["source.tsx"],
-                    "syntaxes": ["Packages/TypeScript Syntax/TypeScriptReact.tmLanguage"],
-                    "languageId": "typescriptreact"
-                }
-            ],
-            "initializationOptions": {}
+            'enabled': True,
+            'command': ['node', server.binary_path, '--stdio'],
         }
 
-        default_configuration.update(client_configuration)
-        return read_client_config('lsp-typescript', default_configuration)
+        default_configuration.update(configuration)
+        return read_client_config(self.name, default_configuration)
+
+    def migrate_and_read_configuration(self) -> Dict:
+        settings = {}
+        loaded_settings = sublime.load_settings(SETTINGS_FILENAME)  # type: Dict
+
+        if loaded_settings:
+            if loaded_settings.has('client'):
+                client = loaded_settings.get('client')  # type: Dict
+                loaded_settings.erase('client')
+                # Migrate old keys
+                for key, value in client.items():
+                    loaded_settings.set(key, value)
+                sublime.save_settings(SETTINGS_FILENAME)
+
+            # Read configuration keys
+            for key in ['languages', 'initializationOptions', 'settings']:
+                settings[key] = loaded_settings.get(key)
+
+        return settings
 
     def on_start(self, window) -> bool:
         if not is_node_installed():
@@ -155,5 +81,20 @@ class LspTypeScriptPlugin(LanguageHandler):
 
     def on_initialized(self, client: Client) -> None:
         client.on_request(
-            "_typescript.rename",
-            lambda params, token: on_typescript_rename(params, token))
+            "_typescript.rename", lambda params, token: self._on_typescript_rename(params, token))
+
+    def _on_typescript_rename(self, textDocumentPositionParams, cancellationToken):
+        view = sublime.active_window().open_file(
+            uri_to_filename(textDocumentPositionParams['textDocument']['uri'])
+        )
+
+        if not view:
+            return
+
+        lsp_point = Point.from_lsp(textDocumentPositionParams['position'])
+        point = point_to_offset(lsp_point, view)
+
+        sel = view.sel()
+        sel.clear()
+        sel.add_all([point])
+        view.run_command('lsp_symbol_rename')
