@@ -1,0 +1,6 @@
+.dependabot export-ignore
+.github/ export-ignore
+codecov.yml export-ignore
+tests/ export-ignore
+tox.ini export-ignore
+unittesting.json export-ignore
