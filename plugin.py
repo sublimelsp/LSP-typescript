@@ -12,7 +12,7 @@ def plugin_unloaded():
 
 class LspTypescriptPlugin(NpmClientHandler):
     package_name = __package__
-    server_directory = 'LSP-typescript.sublime-settings'
+    server_directory = 'typescript-language-server'
     server_binary_path = os.path.join(
         server_directory, 'node_modules', 'typescript-language-server', 'lib', 'cli.js'
     )
