@@ -17,7 +17,7 @@
 		},
 		{
 			"languageId": "typescriptreact",
-			"scopes": ["source.tsx", "source.ts.react"],
+			"scopes": ["source.tsx"],
 			"syntaxes": [
 				"Packages/TypeScript Syntax/TypeScriptReact.tmLanguage",
 			],
