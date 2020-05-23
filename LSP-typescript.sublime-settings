@@ -1,6 +1,16 @@
 {
 	"languages": [
 		{
+			"languageId": "javascriptreact",
+			"scopes": [
+				"source.jsx",
+				"source.js.react",
+			],
+			"syntaxes": [
+				"Packages/User/JS Custom/Syntaxes/React.sublime-syntax",
+			],
+		},
+		{
 			"languageId": "javascript",
 			"scopes": [
 				"source.js",
@@ -8,15 +18,6 @@
 			"syntaxes": [
 				"Packages/JavaScript/JavaScript.sublime-syntax",
 				"Packages/Babel/JavaScript (Babel).sublime-syntax",
-			],
-		},
-		{
-			"languageId": "javascriptreact",
-			"scopes": [
-				"source.jsx",
-			],
-			"syntaxes": [
-				"Packages/User/JS Custom/Syntaxes/React.sublime-syntax",
 			],
 		},
 		{
