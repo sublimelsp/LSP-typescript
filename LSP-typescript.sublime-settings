@@ -2,40 +2,31 @@
 	"languages": [
 		{
 			"languageId": "javascriptreact",
-			"scopes": [
-				"source.jsx",
-				"source.js.react",
-			],
+			"scopes": ["source.jsx", "source.js.react"],
 			"syntaxes": [
 				"Packages/User/JS Custom/Syntaxes/React.sublime-syntax",
 			],
 		},
 		{
 			"languageId": "javascript",
-			"scopes": [
-				"source.js",
-			],
+			"scopes": ["source.js"],
 			"syntaxes": [
 				"Packages/JavaScript/JavaScript.sublime-syntax",
 				"Packages/Babel/JavaScript (Babel).sublime-syntax",
 			],
 		},
 		{
-			"languageId": "typescript",
-			"scopes": [
-				"source.ts",
-			],
+			"languageId": "typescriptreact",
+			"scopes": ["source.tsx", "source.ts.react"],
 			"syntaxes": [
-				"Packages/TypeScript Syntax/TypeScript.tmLanguage",
+				"Packages/TypeScript Syntax/TypeScriptReact.tmLanguage",
 			],
 		},
 		{
-			"languageId": "typescriptreact",
-			"scopes": [
-				"source.tsx",
-			],
+			"languageId": "typescript",
+			"scopes": ["source.ts"],
 			"syntaxes": [
-				"Packages/TypeScript Syntax/TypeScriptReact.tmLanguage",
+				"Packages/TypeScript Syntax/TypeScript.tmLanguage",
 			],
 		},
 	],
