@@ -2,7 +2,7 @@
   "name": "typescript-language-server",
   "version": "0.4.0",
   "dependencies": {
-    "typescript": "4.0.2",
+    "typescript": "4.0.3",
     "typescript-language-server": "0.4.0"
   }
 }
