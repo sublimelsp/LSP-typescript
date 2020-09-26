@@ -1,4 +1,5 @@
 {
+	"command": ["node", "${cache_path}/LSP-typescript/typescript-language-server/node_modules/typescript-language-server/lib/cli.js", "--stdio"],
 	"languages": [
 		{
 			"languageId": "javascriptreact",
