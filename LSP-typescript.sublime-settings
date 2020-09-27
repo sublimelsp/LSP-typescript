@@ -1,4 +1,5 @@
 {
+	"command": ["node", "${server_path}", "--stdio"],
 	"languages": [
 		{
 			"languageId": "javascriptreact",
