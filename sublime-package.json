@@ -1,0 +1,84 @@
+{
+    "contributions": {
+        "settings": [
+            {
+                "file_patterns": [
+                    "/LSP-typescript.sublime-settings"
+                ],
+                "schema": {
+                    "$id": "sublime://settings/LSP-typescript",
+                    "definitions": {
+                        "PluginConfig": {
+                            "properties": {
+                                "initializationOptions": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "logVerbosity": {
+                                            "type": "string",
+                                            "description": "Verbosity of the logging."
+                                        },
+                                        "plugins": {
+                                            "type": "array",
+                                            "default": [],
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "string",
+                                                        "description": "The name of the plugin."
+                                                    },
+                                                    "location": {
+                                                        "type": "string",
+                                                        "description": "The location of the plugin."
+                                                    }
+                                                },
+                                                "defaultSnippets": [
+                                                    {
+                                                        "body": {
+                                                            "name": "$0",
+                                                            "location": "$1"
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "type": "object",
+                    "allOf": [
+                        {
+                            "$ref": "sublime://settings/LSP-plugin-base"
+                        },
+                        {
+                            "$ref": "sublime://settings/LSP-typescript#/definitions/PluginConfig"
+                        }
+                    ]
+                }
+            },
+            {
+              "file_patterns": [
+                "/*.sublime-project"
+              ],
+              "schema": {
+                "properties": {
+                  "settings": {
+                    "properties": {
+                      "LSP": {
+                        "properties": {
+                          "LSP-typescript": {
+                            "$ref": "sublime://settings/LSP-typescript#/definitions/PluginConfig"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+        ]
+    }
+}
