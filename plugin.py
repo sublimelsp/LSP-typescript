@@ -21,6 +21,10 @@ class LspTypescriptPlugin(NpmClientHandler):
         server_directory, 'node_modules', 'typescript-language-server', 'lib', 'cli.js'
     )
 
+    @classmethod
+    def install_in_cache(cls) -> bool:
+        return False
+
     def on_ready(self, api) -> None:
         api.on_request('_typescript.rename', self._on_typescript_rename)
 
