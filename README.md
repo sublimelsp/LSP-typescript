@@ -11,7 +11,7 @@ TypeScript and JavaScript support for Sublime's LSP plugin provided through [The
 
 ### Configuration
 
-Open the configuration file using the Command Palette's `Preferences: LSP-typescript Settings` command or open it from the Sublime menu.
+Open the configuration file using the Command Palette `Preferences: LSP-typescript Settings` command or open it from the Sublime menu.
 
 ### Organize Imports command
 
