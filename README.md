@@ -15,7 +15,7 @@ Open the configuration file using the Command Palette's `Preferences: LSP-typesc
 
 ### Organize Imports command
 
-To sort or remove unused imports you can trigger the `LSP-typescript: Organize Imports` command from the Command Palette or bind that command to a key binding. For example:
+To sort or remove unused imports you can trigger the `LSP-typescript: Organize Imports` command from the Command Palette or create a key binding. For example:
 
 ```json
     { "keys": ["ctrl+k"], "command": "lsp_execute",
