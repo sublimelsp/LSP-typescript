@@ -7,4 +7,13 @@
             "default": "// Settings in here override those in \"LSP-typescript/LSP-typescript.sublime-settings\"\n\n{\n\t$0\n}\n"
         }
     },
+    {
+        "caption": "LSP-typescript: Organize Imports",
+        "command": "lsp_execute",
+        "args": {
+            "session_name": "LSP-typescript",
+            "command_name": "_typescript.organizeImports",
+            "command_args": ["${file}"]
+        }
+    },
 ]
