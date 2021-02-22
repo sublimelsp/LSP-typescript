@@ -1,5 +1,3 @@
-import os
-import sublime
 from LSP.plugin import ClientConfig
 from LSP.plugin import uri_to_filename
 from LSP.plugin import WorkspaceFolder
@@ -8,6 +6,8 @@ from LSP.plugin.core.types import List, Optional
 from LSP.plugin.core.views import point_to_offset
 from lsp_utils import NpmClientHandler
 from lsp_utils import request_handler
+import os
+import sublime
 
 
 def plugin_loaded():
@@ -21,9 +21,7 @@ def plugin_unloaded():
 class LspTypescriptPlugin(NpmClientHandler):
     package_name = __package__
     server_directory = 'typescript-language-server'
-    server_binary_path = os.path.join(
-        server_directory, 'node_modules', 'typescript-language-server', 'lib', 'cli.js'
-    )
+    server_binary_path = os.path.join(server_directory, 'node_modules', 'typescript-language-server', 'lib', 'cli.js')
 
     @classmethod
     def is_allowed_to_start(
