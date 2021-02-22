@@ -1,5 +1,5 @@
 {
-	"command": ["node", "${server_path}", "--stdio"],
+	"command": ["${node_bin}", "${server_path}", "--stdio"],
 	"languages": [
 		{
 			"languageId": "javascriptreact",

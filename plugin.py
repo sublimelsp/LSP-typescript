@@ -26,10 +26,6 @@ class LspTypescriptPlugin(NpmClientHandler):
     )
 
     @classmethod
-    def install_in_cache(cls) -> bool:
-        return False
-
-    @classmethod
     def is_allowed_to_start(
         cls,
         window: sublime.Window,
