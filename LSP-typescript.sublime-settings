@@ -5,6 +5,7 @@
 			"languageId": "javascriptreact",
 			"scopes": ["source.jsx", "source.js.react"],
 			"syntaxes": [
+				"Packages/JavaScript/JSX.sublime-syntax",
 				"Packages/User/JS Custom/Syntaxes/React.sublime-syntax",
 			],
 		},
@@ -20,6 +21,7 @@
 			"languageId": "typescriptreact",
 			"scopes": ["source.tsx"],
 			"syntaxes": [
+				"Packages/JavaScript/TSX.tmLanguage",
 				"Packages/TypeScript Syntax/TypeScriptReact.tmLanguage",
 			],
 		},
@@ -27,6 +29,7 @@
 			"languageId": "typescript",
 			"scopes": ["source.ts"],
 			"syntaxes": [
+				"Packages/JavaScript/TypeScript.tmLanguage",
 				"Packages/TypeScript Syntax/TypeScript.tmLanguage",
 			],
 		},
