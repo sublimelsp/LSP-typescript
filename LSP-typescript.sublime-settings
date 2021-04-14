@@ -6,6 +6,7 @@
 			"scopes": ["source.jsx", "source.js.react"],
 			"syntaxes": [
 				"Packages/User/JS Custom/Syntaxes/React.sublime-syntax",
+				"Packages/JavaScript/JSX.sublime-syntax",
 			],
 		},
 		{
@@ -21,6 +22,7 @@
 			"scopes": ["source.tsx"],
 			"syntaxes": [
 				"Packages/TypeScript Syntax/TypeScriptReact.tmLanguage",
+				"Packages/JavaScript/TSX.sublime-syntax",
 			],
 		},
 		{
@@ -28,6 +30,7 @@
 			"scopes": ["source.ts"],
 			"syntaxes": [
 				"Packages/TypeScript Syntax/TypeScript.tmLanguage",
+				"Packages/JavaScript/TypeScript.sublime-syntax",
 			],
 		},
 	],
