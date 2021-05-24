@@ -78,5 +78,5 @@ class LspTypescriptPlugin(NpmClientHandler):
                             None,
                         )
                     )
-                    workspace_edits[change['fileName']] = file_changes
+                workspace_edits[change['fileName']] = file_changes
         return workspace_edits
