@@ -1,8 +1,10 @@
 from LSP.plugin import ClientConfig
 from LSP.plugin import uri_to_filename
 from LSP.plugin import WorkspaceFolder
+from LSP.plugin.core.edit import apply_workspace_edit
+from LSP.plugin.core.edit import TextEditTuple
 from LSP.plugin.core.protocol import Point
-from LSP.plugin.core.types import List, Optional
+from LSP.plugin.core.typing import Any, Callable, Dict, List, Mapping, Optional
 from LSP.plugin.core.views import point_to_offset
 from lsp_utils import NpmClientHandler
 from lsp_utils import request_handler
@@ -50,3 +52,31 @@ class LspTypescriptPlugin(NpmClientHandler):
 
         # Server doesn't require any specific response.
         respond(None)
+
+    def on_pre_server_command(self, command: Mapping[str, Any], done_callback: Callable[[], None]) -> bool:
+        if command['command'] == '_typescript.applyCompletionCodeAction':
+            _, items = command['arguments']
+            session = self.weaksession()
+            if session:
+                apply_workspace_edit(session.window, self._to_lsp_edits(items)).then(lambda _: done_callback())
+                return True
+        return False
+
+    def _to_lsp_edits(self, items: Any) -> Dict[str, List[TextEditTuple]]:
+        workspace_edits = {}  # type: Dict[str, List[TextEditTuple]]
+        for item in items:
+            for change in item['changes']:
+                file_changes = []  # List[TextEditTuple]
+                for text_change in change['textChanges']:
+                    start = text_change['start']
+                    end = text_change['end']
+                    file_changes.append(
+                        (
+                            (start['line'] - 1, start['offset'] - 1),
+                            (end['line'] - 1, end['offset'] - 1),
+                            text_change['newText'],
+                            None,
+                        )
+                    )
+                    workspace_edits[change['fileName']] = file_changes
+        return workspace_edits
