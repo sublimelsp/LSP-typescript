@@ -1,8 +1,6 @@
 from LSP.plugin import ClientConfig
 from LSP.plugin import uri_to_filename
 from LSP.plugin import WorkspaceFolder
-from LSP.plugin.core.edit import apply_workspace_edit
-from LSP.plugin.core.edit import TextEditTuple
 from LSP.plugin.core.protocol import Point
 from LSP.plugin.core.typing import Any, Callable, Dict, List, Mapping, Optional
 from LSP.plugin.core.views import point_to_offset
@@ -10,6 +8,14 @@ from lsp_utils import NpmClientHandler
 from lsp_utils import request_handler
 import os
 import sublime
+
+try:
+    from LSP.plugin.core.edit import apply_workspace_edit
+    from LSP.plugin.core.edit import TextEditTuple
+except ImportError:
+    # Not supported in ST3
+    TextEditTuple = Any
+    pass
 
 
 def plugin_loaded():
