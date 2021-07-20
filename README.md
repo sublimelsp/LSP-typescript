@@ -26,3 +26,14 @@ To sort or remove unused imports you can trigger the `LSP-typescript: Organize I
         }
     },
 ```
+
+### Keybindings and Customization
+
+To replace default sublime `GoToDefinition` and add `GoToTypeDefinition` command add following keybinding
+```
+{ "keys": ["f11"], "command": "lsp_symbol_type_definition" },
+{ "keys": ["f12"], "command": "lsp_symbol_definition" },
+```
+For other available commands look at `Preferences -> Package Settings -> LSP -> Key Bindings`
+
+For available customizations (popups, ...) look at `Preferences -> Package Settings -> LSP -> Settings`
