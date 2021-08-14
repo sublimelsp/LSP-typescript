@@ -31,6 +31,15 @@
 			],
 		},
 	],
-	"initializationOptions": {},
+	"initializationOptions": {
+		"logVerbosity": "off",
+		"plugins": [],
+		"preferences": {
+			"allowRenameOfImportPath": true,
+			"includeCompletionsForImportStatements": true,
+			"includeCompletionsForModuleExports": true,
+			"includeCompletionsWithInsertText": true,
+		}
+	},
 	"settings": {},
 }
