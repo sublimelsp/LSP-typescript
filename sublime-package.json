@@ -110,6 +110,178 @@
                                             }
                                         }
                                     }
+                                },
+                                "settings": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "typescript.format.insertSpaceAfterCommaDelimiter": {
+                                          "type": "boolean",
+                                          "default": true
+                                        },
+                                        "typescript.format.insertSpaceAfterConstructor": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "typescript.format.insertSpaceAfterSemicolonInForStatements": {
+                                          "type": "boolean",
+                                          "default": true
+                                        },
+                                        "typescript.format.insertSpaceBeforeAndAfterBinaryOperators": {
+                                          "type": "boolean",
+                                          "default": true
+                                        },
+                                        "typescript.format.insertSpaceAfterKeywordsInControlFlowStatements": {
+                                          "type": "boolean",
+                                          "default": true
+                                        },
+                                        "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": {
+                                          "type": "boolean",
+                                          "default": true
+                                        },
+                                        "typescript.format.insertSpaceBeforeFunctionParenthesis": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": {
+                                          "type": "boolean",
+                                          "default": true
+                                        },
+                                        "typescript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "typescript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "typescript.format.insertSpaceAfterTypeAssertion": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "typescript.format.insertSpaceBeforeTypeAnnotation": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "typescript.format.placeOpenBraceOnNewLineForFunctions": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "typescript.format.placeOpenBraceOnNewLineForControlBlocks": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "typescript.format.semicolons": {
+                                          "type": "string",
+                                          "default": "ignore",
+                                          "description": "Defines handling of optional semicolons. Requires using TypeScript 3.7 or newer in the workspace.",
+                                          "scope": "resource",
+                                          "enum": [
+                                            "ignore",
+                                            "insert",
+                                            "remove"
+                                          ]
+                                        },
+                                        "typescript.format.trimTrailingWhitespace": {
+                                          "type": "boolean",
+                                          "default": true
+                                        },
+                                        "javascript.format.insertSpaceAfterCommaDelimiter": {
+                                          "type": "boolean",
+                                          "default": true
+                                        },
+                                        "javascript.format.insertSpaceAfterConstructor": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "javascript.format.insertSpaceAfterSemicolonInForStatements": {
+                                          "type": "boolean",
+                                          "default": true
+                                        },
+                                        "javascript.format.insertSpaceBeforeAndAfterBinaryOperators": {
+                                          "type": "boolean",
+                                          "default": true
+                                        },
+                                        "javascript.format.insertSpaceAfterKeywordsInControlFlowStatements": {
+                                          "type": "boolean",
+                                          "default": true
+                                        },
+                                        "javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": {
+                                          "type": "boolean",
+                                          "default": true
+                                        },
+                                        "javascript.format.insertSpaceBeforeFunctionParenthesis": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "javascript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": {
+                                          "type": "boolean",
+                                          "default": true
+                                        },
+                                        "javascript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "javascript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "javascript.format.insertSpaceAfterTypeAssertion": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "javascript.format.insertSpaceBeforeTypeAnnotation": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "javascript.format.placeOpenBraceOnNewLineForFunctions": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "javascript.format.placeOpenBraceOnNewLineForControlBlocks": {
+                                          "type": "boolean",
+                                          "default": false
+                                        },
+                                        "javascript.format.semicolons": {
+                                          "type": "string",
+                                          "default": "ignore",
+                                          "description": "Defines handling of optional semicolons. Requires using TypeScript 3.7 or newer in the workspace.",
+                                          "scope": "resource",
+                                          "enum": [
+                                            "ignore",
+                                            "insert",
+                                            "remove"
+                                          ]
+                                        },
+                                        "javascript.format.trimTrailingWhitespace": {
+                                          "type": "boolean",
+                                          "default": true
+                                        },
+                                    }
                                 }
                             }
                         }
