@@ -18,11 +18,11 @@ except ImportError:
     pass
 
 
-def plugin_loaded():
+def plugin_loaded() -> None:
     LspTypescriptPlugin.setup()
 
 
-def plugin_unloaded():
+def plugin_unloaded() -> None:
     LspTypescriptPlugin.cleanup()
 
 
@@ -43,7 +43,7 @@ class LspTypescriptPlugin(NpmClientHandler):
             return 'This server only works when the window workspace includes some folders!'
 
     @request_handler('_typescript.rename')
-    def on_typescript_rename(self, textDocumentPositionParams, respond):
+    def on_typescript_rename(self, textDocumentPositionParams: Any, respond: Callable[[None], None]) -> None:
         filename = uri_to_filename(textDocumentPositionParams['textDocument']['uri'])
         view = sublime.active_window().open_file(filename)
 
@@ -58,6 +58,16 @@ class LspTypescriptPlugin(NpmClientHandler):
 
         # Server doesn't require any specific response.
         respond(None)
+
+    def additional_formatting_options(self, view: sublime.View) -> Dict[str, Any]:
+        session = self.weaksession()
+        if session:
+            session_view = session.session_view_for_view_async(view)
+            if session_view:
+                language_id = session_view.get_language_id() or ''
+                language = 'typescript' if language_id.startswith('typescript') else 'javascript'
+                return session.config.settings.get('{}.format'.format(language))
+        return {}
 
     def on_pre_server_command(self, command: Mapping[str, Any], done_callback: Callable[[], None]) -> bool:
         if command['command'] == '_typescript.applyCompletionCodeAction':
