@@ -53,7 +53,7 @@
 		"typescript.format.trimTrailingWhitespace": true,
 	},
 	// ST4 configuration
-	"selector": "source.js - source.js.flow, source.jsx, source.ts, source.tsx",
+	"selector": "source.js, source.jsx, source.ts, source.tsx",
 	// ST3 configuration
 	"languages": [
 		{
