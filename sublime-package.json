@@ -22,6 +22,10 @@
                                             "enum": ["off", "terse", "normal", "requesttime", "verbose"],
                                             "description": "Verbosity of the logging."
                                         },
+                                        "maxTsServerMemory": {
+                                            "type": "number",
+                                            "markdownDescription": "The maximum size of the V8's old memory section in megabytes (for example `4096` means 4GB). The default value is dynamically configured by Node so can differ per system. Increase for very big projects that exceed allowed memory usage."
+                                        },
                                         "plugins": {
                                             "type": "array",
                                             "default": [],

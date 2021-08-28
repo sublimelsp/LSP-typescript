@@ -2,6 +2,7 @@
 	"command": ["${node_bin}", "${server_path}", "--stdio"],
 	"initializationOptions": {
 		"logVerbosity": "off",
+		"maxTsServerMemory": 0,
 		"plugins": [],
 		"preferences": {
 			"allowRenameOfImportPath": true,
