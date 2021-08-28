@@ -1,36 +1,5 @@
 {
 	"command": ["${node_bin}", "${server_path}", "--stdio"],
-	"languages": [
-		{
-			"languageId": "javascriptreact",
-			"scopes": ["source.jsx", "source.js.react"],
-			"syntaxes": [
-				"Packages/User/JS Custom/Syntaxes/React.sublime-syntax",
-			],
-		},
-		{
-			"languageId": "javascript",
-			"scopes": ["source.js"],
-			"syntaxes": [
-				"Packages/JavaScript/JavaScript.sublime-syntax",
-				"Packages/Babel/JavaScript (Babel).sublime-syntax",
-			],
-		},
-		{
-			"languageId": "typescriptreact",
-			"scopes": ["source.tsx"],
-			"syntaxes": [
-				"Packages/TypeScript Syntax/TypeScriptReact.tmLanguage",
-			],
-		},
-		{
-			"languageId": "typescript",
-			"scopes": ["source.ts"],
-			"syntaxes": [
-				"Packages/TypeScript Syntax/TypeScript.tmLanguage",
-			],
-		},
-	],
 	"initializationOptions": {
 		"logVerbosity": "off",
 		"plugins": [],
@@ -83,4 +52,38 @@
 		"typescript.format.semicolons": "ignore",
 		"typescript.format.trimTrailingWhitespace": true,
 	},
+	// ST4 configuration
+	"selector": "source.js, source.jsx, source.ts, source.tsx",
+	// ST3 configuration
+	"languages": [
+		{
+			"languageId": "javascriptreact",
+			"scopes": ["source.jsx", "source.js.react"],
+			"syntaxes": [
+				"Packages/User/JS Custom/Syntaxes/React.sublime-syntax",
+			],
+		},
+		{
+			"languageId": "javascript",
+			"scopes": ["source.js"],
+			"syntaxes": [
+				"Packages/JavaScript/JavaScript.sublime-syntax",
+				"Packages/Babel/JavaScript (Babel).sublime-syntax",
+			],
+		},
+		{
+			"languageId": "typescriptreact",
+			"scopes": ["source.tsx"],
+			"syntaxes": [
+				"Packages/TypeScript Syntax/TypeScriptReact.tmLanguage",
+			],
+		},
+		{
+			"languageId": "typescript",
+			"scopes": ["source.ts"],
+			"syntaxes": [
+				"Packages/TypeScript Syntax/TypeScript.tmLanguage",
+			],
+		},
+	],
 }
