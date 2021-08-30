@@ -26,3 +26,47 @@ To sort or remove unused imports you can trigger the `LSP-typescript: Organize I
         }
     },
 ```
+
+### Usage in projects that also use Flow
+
+TypeScript can [check vanilla JavaScript](https://www.typescriptlang.org/docs/handbook/type-checking-javascript-files.html), but may break on JavaScript with Flow types in it. To keep LSP-typescript enabled for TS and vanilla JS, while ignoring Flow-typed files, you must install [JSCustom](https://packagecontrol.io/packages/JSCustom) and configure it like so:
+
+```json
+{
+  "configurations": {
+    "Flow": {
+      "scope": "source.js.flow",
+      "flow_types": true,
+      "jsx": true
+    }
+  }
+}
+```
+
+Also install [ApplySyntax](https://packagecontrol.io/packages/ApplySyntax) and configure it like so:
+
+```json
+{
+  "syntaxes": [
+    {
+      "syntax": "User/JS Custom/Syntaxes/Flow",
+      "match": "all",
+      "rules": [
+        { "file_path": ".*\\.jsx?$" },
+        { "first_line": "^/[/\\*] *@flow" }
+      ]
+    }
+  ]
+}
+```
+
+And then configure LSP-typescript like so:
+
+```json
+{
+  "selector": "source.js - source.js.flow, source.jsx, source.ts, source.tsx",
+  "languages": []
+}
+```
+
+This works only on Sublime Text 4, and your project must have a `// @flow` or `/* @flow */` in each Flow-typed file. For more information, see [this issue](https://github.com/sublimelsp/LSP-typescript/issues/60).
