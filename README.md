@@ -64,8 +64,7 @@ And then configure LSP-typescript like so:
 
 ```json
 {
-  "selector": "source.js - source.js.flow, source.jsx, source.ts, source.tsx",
-  "languages": []
+  "selector": "source.js - source.js.flow, source.jsx, source.ts, source.tsx"
 }
 ```
 
