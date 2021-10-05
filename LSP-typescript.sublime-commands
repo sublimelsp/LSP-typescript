@@ -16,4 +16,11 @@
             "command_args": ["${file}"]
         }
     },
+    {
+        "caption": "LSP-typescript: Find callers",
+        "command": "lsp_typescript_calls",
+        "args": {
+            "direction": "incoming"
+        },
+    },
 ]
