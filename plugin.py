@@ -43,12 +43,12 @@ class LspTypescriptPlugin(NpmClientHandler):
             return 'This server only works when the window workspace includes some folders!'
 
     @request_handler('_typescript.rename')
-    def on_typescript_rename(self, textDocumentPositionParams: Any, respond: Callable[[None], None]) -> None:
-        filename = uri_to_filename(textDocumentPositionParams['textDocument']['uri'])
+    def on_typescript_rename(self, position_params: Any, respond: Callable[[None], None]) -> None:
+        filename = uri_to_filename(position_params['textDocument']['uri'])
         view = sublime.active_window().open_file(filename)
 
         if view:
-            lsp_point = Point.from_lsp(textDocumentPositionParams['position'])
+            lsp_point = Point.from_lsp(position_params['position'])
             point = point_to_offset(lsp_point, view)
 
             sel = view.sel()

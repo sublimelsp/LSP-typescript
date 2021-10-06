@@ -1,6 +1,7 @@
 .dependabot export-ignore
 .github/ export-ignore
 codecov.yml export-ignore
+mypy.ini export-ignore
 tests/ export-ignore
 tox.ini export-ignore
 unittesting.json export-ignore
