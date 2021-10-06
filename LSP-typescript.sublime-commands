@@ -17,7 +17,7 @@
         }
     },
     {
-        "caption": "LSP-typescript: Find callers",
+        "caption": "LSP-typescript: Find Callers",
         "command": "lsp_typescript_calls",
         "args": {
             "direction": "incoming"

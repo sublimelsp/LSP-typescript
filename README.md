@@ -27,6 +27,10 @@ To sort or remove unused imports you can trigger the `LSP-typescript: Organize I
     },
 ```
 
+## Find Callers command
+
+The `LSP-typescript: Find Callers` command can be used to find what is calling the given symbol. It has some overlap with the built-in `LSP: Find References` command but returns a subset of that.
+
 ## Usage in projects that also use Flow
 
 TypeScript can [check vanilla JavaScript](https://www.typescriptlang.org/docs/handbook/type-checking-javascript-files.html), but may break on JavaScript with Flow types in it. To keep LSP-typescript enabled for TS and vanilla JS, while ignoring Flow-typed files, you must install [JSCustom](https://packagecontrol.io/packages/JSCustom) and configure it like so:
