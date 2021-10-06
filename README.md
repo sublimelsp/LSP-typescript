@@ -29,7 +29,7 @@ To sort or remove unused imports you can trigger the `LSP-typescript: Organize I
 
 ## Find Callers command
 
-The `LSP-typescript: Find Callers` command can be used to find what is calling the given symbol. It has some overlap with the built-in `LSP: Find References` command but returns a subset of that.
+The `LSP-typescript: Find Callers` command can be used to find what is calling the given symbol. It has some overlap with the built-in `LSP: Find References` command but returns only the places where the symbol was called.
 
 ## Usage in projects that also use Flow
 
