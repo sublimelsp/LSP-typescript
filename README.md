@@ -31,6 +31,34 @@ To sort or remove unused imports you can trigger the `LSP-typescript: Organize I
 
 The `LSP-typescript: Find Callers` command can be used to find what is calling the given symbol. It has some overlap with the built-in `LSP: Find References` command but returns only the places where the symbol was called.
 
+
+## Inlay hints
+
+Inlay hints are short textual annotations that show the parameter names, type hints.
+
+![inlay-hints](/images/inlay-hints.png)
+
+Inlay hints are disabled by default, but you can enable them by pasting the following block of code to LSP-typescript settings.
+
+```json
+// Settings in here override those in "LSP-typescript/LSP-typescript.sublime-settings"
+
+{
+  "initializationOptions": {
+    "preferences": {
+      "includeInlayEnumMemberValueHints": true,
+      "includeInlayFunctionLikeReturnTypeHints": true,
+      "includeInlayFunctionParameterTypeHints": true,
+      "includeInlayParameterNameHints": "all",
+      "includeInlayParameterNameHintsWhenArgumentMatchesName": true,
+      "includeInlayPropertyDeclarationTypeHints": true,
+      "includeInlayVariableTypeHints": true,
+    }
+  }
+}
+
+```
+
 ## Usage in projects that also use Flow
 
 TypeScript can [check vanilla JavaScript](https://www.typescriptlang.org/docs/handbook/type-checking-javascript-files.html), but may break on JavaScript with Flow types in it. To keep LSP-typescript enabled for TS and vanilla JS, while ignoring Flow-typed files, you must install [JSCustom](https://packagecontrol.io/packages/JSCustom) and configure it like so:

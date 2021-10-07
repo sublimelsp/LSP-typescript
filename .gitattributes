@@ -5,3 +5,4 @@ mypy.ini export-ignore
 tests/ export-ignore
 tox.ini export-ignore
 unittesting.json export-ignore
+images/ export-ignore
