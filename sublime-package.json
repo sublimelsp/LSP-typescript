@@ -76,6 +76,45 @@
                                                     "type": "boolean",
                                                     "markdownDescription": "If enabled, the completion list will include completions with invalid identifier names. For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `[\"x\"]`."
                                                 },
+                                                "includeInlayEnumMemberValueHints": {
+                                                    "type": "boolean",
+                                                    "default": false,
+                                                    "markdownDescription": "Enable/disable inlay hints for member values in enum declarations: \n\n ```typescript\n enum MyValue {\n   A /* = 0 */;\n   B /* = 1 */;\n }\n ```\n \n Requires using TypeScript 4.4+ in the workspace."
+                                                },
+                                                "includeInlayFunctionLikeReturnTypeHints": {
+                                                    "type": "boolean",
+                                                    "default": false,
+                                                    "markdownDescription": "Enable/disable inlay hints for implicit return types on function signatures:\n\n ```typescript\n function foo() /* :number */ {\n   return Date.now();\n }\n ```\n Requires using TypeScript 4.4+ in the workspace."
+                                                },
+                                                "includeInlayFunctionParameterTypeHints": {
+                                                    "type": "boolean",
+                                                    "default": false,
+                                                    "markdownDescription": "Enable/disable inlay hints for parameter names: \n\n ```typescript\n parseInt(/* str: */ '123', /* radix: */ 8)\n ```\n Requires using TypeScript 4.4+ in the workspace."
+                                                },
+                                                "includeInlayParameterNameHints": {
+                                                    "enum": ["all", "literals", "none"],
+                                                    "default": "none",
+                                                    "markdownEnumDescriptions": [
+                                                        "Enable parameter name hints for literal and non-literal arguments.",
+                                                        "Enable parameter name hints only for literal arguments.",
+                                                        "Disable parameter name hints."
+                                                    ]
+                                                },
+                                                "includeInlayParameterNameHintsWhenArgumentMatchesName": {
+                                                    "type": "boolean",
+                                                    "default": false,
+                                                    "markdownDescription": ""
+                                                },
+                                                "includeInlayPropertyDeclarationTypeHints": {
+                                                    "type": "boolean",
+                                                    "default": false,
+                                                    "markdownDescription": "Enable/disable inlay hints for implicit types on property declarations: \n\n ```typescript\n class Foo {\n   prop /* :number */ = Date.now;\n }\n ```\n Requires using TypeScript 4.4+ in the workspace."
+                                                },
+                                                "includeInlayVariableTypeHints": {
+                                                    "type": "boolean",
+                                                    "default": false,
+                                                    "markdownDescription": "Enable/disable inlay hints for implicit variable types: \n\n ```typescript\n const foo /* :number */ = Date.now();\n ``` \n Requires using TypeScript 4.4+ in the workspace."
+                                                },
                                                 "includeAutomaticOptionalChainCompletions": {
                                                     "type": "boolean",
                                                     "markdownDescription": "Unless this option is `false`, or `includeCompletionsWithInsertText` is not enabled, member completion lists triggered with `.` will include entries on potentially-null and potentially-undefined values, with insertion text to replace preceding `.` tokens with `?.`."
