@@ -34,11 +34,12 @@ The `LSP-typescript: Find Callers` command can be used to find what is calling t
 
 ## Inlay hints
 
-Inlay hints are short textual annotations that show the parameter names, type hints.
+Inlay hints are short textual annotations that show parameter names, type hints.
 
 ![inlay-hints](/images/inlay-hints.png)
 
-Inlay hints are disabled by default, but you can enable them by pasting the following block of code to LSP-typescript settings.
+Inlay hints are disabled by default.
+To enable inlay hints, copy/paste the following block of code to `LSP-typescript.sublime-settings`.
 
 ```json
 // Settings in here override those in "LSP-typescript/LSP-typescript.sublime-settings"
