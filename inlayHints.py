@@ -17,12 +17,6 @@ def inlay_hint_to_phantom(view: sublime.View, hint: InlayHint) -> sublime.Phanto
     html = """
     <body id="lsp-typescript-inlay-hints">
         <style>
-            body {{
-                padding: 0;
-                margin: 0px;
-                border: 0px;
-            }}
-
             #lsp-typescript-inlay-hints .inlay-hint {{
                 color: color(var(--foreground) alpha(0.6));
                 background-color: color(var(--foreground) alpha(0.08));
