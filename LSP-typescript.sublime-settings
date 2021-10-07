@@ -9,13 +9,13 @@
 			"includeCompletionsForImportStatements": true,
 			"includeCompletionsForModuleExports": true,
 			"includeCompletionsWithInsertText": true,
-			"includeInlayParameterNameHintsWhenArgumentMatchesName": true,
-			"includeInlayParameterNameHints": "all",
-			"includeInlayVariableTypeHints": true,
-			"includeInlayPropertyDeclarationTypeHints": true,
-			"includeInlayFunctionParameterTypeHints": true,
 			"includeInlayEnumMemberValueHints": true,
 			"includeInlayFunctionLikeReturnTypeHints": true,
+			"includeInlayFunctionParameterTypeHints": true,
+			"includeInlayParameterNameHints": "all",
+			"includeInlayParameterNameHintsWhenArgumentMatchesName": true,
+			"includeInlayPropertyDeclarationTypeHints": true,
+			"includeInlayVariableTypeHints": true,
 		}
 	},
 	"settings": {
