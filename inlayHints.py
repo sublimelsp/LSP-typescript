@@ -44,15 +44,12 @@ def inlay_hint_to_phantom(view: sublime.View, hint: InlayHint) -> sublime.Phanto
     return sublime.Phantom(region, html, sublime.LAYOUT_INLINE)
 
 
-def session_by_name(view: sublime.View, session_name: str, capability_path: Optional[str] = None) -> Optional[Session]:
+def session_by_name(view: sublime.View, session_name: str) -> Optional[Session]:
     listener = windows.listener_for_view(view)
     if listener:
         for sv in listener.session_views_async():
             if sv.session.config.name == session_name:
-                if capability_path is None or sv.has_capability_async(capability_path):
-                    return sv.session
-                else:
-                    return None
+                return sv.session
     return None
 
 
