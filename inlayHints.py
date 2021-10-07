@@ -8,7 +8,6 @@ from LSP.plugin.core.types import debounced
 from LSP.plugin.core.types import FEATURES_TIMEOUT
 from LSP.plugin.core.typing import List, Optional, Tuple
 from LSP.plugin.core.views import point_to_offset
-from LSP.plugin.core.views import region_to_range
 from LSP.plugin.core.views import text_document_identifier
 import sublime
 import sublime_plugin
