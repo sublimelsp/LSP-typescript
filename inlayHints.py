@@ -27,8 +27,7 @@ def inlay_hint_to_phantom(view: sublime.View, hint: InlayHint) -> sublime.Phanto
                 color: color(var(--foreground) alpha(0.6));
                 background-color: color(var(--foreground) alpha(0.08));
                 border-radius: 4px;
-                padding-left: 4px;
-                padding-right: 4px;
+                padding: 0.05em 4px;
                 font-size: 0.9em;
             }}
         </style>
