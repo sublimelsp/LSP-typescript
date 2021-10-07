@@ -109,4 +109,3 @@ class InlayHintsListener(sublime_plugin.ViewEventListener):
         if not self.view.is_valid():
             return
         self.phantom_set.update(phantoms)
-

@@ -34,13 +34,13 @@ InlayHint = TypedDict('InlayHint', {
     'text': str,
     'position': Position,
     'kind': InlayHintKind,
-    'whitespaceBefore': bool, # optional key
-    'whitespaceAfter': bool, # optional key
+    'whitespaceBefore': bool,  # optional key
+    'whitespaceAfter': bool,  # optional key
 }, total=True)
 
 InlayHintRequestParams = TypedDict('CallsRequestParams', {
     'textDocument': TextDocumentIdentifier,
-    'range': RangeLsp # optional key
+    'range': RangeLsp  # optional key
 }, total=False)
 
 InlayHintResponse = TypedDict('CallsResponse', {
