@@ -62,7 +62,6 @@ class InlayHintsListener(sublime_plugin.ViewEventListener):
         self._stored_region = sublime.Region(-1, -1)
         self.phantom_set = sublime.PhantomSet(view, "_lsp_typescript_inlay_hints")
 
-    # This trick comes from the parent LSP repo
     def _update_stored_region_async(self) -> Tuple[bool, sublime.Region]:
         sel = self.view.sel()
         if not sel:
