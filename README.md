@@ -32,14 +32,14 @@ To sort or remove unused imports you can trigger the `LSP-typescript: Organize I
 The `LSP-typescript: Find Callers` command can be used to find what is calling the given symbol. It has some overlap with the built-in `LSP: Find References` command but returns only the places where the symbol was called.
 
 
-## Inlay hints
+## Inlay hints (experimental)
 
 Inlay hints are short textual annotations that show parameter names, type hints.
 
 ![inlay-hints](/images/inlay-hints.png)
 
 Inlay hints are disabled by default.
-To enable inlay hints, copy/paste the following block of code to `LSP-typescript.sublime-settings`.
+To enable them, copy/paste the following block of code to `LSP-typescript.sublime-settings`.
 
 ```json
 {
@@ -57,6 +57,8 @@ To enable inlay hints, copy/paste the following block of code to `LSP-typescript
 }
 
 ```
+
+Note: Inlay hints require TypeScript 4.4+ in the workspace.
 
 ## Usage in projects that also use Flow
 
