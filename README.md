@@ -42,8 +42,6 @@ Inlay hints are disabled by default.
 To enable inlay hints, copy/paste the following block of code to `LSP-typescript.sublime-settings`.
 
 ```json
-// Settings in here override those in "LSP-typescript/LSP-typescript.sublime-settings"
-
 {
   "initializationOptions": {
     "preferences": {
