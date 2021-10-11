@@ -51,16 +51,12 @@ class InlayHintsListener(sublime_plugin.ViewEventListener):
         super().__init__(view)
         self.phantom_set = sublime.PhantomSet(view, "_lsp_typescript_inlay_hints")
 
-    def is_unchanged(self, old_change_count: int) -> bool:
-        current_change_count = self.view.change_count()
-        return current_change_count == old_change_count
-
     def on_modified_async(self) -> None:
         change_count = self.view.change_count()
         debounced(
             self.request_inlay_hints_async,
             FEATURES_TIMEOUT,
-            lambda: self.is_unchanged(change_count),  # update phantoms when view is unchanged for the given timeout
+            lambda: self.view.change_count() == change_count,
             async_thread=True,
         )
 
