@@ -6,7 +6,7 @@ from LSP.plugin.core.protocol import Point
 from LSP.plugin.core.registry import windows
 from LSP.plugin.core.types import debounced
 from LSP.plugin.core.types import FEATURES_TIMEOUT
-from LSP.plugin.core.typing import List, Optional, Tuple
+from LSP.plugin.core.typing import List, Optional
 from LSP.plugin.core.views import point_to_offset
 from LSP.plugin.core.views import text_document_identifier
 import sublime
@@ -51,7 +51,7 @@ class InlayHintsListener(sublime_plugin.ViewEventListener):
         super().__init__(view)
         self.phantom_set = sublime.PhantomSet(view, "_lsp_typescript_inlay_hints")
 
-    def is_unchanged(self, old_change_count):
+    def is_unchanged(self, old_change_count: int) -> bool:
         current_change_count = self.view.change_count()
         return current_change_count == old_change_count
 
