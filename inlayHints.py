@@ -49,27 +49,18 @@ def session_by_name(view: sublime.View, session_name: str) -> Optional[Session]:
 class InlayHintsListener(sublime_plugin.ViewEventListener):
     def __init__(self, view: sublime.View) -> None:
         super().__init__(view)
-        self._stored_region = sublime.Region(-1, -1)
         self.phantom_set = sublime.PhantomSet(view, "_lsp_typescript_inlay_hints")
 
-    def _update_stored_region_async(self) -> Tuple[bool, sublime.Region]:
-        sel = self.view.sel()
-        if not sel:
-            return False, sublime.Region(-1, -1)
-        region = sel[0]
-        if self._stored_region != region:
-            self._stored_region = region
-            return True, region
-        return False, sublime.Region(-1, -1)
+    def is_unchanged(self, old_change_count):
+        current_change_count = self.view.change_count()
+        return current_change_count == old_change_count
 
     def on_modified_async(self) -> None:
-        different, region = self._update_stored_region_async()
-        if not different:
-            return
+        change_count = self.view.change_count()
         debounced(
             self.request_inlay_hints_async,
             FEATURES_TIMEOUT,
-            lambda: self._stored_region == region,
+            lambda: self.is_unchanged(change_count),  # update phantoms when view is unchanged for the given timeout
             async_thread=True,
         )
 
