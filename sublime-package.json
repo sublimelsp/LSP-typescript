@@ -241,6 +241,49 @@
                                           "type": "boolean",
                                           "default": true
                                         },
+                                        "typescript.inlayHints.includeInlayEnumMemberValueHints": {
+                                          "type": "boolean",
+                                          "default": false,
+                                          "markdownDescription": "Enable/disable inlay hints for member values in enum declarations: \n\n ```typescript\n enum MyValue {\n   A /* = 0 */;\n   B /* = 1 */;\n }\n ```\n \n Requires using TypeScript 4.4+ in the workspace."
+                                        },
+                                        "typescript.inlayHints.includeInlayFunctionLikeReturnTypeHints": {
+                                          "type": "boolean",
+                                          "default": false,
+                                          "markdownDescription": "Enable/disable inlay hints for implicit return types on function signatures:\n\n ```typescript\n function foo() /* :number */ {\n   return Date.now();\n }\n ```\n Requires using TypeScript 4.4+ in the workspace."
+                                        },
+                                        "typescript.inlayHints.includeInlayFunctionParameterTypeHints": {
+                                          "type": "boolean",
+                                          "default": false,
+                                          "markdownDescription": "Enable/disable inlay hints for parameter names: \n\n ```typescript\n parseInt(/* str: */ '123', /* radix: */ 8)\n ```\n Requires using TypeScript 4.4+ in the workspace."
+                                        },
+                                        "typescript.inlayHints.includeInlayParameterNameHints": {
+                                          "enum": [
+                                            "all",
+                                            "literals",
+                                            "none"
+                                          ],
+                                          "default": "none",
+                                          "markdownEnumDescriptions": [
+                                            "Enable parameter name hints for literal and non-literal arguments.",
+                                            "Enable parameter name hints only for literal arguments.",
+                                            "Disable parameter name hints."
+                                          ]
+                                        },
+                                        "typescript.inlayHints.includeInlayParameterNameHintsWhenArgumentMatchesName": {
+                                          "type": "boolean",
+                                          "default": false,
+                                          "markdownDescription": ""
+                                        },
+                                        "typescript.inlayHints.includeInlayPropertyDeclarationTypeHints": {
+                                          "type": "boolean",
+                                          "default": false,
+                                          "markdownDescription": "Enable/disable inlay hints for implicit types on property declarations: \n\n ```typescript\n class Foo {\n   prop /* :number */ = Date.now;\n }\n ```\n Requires using TypeScript 4.4+ in the workspace."
+                                        },
+                                        "typescript.inlayHints.includeInlayVariableTypeHints": {
+                                          "type": "boolean",
+                                          "default": false,
+                                          "markdownDescription": "Enable/disable inlay hints for implicit variable types: \n\n ```typescript\n const foo /* :number */ = Date.now();\n ``` \n Requires using TypeScript 4.4+ in the workspace."
+                                        },
                                         "javascript.format.insertSpaceAfterCommaDelimiter": {
                                           "type": "boolean",
                                           "default": true
@@ -324,6 +367,49 @@
                                           "type": "boolean",
                                           "default": true
                                         },
+                                        "javascript.inlayHints.includeInlayEnumMemberValueHints": {
+                                          "type": "boolean",
+                                          "default": false,
+                                          "markdownDescription": "Enable/disable inlay hints for member values in enum declarations: \n\n ```typescript\n enum MyValue {\n   A /* = 0 */;\n   B /* = 1 */;\n }\n ```\n \n Requires using TypeScript 4.4+ in the workspace."
+                                        },
+                                        "javascript.inlayHints.includeInlayFunctionLikeReturnTypeHints": {
+                                          "type": "boolean",
+                                          "default": false,
+                                          "markdownDescription": "Enable/disable inlay hints for implicit return types on function signatures:\n\n ```typescript\n function foo() /* :number */ {\n   return Date.now();\n }\n ```\n Requires using TypeScript 4.4+ in the workspace."
+                                        },
+                                        "javascript.inlayHints.includeInlayFunctionParameterTypeHints": {
+                                          "type": "boolean",
+                                          "default": false,
+                                          "markdownDescription": "Enable/disable inlay hints for parameter names: \n\n ```typescript\n parseInt(/* str: */ '123', /* radix: */ 8)\n ```\n Requires using TypeScript 4.4+ in the workspace."
+                                        },
+                                        "javascript.inlayHints.includeInlayParameterNameHints": {
+                                          "enum": [
+                                            "all",
+                                            "literals",
+                                            "none"
+                                          ],
+                                          "default": "none",
+                                          "markdownEnumDescriptions": [
+                                            "Enable parameter name hints for literal and non-literal arguments.",
+                                            "Enable parameter name hints only for literal arguments.",
+                                            "Disable parameter name hints."
+                                          ]
+                                        },
+                                        "javascript.inlayHints.includeInlayParameterNameHintsWhenArgumentMatchesName": {
+                                          "type": "boolean",
+                                          "default": false,
+                                          "markdownDescription": ""
+                                        },
+                                        "javascript.inlayHints.includeInlayPropertyDeclarationTypeHints": {
+                                          "type": "boolean",
+                                          "default": false,
+                                          "markdownDescription": "Enable/disable inlay hints for implicit types on property declarations: \n\n ```typescript\n class Foo {\n   prop /* :number */ = Date.now;\n }\n ```\n Requires using TypeScript 4.4+ in the workspace."
+                                        },
+                                        "javascript.inlayHints.includeInlayVariableTypeHints": {
+                                          "type": "boolean",
+                                          "default": false,
+                                          "markdownDescription": "Enable/disable inlay hints for implicit variable types: \n\n ```typescript\n const foo /* :number */ = Date.now();\n ``` \n Requires using TypeScript 4.4+ in the workspace."
+                                        }
                                     }
                                 }
                             }

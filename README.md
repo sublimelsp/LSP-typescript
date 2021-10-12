@@ -39,23 +39,29 @@ Inlay hints are short textual annotations that show parameter names, type hints.
 ![inlay-hints](/images/inlay-hints.png)
 
 Inlay hints are disabled by default.
-To enable them, copy/paste the following block of code to `LSP-typescript.sublime-settings`.
+To enable them, modify the following settings in `LSP-typescript.sublime-settings`:
 
 ```json
 {
-  "initializationOptions": {
-    "preferences": {
-      "includeInlayEnumMemberValueHints": true,
-      "includeInlayFunctionLikeReturnTypeHints": true,
-      "includeInlayFunctionParameterTypeHints": true,
-      "includeInlayParameterNameHints": "all",
-      "includeInlayParameterNameHintsWhenArgumentMatchesName": true,
-      "includeInlayPropertyDeclarationTypeHints": true,
-      "includeInlayVariableTypeHints": true,
-    }
+  "settings": {
+    // Javascript inlay hints options.
+    "javascript.inlayHints.includeInlayEnumMemberValueHints": false,
+    "javascript.inlayHints.includeInlayFunctionLikeReturnTypeHints": false,
+    "javascript.inlayHints.includeInlayFunctionParameterTypeHints": false,
+    "javascript.inlayHints.includeInlayParameterNameHints": "none",
+    "javascript.inlayHints.includeInlayParameterNameHintsWhenArgumentMatchesName": false,
+    "javascript.inlayHints.includeInlayPropertyDeclarationTypeHints": false,
+    "javascript.inlayHints.includeInlayVariableTypeHints": false,
+    // Typescript inlay hints options.
+    "typescript.inlayHints.includeInlayEnumMemberValueHints": false,
+    "typescript.inlayHints.includeInlayFunctionLikeReturnTypeHints": false,
+    "typescript.inlayHints.includeInlayFunctionParameterTypeHints": false,
+    "typescript.inlayHints.includeInlayParameterNameHints": "none",
+    "typescript.inlayHints.includeInlayParameterNameHintsWhenArgumentMatchesName": false,
+    "typescript.inlayHints.includeInlayPropertyDeclarationTypeHints": false,
+    "typescript.inlayHints.includeInlayVariableTypeHints": false,
   }
 }
-
 ```
 
 Note: Inlay hints require TypeScript 4.4+ in the workspace.
