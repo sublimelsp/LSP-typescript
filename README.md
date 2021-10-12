@@ -41,7 +41,7 @@ Inlay hints are short textual annotations that show parameter names, type hints.
 Inlay hints are disabled by default.
 To enable them, modify the following settings in `LSP-typescript.sublime-settings`:
 
-```json
+```js
 {
   "settings": {
     // Javascript inlay hints options.
