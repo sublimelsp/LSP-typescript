@@ -7,7 +7,7 @@ from LSP.plugin.core.registry import windows
 from LSP.plugin.core.types import debounced
 from LSP.plugin.core.types import FEATURES_TIMEOUT
 from LSP.plugin.core.typing import List, Optional
-from LSP.plugin.core.views import point_to_offset
+from LSP.plugin.core.views import point_to_offset, uri_from_view
 from LSP.plugin.core.views import text_document_identifier
 import sublime
 import sublime_plugin
@@ -47,10 +47,6 @@ def session_by_name(view: sublime.View, session_name: str) -> Optional[Session]:
 
 
 class InlayHintsListener(sublime_plugin.ViewEventListener):
-    def __init__(self, view: sublime.View) -> None:
-        super().__init__(view)
-        self.phantom_set = sublime.PhantomSet(view, "_lsp_typescript_inlay_hints")
-
     def on_modified_async(self) -> None:
         change_count = self.view.change_count()
         # increase the timeout to avoid rare issue with hints being requested before the textdocument/didChange
@@ -84,10 +80,18 @@ class InlayHintsListener(sublime_plugin.ViewEventListener):
         session = session_by_name(self.view, 'LSP-typescript')
         if session is None:
             return
+        buffer = session.get_session_buffer_for_uri_async(uri_from_view(self.view))
+        if not buffer:
+            return
+        key = "_lsp_typescript_inlay_hints"
+        phantom_set = getattr(buffer, key, None)
+        if phantom_set is None:
+            phantom_set = sublime.PhantomSet(self.view, key)
+            setattr(buffer, key, phantom_set)
         phantoms = [inlay_hint_to_phantom(self.view, hint) for hint in response['inlayHints']]
-        sublime.set_timeout(lambda: self.present_inlay_hints(phantoms))
+        sublime.set_timeout(lambda: self.present_inlay_hints(phantoms, phantom_set))
 
-    def present_inlay_hints(self, phantoms: List[sublime.Phantom]) -> None:
+    def present_inlay_hints(self, phantoms: List[sublime.Phantom], phantom_set: sublime.PhantomSet) -> None:
         if not self.view.is_valid():
             return
-        self.phantom_set.update(phantoms)
+        phantom_set.update(phantoms)
