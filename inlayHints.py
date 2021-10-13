@@ -7,7 +7,7 @@ from LSP.plugin.core.registry import windows
 from LSP.plugin.core.types import debounced
 from LSP.plugin.core.types import FEATURES_TIMEOUT
 from LSP.plugin.core.typing import List, Optional
-from LSP.plugin.core.views import point_to_offset
+from LSP.plugin.core.views import point_to_offset, uri_from_view
 from LSP.plugin.core.views import text_document_identifier
 import sublime
 import sublime_plugin
@@ -47,47 +47,54 @@ def session_by_name(view: sublime.View, session_name: str) -> Optional[Session]:
 
 
 class InlayHintsListener(sublime_plugin.ViewEventListener):
-    def __init__(self, view: sublime.View) -> None:
-        super().__init__(view)
-        self.phantom_set = sublime.PhantomSet(view, "_lsp_typescript_inlay_hints")
-
     def on_modified_async(self) -> None:
         change_count = self.view.change_count()
         # increase the timeout to avoid rare issue with hints being requested before the textdocument/didChange
         TIMEOUT = FEATURES_TIMEOUT + 100
         debounced(
-            self.request_inlay_hints_async,
+            lambda: request_inlay_hints_async(self.view),
             TIMEOUT,
             lambda: self.view.change_count() == change_count,
             async_thread=True,
         )
 
     def on_load_async(self) -> None:
-        self.request_inlay_hints_async()
+        request_inlay_hints_async(self.view)
 
     def on_activated_async(self) -> None:
-        self.request_inlay_hints_async()
+        request_inlay_hints_async(self.view)
 
-    def request_inlay_hints_async(self) -> None:
-        session = session_by_name(self.view, 'LSP-typescript')
-        if session is None:
-            return
-        params = {
-            "textDocument": text_document_identifier(self.view)
-        }  # type: InlayHintRequestParams
-        session.send_request_async(
-            Request("typescript/inlayHints", params),
-            self.on_inlay_hints_async
-        )
 
-    def on_inlay_hints_async(self, response: InlayHintResponse) -> None:
-        session = session_by_name(self.view, 'LSP-typescript')
-        if session is None:
-            return
-        phantoms = [inlay_hint_to_phantom(self.view, hint) for hint in response['inlayHints']]
-        sublime.set_timeout(lambda: self.present_inlay_hints(phantoms))
+def request_inlay_hints_async(view: sublime.View) -> None:
+    session = session_by_name(view, 'LSP-typescript')
+    if session is None:
+        return
+    params = {
+        "textDocument": text_document_identifier(view)
+    }  # type: InlayHintRequestParams
+    session.send_request_async(
+        Request("typescript/inlayHints", params),
+        lambda response: on_inlay_hints_async(view, response)
+    )
 
-    def present_inlay_hints(self, phantoms: List[sublime.Phantom]) -> None:
-        if not self.view.is_valid():
-            return
-        self.phantom_set.update(phantoms)
+
+def on_inlay_hints_async(view: sublime.View, response: InlayHintResponse) -> None:
+    session = session_by_name(view, 'LSP-typescript')
+    if session is None:
+        return
+    buffer = session.get_session_buffer_for_uri_async(uri_from_view(view))
+    if not buffer:
+        return
+    key = "_lsp_typescript_inlay_hints"
+    phantom_set = getattr(buffer, key, None)
+    if phantom_set is None:
+        phantom_set = sublime.PhantomSet(view, key)
+        setattr(buffer, key, phantom_set)
+    phantoms = [inlay_hint_to_phantom(view, hint) for hint in response['inlayHints']]
+    sublime.set_timeout(lambda: present_inlay_hints(view, phantoms, phantom_set))
+
+
+def present_inlay_hints(view: sublime.View, phantoms: List[sublime.Phantom], phantom_set: sublime.PhantomSet) -> None:
+    if not view.is_valid():
+        return
+    phantom_set.update(phantoms)
