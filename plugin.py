@@ -3,13 +3,10 @@ from LSP.plugin import uri_to_filename
 from LSP.plugin import WorkspaceFolder
 from LSP.plugin.core.protocol import Point
 from LSP.plugin.core.typing import Any, Callable, Dict, List, Mapping, Optional
-from LSP.plugin.core.views import point_to_offset, text_document_identifier
-from .inlayHints import on_inlay_hints_async, request_inlay_hints_async, session_by_name
-from .protocol import InlayHintRequestParams
+from LSP.plugin.core.views import point_to_offset
 from lsp_utils import NpmClientHandler
 from lsp_utils import request_handler
 import os
-from lsp_utils.api_wrapper_interface import ApiWrapperInterface
 import sublime
 
 try:
@@ -33,15 +30,6 @@ class LspTypescriptPlugin(NpmClientHandler):
     package_name = __package__
     server_directory = 'typescript-language-server'
     server_binary_path = os.path.join(server_directory, 'node_modules', 'typescript-language-server', 'lib', 'cli.js')
-
-    def on_ready(self, api: ApiWrapperInterface) -> None:
-        view = sublime.active_window().active_view()
-        if view:
-            timeout = 0
-            session = session_by_name(view, 'LSP-typescript')
-            if not session:
-                timeout = 300
-            sublime.set_timeout_async(lambda: request_inlay_hints_async(view), timeout)
 
     @classmethod
     def is_allowed_to_start(
