@@ -53,9 +53,11 @@ class InlayHintsListener(sublime_plugin.ViewEventListener):
 
     def on_modified_async(self) -> None:
         change_count = self.view.change_count()
+        # increase the timeout to avoid rare issue with hints being requested before the textdocument/didChange
+        TIMEOUT = FEATURES_TIMEOUT + 100
         debounced(
             self.request_inlay_hints_async,
-            FEATURES_TIMEOUT,
+            TIMEOUT,
             lambda: self.view.change_count() == change_count,
             async_thread=True,
         )
