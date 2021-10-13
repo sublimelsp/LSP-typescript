@@ -229,17 +229,17 @@
                     "typescript.inlayHints.includeInlayEnumMemberValueHints": {
                       "type": "boolean",
                       "default": false,
-                      "markdownDescription": "Enable/disable inlay hints for member values in enum declarations: \n\n ```typescript\n enum MyValue {\n   A /* = 0 */;\n   B /* = 1 */;\n }\n ```\n \n Requires using TypeScript 4.4+ in the workspace."
+                      "markdownDescription": "Enable/disable inlay hints for member values in enum declarations: \n\n ```typescript\n enum MyValue {\n   A /* = 0 */;\n   B /* = 1 */;\n }\n ```\n \n Require TypeScript 4.4+."
                     },
                     "typescript.inlayHints.includeInlayFunctionLikeReturnTypeHints": {
                       "type": "boolean",
                       "default": false,
-                      "markdownDescription": "Enable/disable inlay hints for implicit return types on function signatures:\n\n ```typescript\n function foo() /* :number */ {\n   return Date.now();\n }\n ```\n Requires using TypeScript 4.4+ in the workspace."
+                      "markdownDescription": "Enable/disable inlay hints for implicit return types on function signatures:\n\n ```typescript\n function foo() /* :number */ {\n   return Date.now();\n }\n ```\n Require TypeScript 4.4+."
                     },
                     "typescript.inlayHints.includeInlayFunctionParameterTypeHints": {
                       "type": "boolean",
                       "default": false,
-                      "markdownDescription": "Enable/disable inlay hints for parameter names: \n\n ```typescript\n parseInt(/* str: */ '123', /* radix: */ 8)\n ```\n Requires using TypeScript 4.4+ in the workspace."
+                      "markdownDescription": "Enable/disable inlay hints for parameter names: \n\n ```typescript\n parseInt(/* str: */ '123', /* radix: */ 8)\n ```\n Require TypeScript 4.4+."
                     },
                     "typescript.inlayHints.includeInlayParameterNameHints": {
                       "enum": [
@@ -262,12 +262,12 @@
                     "typescript.inlayHints.includeInlayPropertyDeclarationTypeHints": {
                       "type": "boolean",
                       "default": false,
-                      "markdownDescription": "Enable/disable inlay hints for implicit types on property declarations: \n\n ```typescript\n class Foo {\n   prop /* :number */ = Date.now;\n }\n ```\n Requires using TypeScript 4.4+ in the workspace."
+                      "markdownDescription": "Enable/disable inlay hints for implicit types on property declarations: \n\n ```typescript\n class Foo {\n   prop /* :number */ = Date.now;\n }\n ```\n Require TypeScript 4.4+."
                     },
                     "typescript.inlayHints.includeInlayVariableTypeHints": {
                       "type": "boolean",
                       "default": false,
-                      "markdownDescription": "Enable/disable inlay hints for implicit variable types: \n\n ```typescript\n const foo /* :number */ = Date.now();\n ``` \n Requires using TypeScript 4.4+ in the workspace."
+                      "markdownDescription": "Enable/disable inlay hints for implicit variable types: \n\n ```typescript\n const foo /* :number */ = Date.now();\n ``` \n Require TypeScript 4.4+."
                     },
                     "javascript.format.insertSpaceAfterCommaDelimiter": {
                       "type": "boolean",
@@ -355,17 +355,17 @@
                     "javascript.inlayHints.includeInlayEnumMemberValueHints": {
                       "type": "boolean",
                       "default": false,
-                      "markdownDescription": "Enable/disable inlay hints for member values in enum declarations: \n\n ```typescript\n enum MyValue {\n   A /* = 0 */;\n   B /* = 1 */;\n }\n ```\n \n Requires using TypeScript 4.4+ in the workspace."
+                      "markdownDescription": "Enable/disable inlay hints for member values in enum declarations: \n\n ```typescript\n enum MyValue {\n   A /* = 0 */;\n   B /* = 1 */;\n }\n ```\n \n Require TypeScript 4.4+."
                     },
                     "javascript.inlayHints.includeInlayFunctionLikeReturnTypeHints": {
                       "type": "boolean",
                       "default": false,
-                      "markdownDescription": "Enable/disable inlay hints for implicit return types on function signatures:\n\n ```typescript\n function foo() /* :number */ {\n   return Date.now();\n }\n ```\n Requires using TypeScript 4.4+ in the workspace."
+                      "markdownDescription": "Enable/disable inlay hints for implicit return types on function signatures:\n\n ```typescript\n function foo() /* :number */ {\n   return Date.now();\n }\n ```\n Require TypeScript 4.4+."
                     },
                     "javascript.inlayHints.includeInlayFunctionParameterTypeHints": {
                       "type": "boolean",
                       "default": false,
-                      "markdownDescription": "Enable/disable inlay hints for parameter names: \n\n ```typescript\n parseInt(/* str: */ '123', /* radix: */ 8)\n ```\n Requires using TypeScript 4.4+ in the workspace."
+                      "markdownDescription": "Enable/disable inlay hints for parameter names: \n\n ```typescript\n parseInt(/* str: */ '123', /* radix: */ 8)\n ```\n Require TypeScript 4.4+."
                     },
                     "javascript.inlayHints.includeInlayParameterNameHints": {
                       "enum": [
@@ -388,12 +388,12 @@
                     "javascript.inlayHints.includeInlayPropertyDeclarationTypeHints": {
                       "type": "boolean",
                       "default": false,
-                      "markdownDescription": "Enable/disable inlay hints for implicit types on property declarations: \n\n ```typescript\n class Foo {\n   prop /* :number */ = Date.now;\n }\n ```\n Requires using TypeScript 4.4+ in the workspace."
+                      "markdownDescription": "Enable/disable inlay hints for implicit types on property declarations: \n\n ```typescript\n class Foo {\n   prop /* :number */ = Date.now;\n }\n ```\n Require TypeScript 4.4+."
                     },
                     "javascript.inlayHints.includeInlayVariableTypeHints": {
                       "type": "boolean",
                       "default": false,
-                      "markdownDescription": "Enable/disable inlay hints for implicit variable types: \n\n ```typescript\n const foo /* :number */ = Date.now();\n ``` \n Requires using TypeScript 4.4+ in the workspace."
+                      "markdownDescription": "Enable/disable inlay hints for implicit variable types: \n\n ```typescript\n const foo /* :number */ = Date.now();\n ``` \n Require TypeScript 4.4+."
                     }
                   }
                 }

@@ -63,7 +63,7 @@ To enable inlay hints, modify the following settings through `Preferences: LSP-t
 }
 ```
 
-Note: Inlay hints require TypeScript 4.4+ in the workspace.
+Note: Inlay hints require TypeScript 4.4+.
 
 ## Usage in projects that also use Flow
 
