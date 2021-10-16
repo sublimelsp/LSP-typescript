@@ -31,6 +31,40 @@ To sort or remove unused imports you can trigger the `LSP-typescript: Organize I
 
 The `LSP-typescript: Find Callers` command can be used to find what is calling the given symbol. It has some overlap with the built-in `LSP: Find References` command but returns only the places where the symbol was called.
 
+
+## Inlay hints (experimental)
+
+Inlay hints are short textual annotations that show parameter names, type hints.
+
+![inlay-hints](./images/inlay-hints.png)
+
+To enable inlay hints, modify the following settings through `Preferences: LSP-typescript Settings`:
+
+```js
+{
+  "settings": {
+    // Javascript inlay hints options.
+    "javascript.inlayHints.includeInlayEnumMemberValueHints": false,
+    "javascript.inlayHints.includeInlayFunctionLikeReturnTypeHints": false,
+    "javascript.inlayHints.includeInlayFunctionParameterTypeHints": false,
+    "javascript.inlayHints.includeInlayParameterNameHints": "none",
+    "javascript.inlayHints.includeInlayParameterNameHintsWhenArgumentMatchesName": false,
+    "javascript.inlayHints.includeInlayPropertyDeclarationTypeHints": false,
+    "javascript.inlayHints.includeInlayVariableTypeHints": false,
+    // Typescript inlay hints options.
+    "typescript.inlayHints.includeInlayEnumMemberValueHints": false,
+    "typescript.inlayHints.includeInlayFunctionLikeReturnTypeHints": false,
+    "typescript.inlayHints.includeInlayFunctionParameterTypeHints": false,
+    "typescript.inlayHints.includeInlayParameterNameHints": "none",
+    "typescript.inlayHints.includeInlayParameterNameHintsWhenArgumentMatchesName": false,
+    "typescript.inlayHints.includeInlayPropertyDeclarationTypeHints": false,
+    "typescript.inlayHints.includeInlayVariableTypeHints": false,
+  }
+}
+```
+
+Note: Inlay hints require TypeScript 4.4+.
+
 ## Usage in projects that also use Flow
 
 TypeScript can [check vanilla JavaScript](https://www.typescriptlang.org/docs/handbook/type-checking-javascript-files.html), but may break on JavaScript with Flow types in it. To keep LSP-typescript enabled for TS and vanilla JS, while ignoring Flow-typed files, you must install [JSCustom](https://packagecontrol.io/packages/JSCustom) and configure it like so:

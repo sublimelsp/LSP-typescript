@@ -1,326 +1,436 @@
 {
-    "contributions": {
-        "settings": [
-            {
-                "file_patterns": [
-                    "/LSP-typescript.sublime-settings"
-                ],
-                "schema": {
-                    "$id": "sublime://settings/LSP-typescript",
-                    "definitions": {
-                        "PluginConfig": {
-                            "properties": {
-                                "initializationOptions": {
-                                    "type": "object",
-                                    "additionalProperties": false,
-                                    "properties": {
-                                        "hostInfo": {
-                                            "type": "string",
-                                            "markdownDescription": "Information about the host, for example `Emacs 24.4` or `Sublime Text version 3075`. This value is only relevant when using `yarn pnp` which might apply special logic for certain values."
-                                        },
-                                        "logVerbosity": {
-                                            "enum": ["off", "terse", "normal", "requesttime", "verbose"],
-                                            "description": "Verbosity of the logging."
-                                        },
-                                        "maxTsServerMemory": {
-                                            "type": "number",
-                                            "markdownDescription": "The maximum size of the V8's old memory section in megabytes (for example `4096` means 4GB). The default value is dynamically configured by Node so can differ per system. Increase for very big projects that exceed allowed memory usage."
-                                        },
-                                        "plugins": {
-                                            "type": "array",
-                                            "default": [],
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "name": {
-                                                        "type": "string",
-                                                        "description": "The name of the plugin."
-                                                    },
-                                                    "location": {
-                                                        "type": "string",
-                                                        "description": "The location of the plugin."
-                                                    }
-                                                },
-                                                "defaultSnippets": [
-                                                    {
-                                                        "body": {
-                                                            "name": "$0",
-                                                            "location": "$1"
-                                                        }
-                                                    }
-                                                ]
-                                            }
-                                        },
-                                        "preferences": {
-                                            "type": "object",
-                                            "properties": {
-                                                "disableSuggestions": {
-                                                    "type": "boolean",
-                                                },
-                                                "quotePreference": {
-                                                    "enum": ["auto", "double", "single"],
-                                                },
-                                                "includeCompletionsForModuleExports": {
-                                                    "type": "boolean",
-                                                    "markdownDescription": "If enabled, TypeScript will search through all external modules' exports and add them to the completions list. This affects lone identifier completions but not completions on the right hand side of `obj.`."
-                                                },
-                                                "includeCompletionsForImportStatements": {
-                                                    "type": "boolean",
-                                                    "markdownDescription": "Enables auto-import-style completions on partially-typed import statements. E.g., allows `import write|` to be completed to `import { writeFile } from \"fs\"`."
-                                                },
-                                                "includeCompletionsWithSnippetText": {
-                                                    "type": "boolean",
-                                                    "markdownDescription": "Allows completions to be formatted with snippet text, indicated by `CompletionItem[\"isSnippet\"]`."
-                                                },
-                                                "includeCompletionsWithInsertText": {
-                                                    "type": "boolean",
-                                                    "markdownDescription": "If enabled, the completion list will include completions with invalid identifier names. For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `[\"x\"]`."
-                                                },
-                                                "includeAutomaticOptionalChainCompletions": {
-                                                    "type": "boolean",
-                                                    "markdownDescription": "Unless this option is `false`, or `includeCompletionsWithInsertText` is not enabled, member completion lists triggered with `.` will include entries on potentially-null and potentially-undefined values, with insertion text to replace preceding `.` tokens with `?.`."
-                                                },
-                                                "importModuleSpecifierPreference": {
-                                                    "enum": ["shortest", "project-relative", "relative", "non-relative"],
-                                                },
-                                                "importModuleSpecifierEnding": {
-                                                    "enum": ["auto", "minimal", "index", "js"],
-                                                    "markdownDescription": "Determines whether we import `foo/index.ts` as \"foo\", \"foo/index\", or \"foo/index.js\"."
-                                                },
-                                                "allowTextChangesInNewFiles": {
-                                                    "type": "boolean",
-                                                },
-                                                "lazyConfiguredProjectsFromExternalProject": {
-                                                    "type": "boolean",
-                                                },
-                                                "providePrefixAndSuffixTextForRename": {
-                                                    "type": "boolean",
-                                                },
-                                                "provideRefactorNotApplicableReason": {
-                                                    "type": "boolean",
-                                                },
-                                                "allowRenameOfImportPath": {
-                                                    "type": "boolean",
-                                                },
-                                                "includePackageJsonAutoImports": {
-                                                    "enum": ["auto", "on", "off"],
-                                                },
-                                                "displayPartsForJSDoc": {
-                                                    "type": "boolean",
-                                                },
-                                                "generateReturnInDocTemplate": {
-                                                    "type": "boolean",
-                                                },
-                                            }
-                                        }
-                                    }
-                                },
-                                "settings": {
-                                    "type": "object",
-                                    "additionalProperties": false,
-                                    "properties": {
-                                        "typescript.format.insertSpaceAfterCommaDelimiter": {
-                                          "type": "boolean",
-                                          "default": true
-                                        },
-                                        "typescript.format.insertSpaceAfterConstructor": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "typescript.format.insertSpaceAfterSemicolonInForStatements": {
-                                          "type": "boolean",
-                                          "default": true
-                                        },
-                                        "typescript.format.insertSpaceBeforeAndAfterBinaryOperators": {
-                                          "type": "boolean",
-                                          "default": true
-                                        },
-                                        "typescript.format.insertSpaceAfterKeywordsInControlFlowStatements": {
-                                          "type": "boolean",
-                                          "default": true
-                                        },
-                                        "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": {
-                                          "type": "boolean",
-                                          "default": true
-                                        },
-                                        "typescript.format.insertSpaceBeforeFunctionParenthesis": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": {
-                                          "type": "boolean",
-                                          "default": true
-                                        },
-                                        "typescript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "typescript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "typescript.format.insertSpaceAfterTypeAssertion": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "typescript.format.insertSpaceBeforeTypeAnnotation": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "typescript.format.placeOpenBraceOnNewLineForFunctions": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "typescript.format.placeOpenBraceOnNewLineForControlBlocks": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "typescript.format.semicolons": {
-                                          "type": "string",
-                                          "default": "ignore",
-                                          "description": "Defines handling of optional semicolons. Requires using TypeScript 3.7 or newer in the workspace.",
-                                          "scope": "resource",
-                                          "enum": [
-                                            "ignore",
-                                            "insert",
-                                            "remove"
-                                          ]
-                                        },
-                                        "typescript.format.trimTrailingWhitespace": {
-                                          "type": "boolean",
-                                          "default": true
-                                        },
-                                        "javascript.format.insertSpaceAfterCommaDelimiter": {
-                                          "type": "boolean",
-                                          "default": true
-                                        },
-                                        "javascript.format.insertSpaceAfterConstructor": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "javascript.format.insertSpaceAfterSemicolonInForStatements": {
-                                          "type": "boolean",
-                                          "default": true
-                                        },
-                                        "javascript.format.insertSpaceBeforeAndAfterBinaryOperators": {
-                                          "type": "boolean",
-                                          "default": true
-                                        },
-                                        "javascript.format.insertSpaceAfterKeywordsInControlFlowStatements": {
-                                          "type": "boolean",
-                                          "default": true
-                                        },
-                                        "javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": {
-                                          "type": "boolean",
-                                          "default": true
-                                        },
-                                        "javascript.format.insertSpaceBeforeFunctionParenthesis": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "javascript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": {
-                                          "type": "boolean",
-                                          "default": true
-                                        },
-                                        "javascript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "javascript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "javascript.format.insertSpaceAfterTypeAssertion": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "javascript.format.insertSpaceBeforeTypeAnnotation": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "javascript.format.placeOpenBraceOnNewLineForFunctions": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "javascript.format.placeOpenBraceOnNewLineForControlBlocks": {
-                                          "type": "boolean",
-                                          "default": false
-                                        },
-                                        "javascript.format.semicolons": {
-                                          "type": "string",
-                                          "default": "ignore",
-                                          "description": "Defines handling of optional semicolons. Requires using TypeScript 3.7 or newer in the workspace.",
-                                          "scope": "resource",
-                                          "enum": [
-                                            "ignore",
-                                            "insert",
-                                            "remove"
-                                          ]
-                                        },
-                                        "javascript.format.trimTrailingWhitespace": {
-                                          "type": "boolean",
-                                          "default": true
-                                        },
-                                    }
-                                }
-                            }
-                        }
+  "contributions": {
+    "settings": [
+      {
+        "file_patterns": [
+          "/LSP-typescript.sublime-settings"
+        ],
+        "schema": {
+          "$id": "sublime://settings/LSP-typescript",
+          "definitions": {
+            "PluginConfig": {
+              "properties": {
+                "initializationOptions": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "hostInfo": {
+                      "type": "string",
+                      "markdownDescription": "Information about the host, for example `Emacs 24.4` or `Sublime Text version 3075`. This value is only relevant when using `yarn pnp` which might apply special logic for certain values."
                     },
-                    "type": "object",
-                    "allOf": [
-                        {
-                            "$ref": "sublime://settings/LSP-plugin-base"
-                        },
-                        {
-                            "$ref": "sublime://settings/LSP-typescript#/definitions/PluginConfig"
-                        }
-                    ]
-                }
-            },
-            {
-              "file_patterns": [
-                "/*.sublime-project"
-              ],
-              "schema": {
-                "properties": {
-                  "settings": {
-                    "properties": {
-                      "LSP": {
+                    "logVerbosity": {
+                      "enum": [
+                        "off",
+                        "terse",
+                        "normal",
+                        "requesttime",
+                        "verbose"
+                      ],
+                      "description": "Verbosity of the logging."
+                    },
+                    "maxTsServerMemory": {
+                      "type": "number",
+                      "markdownDescription": "The maximum size of the V8's old memory section in megabytes (for example `4096` means 4GB). The default value is dynamically configured by Node so can differ per system. Increase for very big projects that exceed allowed memory usage."
+                    },
+                    "plugins": {
+                      "type": "array",
+                      "default": [],
+                      "items": {
+                        "type": "object",
                         "properties": {
-                          "LSP-typescript": {
-                            "$ref": "sublime://settings/LSP-typescript#/definitions/PluginConfig"
+                          "name": {
+                            "type": "string",
+                            "description": "The name of the plugin."
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "The location of the plugin."
                           }
-                        }
+                        },
+                        "defaultSnippets": [
+                          {
+                            "body": {
+                              "name": "$0",
+                              "location": "$1"
+                            }
+                          }
+                        ]
                       }
+                    },
+                    "preferences": {
+                      "type": "object",
+                      "properties": {
+                        "disableSuggestions": {
+                          "type": "boolean",
+                        },
+                        "quotePreference": {
+                          "enum": [
+                            "auto",
+                            "double",
+                            "single"
+                          ],
+                        },
+                        "includeCompletionsForModuleExports": {
+                          "type": "boolean",
+                          "markdownDescription": "If enabled, TypeScript will search through all external modules' exports and add them to the completions list. This affects lone identifier completions but not completions on the right hand side of `obj.`."
+                        },
+                        "includeCompletionsForImportStatements": {
+                          "type": "boolean",
+                          "markdownDescription": "Enables auto-import-style completions on partially-typed import statements. E.g., allows `import write|` to be completed to `import { writeFile } from \"fs\"`."
+                        },
+                        "includeCompletionsWithSnippetText": {
+                          "type": "boolean",
+                          "markdownDescription": "Allows completions to be formatted with snippet text, indicated by `CompletionItem[\"isSnippet\"]`."
+                        },
+                        "includeCompletionsWithInsertText": {
+                          "type": "boolean",
+                          "markdownDescription": "If enabled, the completion list will include completions with invalid identifier names. For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `[\"x\"]`."
+                        },
+                        "includeAutomaticOptionalChainCompletions": {
+                          "type": "boolean",
+                          "markdownDescription": "Unless this option is `false`, or `includeCompletionsWithInsertText` is not enabled, member completion lists triggered with `.` will include entries on potentially-null and potentially-undefined values, with insertion text to replace preceding `.` tokens with `?.`."
+                        },
+                        "importModuleSpecifierPreference": {
+                          "enum": [
+                            "shortest",
+                            "project-relative",
+                            "relative",
+                            "non-relative"
+                          ],
+                        },
+                        "importModuleSpecifierEnding": {
+                          "enum": [
+                            "auto",
+                            "minimal",
+                            "index",
+                            "js"
+                          ],
+                          "markdownDescription": "Determines whether we import `foo/index.ts` as \"foo\", \"foo/index\", or \"foo/index.js\"."
+                        },
+                        "allowTextChangesInNewFiles": {
+                          "type": "boolean",
+                        },
+                        "lazyConfiguredProjectsFromExternalProject": {
+                          "type": "boolean",
+                        },
+                        "providePrefixAndSuffixTextForRename": {
+                          "type": "boolean",
+                        },
+                        "provideRefactorNotApplicableReason": {
+                          "type": "boolean",
+                        },
+                        "allowRenameOfImportPath": {
+                          "type": "boolean",
+                        },
+                        "includePackageJsonAutoImports": {
+                          "enum": [
+                            "auto",
+                            "on",
+                            "off"
+                          ],
+                        },
+                        "displayPartsForJSDoc": {
+                          "type": "boolean",
+                        },
+                        "generateReturnInDocTemplate": {
+                          "type": "boolean",
+                        },
+                      }
+                    }
+                  }
+                },
+                "settings": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "typescript.format.insertSpaceAfterCommaDelimiter": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "typescript.format.insertSpaceAfterConstructor": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "typescript.format.insertSpaceAfterSemicolonInForStatements": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "typescript.format.insertSpaceBeforeAndAfterBinaryOperators": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "typescript.format.insertSpaceAfterKeywordsInControlFlowStatements": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "typescript.format.insertSpaceBeforeFunctionParenthesis": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "typescript.format.insertSpaceAfterTypeAssertion": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "typescript.format.insertSpaceBeforeTypeAnnotation": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "typescript.format.placeOpenBraceOnNewLineForFunctions": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "typescript.format.placeOpenBraceOnNewLineForControlBlocks": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "typescript.format.semicolons": {
+                      "type": "string",
+                      "default": "ignore",
+                      "description": "Defines handling of optional semicolons. Requires using TypeScript 3.7 or newer in the workspace.",
+                      "scope": "resource",
+                      "enum": [
+                        "ignore",
+                        "insert",
+                        "remove"
+                      ]
+                    },
+                    "typescript.format.trimTrailingWhitespace": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "typescript.inlayHints.includeInlayEnumMemberValueHints": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Enable/disable inlay hints for member values in enum declarations: \n\n ```typescript\n enum MyValue {\n   A /* = 0 */;\n   B /* = 1 */;\n }\n ```\n \n Require TypeScript 4.4+."
+                    },
+                    "typescript.inlayHints.includeInlayFunctionLikeReturnTypeHints": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Enable/disable inlay hints for implicit return types on function signatures:\n\n ```typescript\n function foo() /* :number */ {\n   return Date.now();\n }\n ```\n Require TypeScript 4.4+."
+                    },
+                    "typescript.inlayHints.includeInlayFunctionParameterTypeHints": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Enable/disable inlay hints for parameter names: \n\n ```typescript\n parseInt(/* str: */ '123', /* radix: */ 8)\n ```\n Require TypeScript 4.4+."
+                    },
+                    "typescript.inlayHints.includeInlayParameterNameHints": {
+                      "enum": [
+                        "all",
+                        "literals",
+                        "none"
+                      ],
+                      "default": "none",
+                      "markdownEnumDescriptions": [
+                        "Enable parameter name hints for literal and non-literal arguments.",
+                        "Enable parameter name hints only for literal arguments.",
+                        "Disable parameter name hints."
+                      ]
+                    },
+                    "typescript.inlayHints.includeInlayParameterNameHintsWhenArgumentMatchesName": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": ""
+                    },
+                    "typescript.inlayHints.includeInlayPropertyDeclarationTypeHints": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Enable/disable inlay hints for implicit types on property declarations: \n\n ```typescript\n class Foo {\n   prop /* :number */ = Date.now;\n }\n ```\n Require TypeScript 4.4+."
+                    },
+                    "typescript.inlayHints.includeInlayVariableTypeHints": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Enable/disable inlay hints for implicit variable types: \n\n ```typescript\n const foo /* :number */ = Date.now();\n ``` \n Require TypeScript 4.4+."
+                    },
+                    "javascript.format.insertSpaceAfterCommaDelimiter": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "javascript.format.insertSpaceAfterConstructor": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "javascript.format.insertSpaceAfterSemicolonInForStatements": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "javascript.format.insertSpaceBeforeAndAfterBinaryOperators": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "javascript.format.insertSpaceAfterKeywordsInControlFlowStatements": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "javascript.format.insertSpaceBeforeFunctionParenthesis": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "javascript.format.insertSpaceAfterTypeAssertion": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "javascript.format.insertSpaceBeforeTypeAnnotation": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "javascript.format.placeOpenBraceOnNewLineForFunctions": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "javascript.format.placeOpenBraceOnNewLineForControlBlocks": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "javascript.format.semicolons": {
+                      "type": "string",
+                      "default": "ignore",
+                      "description": "Defines handling of optional semicolons. Requires using TypeScript 3.7 or newer in the workspace.",
+                      "scope": "resource",
+                      "enum": [
+                        "ignore",
+                        "insert",
+                        "remove"
+                      ]
+                    },
+                    "javascript.format.trimTrailingWhitespace": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "javascript.inlayHints.includeInlayEnumMemberValueHints": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Enable/disable inlay hints for member values in enum declarations: \n\n ```typescript\n enum MyValue {\n   A /* = 0 */;\n   B /* = 1 */;\n }\n ```\n \n Require TypeScript 4.4+."
+                    },
+                    "javascript.inlayHints.includeInlayFunctionLikeReturnTypeHints": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Enable/disable inlay hints for implicit return types on function signatures:\n\n ```typescript\n function foo() /* :number */ {\n   return Date.now();\n }\n ```\n Require TypeScript 4.4+."
+                    },
+                    "javascript.inlayHints.includeInlayFunctionParameterTypeHints": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Enable/disable inlay hints for parameter names: \n\n ```typescript\n parseInt(/* str: */ '123', /* radix: */ 8)\n ```\n Require TypeScript 4.4+."
+                    },
+                    "javascript.inlayHints.includeInlayParameterNameHints": {
+                      "enum": [
+                        "all",
+                        "literals",
+                        "none"
+                      ],
+                      "default": "none",
+                      "markdownEnumDescriptions": [
+                        "Enable parameter name hints for literal and non-literal arguments.",
+                        "Enable parameter name hints only for literal arguments.",
+                        "Disable parameter name hints."
+                      ]
+                    },
+                    "javascript.inlayHints.includeInlayParameterNameHintsWhenArgumentMatchesName": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": ""
+                    },
+                    "javascript.inlayHints.includeInlayPropertyDeclarationTypeHints": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Enable/disable inlay hints for implicit types on property declarations: \n\n ```typescript\n class Foo {\n   prop /* :number */ = Date.now;\n }\n ```\n Require TypeScript 4.4+."
+                    },
+                    "javascript.inlayHints.includeInlayVariableTypeHints": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Enable/disable inlay hints for implicit variable types: \n\n ```typescript\n const foo /* :number */ = Date.now();\n ``` \n Require TypeScript 4.4+."
                     }
                   }
                 }
               }
+            }
+          },
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "sublime://settings/LSP-plugin-base"
             },
-        ]
-    }
+            {
+              "$ref": "sublime://settings/LSP-typescript#/definitions/PluginConfig"
+            }
+          ]
+        }
+      },
+      {
+        "file_patterns": [
+          "/*.sublime-project"
+        ],
+        "schema": {
+          "properties": {
+            "settings": {
+              "properties": {
+                "LSP": {
+                  "properties": {
+                    "LSP-typescript": {
+                      "$ref": "sublime://settings/LSP-typescript#/definitions/PluginConfig"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+    ]
+  }
 }
