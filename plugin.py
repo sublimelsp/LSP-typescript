@@ -140,7 +140,7 @@ class LspTypescriptPlugin(NpmClientHandler):
         params = {"textDocument": text_document_identifier(uri)}  # type: InlayHintRequestParams
         self._api.send_request(
             "typescript/inlayHints", params,
-            lambda result, success: self._on_inlay_hints_async(result, success, session_buffer))
+            lambda result, is_error: self._on_inlay_hints_async(result, is_error, session_buffer))
 
     def _on_inlay_hints_async(
         self, response: InlayHintResponse, is_error: bool, session_buffer: SessionBufferProtocol
