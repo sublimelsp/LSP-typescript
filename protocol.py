@@ -1,5 +1,5 @@
 from LSP.plugin.core.protocol import Location, Position, RangeLsp, TextDocumentIdentifier
-from LSP.plugin.core.typing import List, Literal, Optional, TypedDict, Union
+from LSP.plugin.core.typing import Any, List, Literal, Optional, TypedDict, Union
 
 
 CallsDirection = Union[Literal['incoming'], Literal['outgoing']]
@@ -45,4 +45,26 @@ InlayHintRequestParams = TypedDict('CallsRequestParams', {
 
 InlayHintResponse = TypedDict('CallsResponse', {
     'inlayHints': List[InlayHint]
+}, total=True)
+
+TypescriptLocation = TypedDict('TypescriptLocation', {
+    'line': int,
+    'offset': int,
+}, total=True)
+
+CodeEdit = TypedDict('CodeEdit', {
+    'start': TypescriptLocation,
+    'end': TypescriptLocation,
+    'newText': str,
+}, total=True)
+
+FileCodeEdit = TypedDict('FileCodeEdits', {
+    'fileName': str,
+    'textChanges': List[CodeEdit],
+}, total=True)
+
+CompletionCodeActionCommand = TypedDict('CompletionCodeActionCommand', {
+    'commands': List[Any],
+    'description': str,
+    'changes': List[FileCodeEdit],
 }, total=True)
