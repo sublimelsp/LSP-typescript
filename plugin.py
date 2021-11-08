@@ -1,11 +1,11 @@
-from .protocol import InlayHint, InlayHintRequestParams, InlayHintResponse, CompletionCodeActionCommand
+from .protocol import InlayHint, InlayHintRequestParams, InlayHintResponse
 from html import escape as html_escape
 from LSP.plugin import ClientConfig
 from LSP.plugin import SessionBufferProtocol
 from LSP.plugin import uri_to_filename
 from LSP.plugin import WorkspaceFolder
 from LSP.plugin.core.protocol import Point
-from LSP.plugin.core.typing import Any, Callable, Dict, List, Mapping, Optional
+from LSP.plugin.core.typing import Any, Callable, List, Optional
 from LSP.plugin.core.views import point_to_offset
 from LSP.plugin.core.views import text_document_identifier
 from lsp_utils import ApiWrapperInterface
@@ -13,14 +13,6 @@ from lsp_utils import NpmClientHandler
 from lsp_utils import request_handler
 import os
 import sublime
-
-try:
-    from LSP.plugin.core.edit import apply_workspace_edit
-    from LSP.plugin.core.edit import TextEditTuple
-except ImportError:
-    # Not supported in ST3
-    TextEditTuple = Any
-    pass
 
 
 def plugin_loaded() -> None:
@@ -53,26 +45,6 @@ def inlay_hint_to_phantom(view: sublime.View, hint: InlayHint) -> sublime.Phanto
     label = html_escape(hint["text"])
     html = html.format(label=label)
     return sublime.Phantom(region, html, sublime.LAYOUT_INLINE)
-
-
-def to_lsp_edits(items: List[CompletionCodeActionCommand]) -> Dict[str, List[TextEditTuple]]:
-    workspace_edits = {}  # type: Dict[str, List[TextEditTuple]]
-    for item in items:
-        for change in item['changes']:
-            file_changes = []  # List[TextEditTuple]
-            for text_change in change['textChanges']:
-                start = text_change['start']
-                end = text_change['end']
-                file_changes.append(
-                    (
-                        (start['line'] - 1, start['offset'] - 1),
-                        (end['line'] - 1, end['offset'] - 1),
-                        text_change['newText'].replace("\r", ""),
-                        None,
-                    )
-                )
-            workspace_edits[change['fileName']] = file_changes
-    return workspace_edits
 
 
 class LspTypescriptPlugin(NpmClientHandler):
@@ -119,15 +91,6 @@ class LspTypescriptPlugin(NpmClientHandler):
 
     def on_session_buffer_changed_async(self, session_buffer: SessionBufferProtocol) -> None:
         self._request_inlay_hints_async(session_buffer)
-
-    def on_pre_server_command(self, command: Mapping[str, Any], done_callback: Callable[[], None]) -> bool:
-        if command['command'] == '_typescript.applyCompletionCodeAction':
-            _, items = command['arguments']
-            session = self.weaksession()
-            if session:
-                apply_workspace_edit(session.window, to_lsp_edits(items)).then(lambda _: done_callback())
-                return True
-        return False
 
     # --- Inlay Hints handlers -----------------------------------------------------------------------------------------
 
