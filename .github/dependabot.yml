@@ -4,3 +4,4 @@ updates:
     directory: /typescript-language-server
     schedule:
       interval: daily
+      time: "11:00"
