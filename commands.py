@@ -5,6 +5,7 @@ from LSP.plugin.core.protocol import LocationLink
 from LSP.plugin.core.registry import LspTextCommand
 from LSP.plugin.core.typing import Optional
 from LSP.plugin.core.views import text_document_position_params
+from LSP.plugin.execute_command import LspExecuteCommand
 from LSP.plugin.locationpicker import LocationPicker
 import functools
 import sublime
@@ -13,8 +14,11 @@ import sublime
 SESSION_NAME = "LSP-typescript"
 
 
-class LspTypescriptCallsCommand(LspTextCommand):
+class LspTypescriptOrganizeImportsCommand(LspExecuteCommand):
+    session_name = SESSION_NAME
 
+
+class LspTypescriptCallsCommand(LspTextCommand):
     session_name = SESSION_NAME
 
     def is_enabled(self) -> bool:

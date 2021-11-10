@@ -9,7 +9,7 @@
     },
     {
         "caption": "LSP-typescript: Organize Imports",
-        "command": "lsp_execute",
+        "command": "lsp_typescript_organize_imports",
         "args": {
             "session_name": "LSP-typescript",
             "command_name": "_typescript.organizeImports",
