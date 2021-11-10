@@ -18,6 +18,11 @@
                       "type": "string",
                       "markdownDescription": "Information about the host, for example `Emacs 24.4` or `Sublime Text version 3075`. This value is only relevant when using `yarn pnp` which might apply special logic for certain values."
                     },
+                    "disableAutomaticTypingAcquisition": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Disables tsserver from automatically fetching missing type definitions (`@types` packages) for external modules."
+                    },
                     "logVerbosity": {
                       "enum": [
                         "off",
@@ -60,6 +65,11 @@
                     "preferences": {
                       "type": "object",
                       "properties": {
+                        "allowIncompleteCompletions": {
+                          "type": "boolean",
+                          "default": true,
+                          "markdownDescription": "Allows import module names to be resolved in the initial completions request."
+                        },
                         "disableSuggestions": {
                           "type": "boolean",
                         },

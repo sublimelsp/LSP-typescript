@@ -1,9 +1,7 @@
 from .protocol import InlayHint, InlayHintRequestParams, InlayHintResponse
 from html import escape as html_escape
-from LSP.plugin import ClientConfig
 from LSP.plugin import SessionBufferProtocol
 from LSP.plugin import uri_to_filename
-from LSP.plugin import WorkspaceFolder
 from LSP.plugin.core.protocol import Point
 from LSP.plugin.core.typing import Any, Callable, List, Optional
 from LSP.plugin.core.views import point_to_offset
@@ -51,17 +49,6 @@ class LspTypescriptPlugin(NpmClientHandler):
     package_name = __package__
     server_directory = 'typescript-language-server'
     server_binary_path = os.path.join(server_directory, 'node_modules', 'typescript-language-server', 'lib', 'cli.js')
-
-    @classmethod
-    def is_allowed_to_start(
-        cls,
-        window: sublime.Window,
-        initiating_view: Optional[sublime.View] = None,
-        workspace_folders: Optional[List[WorkspaceFolder]] = None,
-        configuration: Optional[ClientConfig] = None
-    ) -> Optional[str]:
-        if not workspace_folders:
-            return 'This server only works when the window workspace includes some folders!'
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         self._api = None  # type: Optional[ApiWrapperInterface]
