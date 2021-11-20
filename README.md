@@ -1,3 +1,5 @@
+DEPRECATED: This branch targets ST3 and is no longer maintained. To get the latest fixes and features switch to ST4+ and see the `master` branch.
+
 # LSP-typescript
 
 TypeScript and JavaScript support for Sublime's LSP plugin provided through [Theia TypeScript Language Server](https://github.com/theia-ide/typescript-language-server).
