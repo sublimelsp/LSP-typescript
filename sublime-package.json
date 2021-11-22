@@ -37,6 +37,10 @@
                       "type": "number",
                       "markdownDescription": "The maximum size of the V8's old memory section in megabytes (for example `4096` means 4GB). The default value is dynamically configured by Node so can differ per system. Increase for very big projects that exceed allowed memory usage."
                     },
+                    "npmLocation": {
+                      "type": "string",
+                      "markdownDescription": "Specifies the path to the NPM executable used for Automatic Type Acquisition."
+                    },
                     "plugins": {
                       "type": "array",
                       "default": [],
@@ -153,6 +157,19 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
+                    "completions.completeFunctionCalls": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "diagnostics.ignoredCodes": {
+                      "type": "array",
+                      "items": {
+                        "type": "number",
+                        "uniqueItems": true
+                      },
+                      "default": [],
+                      "markdownDescription": "Diagnostics code to be omitted when reporting diagnostics. See https://github.com/microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json for a full list of valid codes."
+                    },
                     "typescript.format.insertSpaceAfterCommaDelimiter": {
                       "type": "boolean",
                       "default": true
