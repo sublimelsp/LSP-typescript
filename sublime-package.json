@@ -170,6 +170,19 @@
                       "default": [],
                       "markdownDescription": "Diagnostics code to be omitted when reporting diagnostics. See https://github.com/microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json for a full list of valid codes."
                     },
+                    "updateImportsOnFileMove": {
+                      "enum": [
+                        "prompt",
+                        "always",
+                        "never"
+                      ],
+                      "default": "prompt",
+                      "markdownEnumDescriptions": [
+                        "Prompt on each rename",
+                        "Always update path automatically",
+                        "Never update paths and don't prompt"
+                      ]
+                    },
                     "typescript.format.insertSpaceAfterCommaDelimiter": {
                       "type": "boolean",
                       "default": true

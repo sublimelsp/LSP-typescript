@@ -1,7 +1,10 @@
 from .protocol import InlayHint, InlayHintRequestParams, InlayHintResponse
+from .rename_imports import register_rename_import_file_watcher
 from html import escape as html_escape
+from LSP.plugin import ClientConfig
 from LSP.plugin import SessionBufferProtocol
 from LSP.plugin import uri_to_filename
+from LSP.plugin import WorkspaceFolder
 from LSP.plugin.core.protocol import Point
 from LSP.plugin.core.typing import Any, Callable, List, Optional
 from LSP.plugin.core.views import point_to_offset
@@ -53,6 +56,18 @@ class LspTypescriptPlugin(NpmClientHandler):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         self._api = None  # type: Optional[ApiWrapperInterface]
         super().__init__(*args, **kwargs)
+
+    @classmethod
+    def is_allowed_to_start(
+        cls,
+        window: sublime.Window,
+        initiating_view: Optional[sublime.View] = None,
+        workspace_folders: Optional[List[WorkspaceFolder]] = None,
+        configuration: Optional[ClientConfig] = None
+    ) -> Optional[str]:
+        if workspace_folders:
+            register_rename_import_file_watcher(workspace_folders[0].path)
+        return None
 
     def on_ready(self, api: ApiWrapperInterface) -> None:
         self._api = api
