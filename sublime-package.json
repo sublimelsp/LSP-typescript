@@ -161,7 +161,7 @@
                               "Insert `={}` after attribute names.",
                               "Only insert attribute names."
                             ],
-                            "markdownDescription": "Preferred style for JSX attribute completions.\n \n Require TypeScript 4.5+."
+                            "markdownDescription": "Preferred style for JSX attribute completions.\n\nRequires TypeScript 4.5+."
                         }
                       }
                     }
