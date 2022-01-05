@@ -149,6 +149,20 @@
                         "generateReturnInDocTemplate": {
                           "type": "boolean",
                         },
+                        "jsxAttributeCompletionStyle": {
+                            "enum": [
+                              "auto",
+                              "braces",
+                              "none"
+                            ],
+                            "default": "auto",
+                            "markdownEnumDescriptions": [
+                              "Insert `={}` or `=\"\"` after attribute names based on the prop type.",
+                              "Insert `={}` after attribute names.",
+                              "Only insert attribute names."
+                            ],
+                            "markdownDescription": "Preferred style for JSX attribute completions.\n \n Require TypeScript 4.5+."
+                        }
                       }
                     }
                   }
