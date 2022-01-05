@@ -1,10 +1,12 @@
 from .protocol import InlayHint, InlayHintRequestParams, InlayHintResponse
-from .rename_imports import register_rename_import_file_watcher
+from .rename_imports import HandleRenameImport
 from html import escape as html_escape
 from LSP.plugin import ClientConfig
 from LSP.plugin import SessionBufferProtocol
 from LSP.plugin import uri_to_filename
 from LSP.plugin import WorkspaceFolder
+from LSP.plugin.core.file_watcher import FileWatcher
+from LSP.plugin.core.file_watcher import get_file_watcher_implementation
 from LSP.plugin.core.protocol import Point
 from LSP.plugin.core.typing import Any, Callable, List, Optional
 from LSP.plugin.core.views import point_to_offset
@@ -66,8 +68,17 @@ class LspTypescriptPlugin(NpmClientHandler):
         configuration: Optional[ClientConfig] = None
     ) -> Optional[str]:
         if workspace_folders:
-            register_rename_import_file_watcher(workspace_folders[0].path)
+            cls.register_rename_import_file_watcher(cls, window, workspace_folders[0].path)
         return None
+
+    def register_rename_import_file_watcher(self, window: sublime.Window, root_path: str) -> Optional[FileWatcher]:
+        settings = sublime.load_settings("LSP-typescript.sublime-settings")
+        update_imports_on_file_move_setting = settings.get('settings', {}).get('updateImportsOnFileMove', "prompt")
+        if update_imports_on_file_move_setting == "never":
+            return
+        file_watcher = get_file_watcher_implementation()
+        if file_watcher:
+            self.rename_import_handler = HandleRenameImport(window, root_path, file_watcher)
 
     def on_ready(self, api: ApiWrapperInterface) -> None:
         self._api = api
@@ -129,3 +140,7 @@ class LspTypescriptPlugin(NpmClientHandler):
         if not view.is_valid():
             return
         phantom_set.update(phantoms)
+
+    def on_session_end_async(self) -> None:
+        if self.rename_import_handler:
+            self.rename_import_handler.clean_up()
