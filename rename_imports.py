@@ -1,12 +1,16 @@
-
-from LSP.plugin.core.file_watcher import FileWatcherEvent, FileWatcherProtocol, get_file_watcher_implementation, FileWatcher
-from LSP.plugin.core.typing import  List
+from LSP.plugin.core.file_watcher import FileWatcher
+from LSP.plugin.core.file_watcher import FileWatcherEvent
+from LSP.plugin.core.file_watcher import FileWatcherProtocol
+from LSP.plugin.core.file_watcher import get_file_watcher_implementation
+from LSP.plugin.core.typing import List
+from typing import Optional
 import os
 import sublime
 
 
-def register_rename_import_file_watcher(root_path: str):
+def register_rename_import_file_watcher(root_path: str) -> Optional[FileWatcher]:
     file_watcher = get_file_watcher_implementation()
+    watcher = None
     if file_watcher:
         watcher = file_watcher.create(
             root_path=root_path,
@@ -15,6 +19,7 @@ def register_rename_import_file_watcher(root_path: str):
             ignores=['**/node_modules/**'],
             handler=HandleRenameImport
         )
+    return watcher
 
 
 queued_events = []  # type: List[FileWatcherEvent]
@@ -66,7 +71,6 @@ def prompt_rename(old_name: str, new_name: str) -> None:
         placeholder = "Update import paths for '{}'?".format(old_base_file_name)
 
         def on_select(index):
-            global confirm_rename
             if index == -1:
                 return
             if items[index].trigger == 'Yes':
