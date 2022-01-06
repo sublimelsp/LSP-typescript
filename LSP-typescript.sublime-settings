@@ -20,7 +20,6 @@
 	},
 	"settings": {
 		"diagnostics.ignoredCodes": [],
-		"updateImportsOnFileMove": "prompt",
 		// Javascript formatting options.
 		"javascript.format.insertSpaceAfterCommaDelimiter": true,
 		"javascript.format.insertSpaceAfterConstructor": false,

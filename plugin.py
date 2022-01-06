@@ -59,9 +59,9 @@ class LspTypescriptPlugin(NpmClientHandler):
         super().__init__(*args, **kwargs)
 
     def register_rename_import_file_watcher(self, session: Session) -> None:
-        update_imports_on_file_move_setting = session.config.settings.get("updateImportsOnFileMove")
+        allow_rename_of_import_path = session.config.init_options.get('preferences.allowRenameOfImportPath')
         workspace_folders = session.get_workspace_folders()
-        if update_imports_on_file_move_setting == "never":
+        if not allow_rename_of_import_path:
             return
         file_watcher = get_file_watcher_implementation()
         if file_watcher:

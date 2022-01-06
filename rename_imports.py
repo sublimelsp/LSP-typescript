@@ -37,26 +37,20 @@ class RenameImportHandler(FileWatcherProtocol):
         self.events = []
 
     def prompt_rename(self, old_name: str, new_name: str) -> None:
-        settings = sublime.load_settings("LSP-typescript.sublime-settings")
-        update_imports_on_file_move_setting = settings.get('settings', {}).get('updateImportsOnFileMove', "prompt")
-        if update_imports_on_file_move_setting == "always":
-            self.apply_rename_on_server(old_name, new_name)
-            return
-        if update_imports_on_file_move_setting == 'prompt':
-            items = [
-                sublime.QuickPanelItem('Yes', 'Update imports.'),
-                sublime.QuickPanelItem('No', 'Do not update imports.')
-            ]
-            old_base_file_name = os.path.basename(old_name)
-            placeholder = "Update import paths for '{}'?".format(old_base_file_name)
+        items = [
+            sublime.QuickPanelItem('Yes', 'Update imports.'),
+            sublime.QuickPanelItem('No', 'Do not update imports.')
+        ]
+        old_base_file_name = os.path.basename(old_name)
+        placeholder = "Update import paths for '{}'?".format(old_base_file_name)
 
-            def on_select(index):
-                if index == -1:
-                    return
-                if items[index].trigger == 'Yes':
-                    self.apply_rename_on_server(old_name, new_name)
+        def on_select(index):
+            if index == -1:
+                return
+            if items[index].trigger == 'Yes':
+                self.apply_rename_on_server(old_name, new_name)
 
-            self.window.show_quick_panel(items, on_select, placeholder=placeholder)
+        self.window.show_quick_panel(items, on_select, placeholder=placeholder)
 
     def apply_rename_on_server(self, old_name: str, new_name: str):
         self.window.run_command('lsp_execute', {
