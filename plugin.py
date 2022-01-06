@@ -1,13 +1,11 @@
 from .protocol import InlayHint, InlayHintRequestParams, InlayHintResponse
 from .rename_imports import HandleRenameImport
 from html import escape as html_escape
-from LSP.plugin import ClientConfig
 from LSP.plugin import SessionBufferProtocol
 from LSP.plugin import uri_to_filename
-from LSP.plugin import WorkspaceFolder
-from LSP.plugin.core.file_watcher import FileWatcher
 from LSP.plugin.core.file_watcher import get_file_watcher_implementation
 from LSP.plugin.core.protocol import Point
+from LSP.plugin.core.sessions import Session
 from LSP.plugin.core.typing import Any, Callable, List, Optional
 from LSP.plugin.core.views import point_to_offset
 from LSP.plugin.core.views import text_document_identifier
@@ -57,31 +55,24 @@ class LspTypescriptPlugin(NpmClientHandler):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         self._api = None  # type: Optional[ApiWrapperInterface]
+        self.rename_import_handler = None  # type: Optional[HandleRenameImport]
         super().__init__(*args, **kwargs)
 
-    @classmethod
-    def is_allowed_to_start(
-        cls,
-        window: sublime.Window,
-        initiating_view: Optional[sublime.View] = None,
-        workspace_folders: Optional[List[WorkspaceFolder]] = None,
-        configuration: Optional[ClientConfig] = None
-    ) -> Optional[str]:
-        if workspace_folders:
-            cls.register_rename_import_file_watcher(cls, window, workspace_folders[0].path)
-        return None
-
-    def register_rename_import_file_watcher(self, window: sublime.Window, root_path: str) -> Optional[FileWatcher]:
-        settings = sublime.load_settings("LSP-typescript.sublime-settings")
-        update_imports_on_file_move_setting = settings.get('settings', {}).get('updateImportsOnFileMove', "prompt")
+    def register_rename_import_file_watcher(self, session: Session) -> None:
+        update_imports_on_file_move_setting = session.config.settings.get("updateImportsOnFileMove")
+        workspace_folders = session.get_workspace_folders()
         if update_imports_on_file_move_setting == "never":
             return
         file_watcher = get_file_watcher_implementation()
         if file_watcher:
-            self.rename_import_handler = HandleRenameImport(window, root_path, file_watcher)
+            self.rename_import_handler = HandleRenameImport(session.window, workspace_folders[0].path, file_watcher)
 
     def on_ready(self, api: ApiWrapperInterface) -> None:
         self._api = api
+        session = self.weaksession()
+        if not session:
+            return
+        self.register_rename_import_file_watcher(session)
 
     @request_handler('_typescript.rename')
     def on_typescript_rename(self, position_params: Any, respond: Callable[[None], None]) -> None:
