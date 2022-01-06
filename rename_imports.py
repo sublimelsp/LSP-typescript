@@ -6,7 +6,7 @@ import os
 import sublime
 
 
-class HandleRenameImport(FileWatcherProtocol):
+class RenameImportHandler(FileWatcherProtocol):
     def __init__(self, window: sublime.Window, root_path: str, file_watcher: Type[FileWatcher]):
         self.window = window
         self.events = []  # type: List[FileWatcherEvent]

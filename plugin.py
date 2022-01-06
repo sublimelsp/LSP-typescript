@@ -1,5 +1,5 @@
 from .protocol import InlayHint, InlayHintRequestParams, InlayHintResponse
-from .rename_imports import HandleRenameImport
+from .rename_imports import RenameImportHandler
 from html import escape as html_escape
 from LSP.plugin import SessionBufferProtocol
 from LSP.plugin import uri_to_filename
@@ -55,7 +55,7 @@ class LspTypescriptPlugin(NpmClientHandler):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         self._api = None  # type: Optional[ApiWrapperInterface]
-        self.rename_import_handler = None  # type: Optional[HandleRenameImport]
+        self.rename_import_handler = None  # type: Optional[RenameImportHandler]
         super().__init__(*args, **kwargs)
 
     def register_rename_import_file_watcher(self, session: Session) -> None:
@@ -65,7 +65,7 @@ class LspTypescriptPlugin(NpmClientHandler):
             return
         file_watcher = get_file_watcher_implementation()
         if file_watcher:
-            self.rename_import_handler = HandleRenameImport(session.window, workspace_folders[0].path, file_watcher)
+            self.rename_import_handler = RenameImportHandler(session.window, workspace_folders[0].path, file_watcher)
 
     def on_ready(self, api: ApiWrapperInterface) -> None:
         self._api = api
