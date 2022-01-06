@@ -29,7 +29,7 @@ class HandleRenameImport(FileWatcherProtocol):
         if len(self.events) == 2:
             create_event = next((event for event in self.events if event[0] == 'create'), None)
             delete_event = next((event for event in self.events if event[0] == 'delete'), None)
-            if (create_event and delete_event):
+            if create_event and delete_event:
                 # Rename detected
                 new_name = create_event[1]
                 old_name = delete_event[1]
