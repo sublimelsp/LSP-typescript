@@ -27,6 +27,15 @@ To sort or remove unused imports you can trigger the `LSP-typescript: Organize I
     },
 ```
 
+## Code Actions on Save
+
+Server supports the following code actions that can be specified in the global `lsp_code_actions_on_save` setting and run on saving files:
+
+ - `source.addMissingImports.ts` - adds imports for used but not imported symbols
+ - `source.fixAll.ts` - despite the name, fixes a couple of specific issues: unreachable code, await in non-async functions, incorrectly implemented interface
+ - `source.removeUnused.ts` - removes declared but unused variables
+ - `source.organizeImports.ts` - organizes and removes unused imports
+
 ## Find Callers command
 
 The `LSP-typescript: Find Callers` command can be used to find what is calling the given symbol. It has some overlap with the built-in `LSP: Find References` command but returns only the places where the symbol was called.

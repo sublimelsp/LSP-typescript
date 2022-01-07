@@ -1,5 +1,4 @@
 {
-	"command": ["${node_bin}", "${server_path}", "--stdio"],
 	"initializationOptions": {
 		"logVerbosity": "off",
 		"maxTsServerMemory": 0,
@@ -14,6 +13,7 @@
 			"includeAutomaticOptionalChainCompletions": true,
 			"includeCompletionsForImportStatements": true,
 			"includeCompletionsForModuleExports": true,
+			"includeCompletionsWithClassMemberSnippets": true,
 			"includeCompletionsWithInsertText": true,
 			"includeCompletionsWithSnippetText": true,
 			"jsxAttributeCompletionStyle": "auto"
@@ -78,38 +78,6 @@
 		"typescript.inlayHints.includeInlayPropertyDeclarationTypeHints": false,
 		"typescript.inlayHints.includeInlayVariableTypeHints": false,
 	},
-	// ST4 configuration
+	"command": ["${node_bin}", "${server_path}", "--stdio"],
 	"selector": "source.js, source.jsx, source.ts, source.tsx",
-	// ST3 configuration
-	"languages": [
-		{
-			"languageId": "javascriptreact",
-			"scopes": ["source.jsx", "source.js.react"],
-			"syntaxes": [
-				"Packages/User/JS Custom/Syntaxes/React.sublime-syntax",
-			],
-		},
-		{
-			"languageId": "javascript",
-			"scopes": ["source.js"],
-			"syntaxes": [
-				"Packages/JavaScript/JavaScript.sublime-syntax",
-				"Packages/Babel/JavaScript (Babel).sublime-syntax",
-			],
-		},
-		{
-			"languageId": "typescriptreact",
-			"scopes": ["source.tsx"],
-			"syntaxes": [
-				"Packages/TypeScript Syntax/TypeScriptReact.tmLanguage",
-			],
-		},
-		{
-			"languageId": "typescript",
-			"scopes": ["source.ts"],
-			"syntaxes": [
-				"Packages/TypeScript Syntax/TypeScript.tmLanguage",
-			],
-		},
-	],
 }
