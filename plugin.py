@@ -97,9 +97,10 @@ class LspTypescriptPlugin(NpmClientHandler):
     ) -> None:
         if is_error:
             return
-        view = next(iter(session_buffer.session_views)).view
-        if not view:
+        session_view = next(iter(session_buffer.session_views), None)
+        if not session_view:
             return
+        view = session_view.view
         key = "_lsp_typescript_inlay_hints"
         phantom_set = getattr(session_buffer, key, None)
         if phantom_set is None:
