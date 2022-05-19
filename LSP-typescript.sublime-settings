@@ -1,5 +1,6 @@
 {
 	"initializationOptions": {
+		"locale": "en",
 		"logVerbosity": "off",
 		"maxTsServerMemory": 0,
 		"npmLocation": "",
@@ -16,7 +17,7 @@
 			"includeCompletionsWithClassMemberSnippets": true,
 			"includeCompletionsWithInsertText": true,
 			"includeCompletionsWithSnippetText": true,
-			"jsxAttributeCompletionStyle": "auto"
+			"jsxAttributeCompletionStyle": "auto",
 		},
 	},
 	"settings": {

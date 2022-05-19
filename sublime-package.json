@@ -23,6 +23,13 @@
                       "default": false,
                       "markdownDescription": "Disables tsserver from automatically fetching missing type definitions (`@types` packages) for external modules."
                     },
+                    "locale": {
+                      "type": "string",
+                      "pattern": "^([a-z]+)([_\\-]([a-z]+))?$",
+                      "enum": ["cs", "de", "en", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"],
+                      "default": "en",
+                      "markdownDescription": "The locale to use for showing diagnostics."
+                    },
                     "logVerbosity": {
                       "enum": [
                         "off",
