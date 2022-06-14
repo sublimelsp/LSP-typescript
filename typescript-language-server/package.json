@@ -3,6 +3,6 @@
   "private": true,
   "dependencies": {
     "typescript": "4.7.3",
-    "typescript-language-server": "0.11.0"
+    "typescript-language-server": "0.11.1"
   }
 }
