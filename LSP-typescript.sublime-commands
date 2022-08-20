@@ -23,4 +23,11 @@
             "direction": "incoming"
         },
     },
+    {
+        "caption": "LSP-typescript: Goto Source Definition",
+        "command": "lsp_typescript_goto_source_definition",
+        "args": {
+            "command_args": ["$file_uri", "$position"]
+        },
+    },
 ]

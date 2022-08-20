@@ -28,25 +28,6 @@ CallsResponse = TypedDict('CallsResponse', {
     'calls': List[Call],
 }, total=True)
 
-InlayHintKind = Union[Literal['Type'], Literal['Parameter'], Literal['Enum']]
-
-InlayHint = TypedDict('InlayHint', {
-    'text': str,
-    'position': Position,
-    'kind': InlayHintKind,
-    'whitespaceBefore': bool,  # optional key
-    'whitespaceAfter': bool,  # optional key
-}, total=True)
-
-InlayHintRequestParams = TypedDict('CallsRequestParams', {
-    'textDocument': TextDocumentIdentifier,
-    'range': RangeLsp  # optional key
-}, total=False)
-
-InlayHintResponse = TypedDict('CallsResponse', {
-    'inlayHints': List[InlayHint]
-}, total=True)
-
 TypescriptLocation = TypedDict('TypescriptLocation', {
     'line': int,
     'offset': int,
