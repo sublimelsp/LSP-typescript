@@ -1,6 +1,6 @@
 from LSP.plugin import uri_to_filename
-from LSP.plugin.core.protocol import Point
-from LSP.plugin.core.typing import Any, Callable
+from LSP.plugin.core.protocol import Point, TextDocumentPositionParams
+from LSP.plugin.core.typing import Callable
 from LSP.plugin.core.views import point_to_offset
 from lsp_utils import NpmClientHandler
 from lsp_utils import request_handler
@@ -22,7 +22,9 @@ class LspTypescriptPlugin(NpmClientHandler):
     server_binary_path = os.path.join(server_directory, 'node_modules', 'typescript-language-server', 'lib', 'cli.js')
 
     @request_handler('_typescript.rename')
-    def on_typescript_rename(self, position_params: Any, respond: Callable[[None], None]) -> None:
+    def on_typescript_rename(
+        self, position_params: TextDocumentPositionParams, respond: Callable[[None], None]
+    ) -> None:
         filename = uri_to_filename(position_params['textDocument']['uri'])
         view = sublime.active_window().open_file(filename)
 

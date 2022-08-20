@@ -27,25 +27,3 @@ CallsResponse = TypedDict('CallsResponse', {
     'symbol': Optional[DefinitionSymbol],
     'calls': List[Call],
 }, total=True)
-
-TypescriptLocation = TypedDict('TypescriptLocation', {
-    'line': int,
-    'offset': int,
-}, total=True)
-
-CodeEdit = TypedDict('CodeEdit', {
-    'start': TypescriptLocation,
-    'end': TypescriptLocation,
-    'newText': str,
-}, total=True)
-
-FileCodeEdit = TypedDict('FileCodeEdits', {
-    'fileName': str,
-    'textChanges': List[CodeEdit],
-}, total=True)
-
-CompletionCodeActionCommand = TypedDict('CompletionCodeActionCommand', {
-    'commands': List[Any],
-    'description': str,
-    'changes': List[FileCodeEdit],
-}, total=True)
