@@ -9,7 +9,7 @@
     },
     {
         "caption": "LSP-typescript: Organize Imports",
-        "command": "lsp_typescript_organize_imports",
+        "command": "lsp_typescript_execute",
         "args": {
             "session_name": "LSP-typescript",
             "command_name": "_typescript.organizeImports",
@@ -27,6 +27,7 @@
         "caption": "LSP-typescript: Goto Source Definition",
         "command": "lsp_typescript_goto_source_definition",
         "args": {
+            "command_name": "_typescript.goToSourceDefinition",
             "command_args": ["$file_uri", "$position"]
         },
     },
