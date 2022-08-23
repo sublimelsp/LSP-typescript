@@ -41,13 +41,21 @@ Server supports the following code actions that can be specified in the global `
 The `LSP-typescript: Find Callers` command can be used to find what is calling the given symbol. It has some overlap with the built-in `LSP: Find References` command but returns only the places where the symbol was called.
 
 
-## Inlay hints (experimental)
+## Inlay hints
 
 Inlay hints are short textual annotations that show parameter names, type hints.
 
 ![inlay-hints](./images/inlay-hints.png)
 
-To enable inlay hints, modify the following settings through `Preferences: LSP-typescript Settings`:
+To enable inlay hints:
+1. Open the command palette and select `Preferences: LSP Settings`, then enable `show_inlay_hints`:
+```js
+{
+    "show_inlay_hints": true
+}
+```
+
+2. Modify the following settings through `Preferences: LSP-typescript Settings`:
 
 ```js
 {
