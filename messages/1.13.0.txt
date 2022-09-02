@@ -1,0 +1,4 @@
+# Features and Fixes
+
+- Experimental inlay hints implementation was removed and replaced by an official implementation which is now controlled by the `show_inlay_hints` setting in the main LSP Settings. More information: https://github.com/sublimelsp/LSP-typescript/blob/master/README.md#inlay-hints
+- Added `LSP-typescript: Goto Source Definition` command. More information: https://github.com/sublimelsp/LSP-typescript/blob/master/README.md#goto-source-definition-command

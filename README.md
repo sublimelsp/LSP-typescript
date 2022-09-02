@@ -29,17 +29,24 @@ To sort or remove unused imports you can trigger the `LSP-typescript: Organize I
 
 ## Code Actions on Save
 
-Server supports the following code actions that can be specified in the global `lsp_code_actions_on_save` setting and run on saving files:
+The server supports the following code actions that can be specified in the global `lsp_code_actions_on_save` setting and run on saving files:
 
  - `source.addMissingImports.ts` - adds imports for used but not imported symbols
  - `source.fixAll.ts` - despite the name, fixes a couple of specific issues: unreachable code, await in non-async functions, incorrectly implemented interface
  - `source.removeUnused.ts` - removes declared but unused variables
  - `source.organizeImports.ts` - organizes and removes unused imports
 
+## Goto Source Definition command
+
+TypeScript 4.7+ supports Go To Source Definition. It’s similar to Go To Definition, but it never returns results inside declaration files. Instead, it tries to find corresponding implementation files (like .js or .ts files), and find definitions there — even if those files are normally shadowed by .d.ts files.
+
+This comes in handy most often when you need to peek at the implementation of a function you're importing from a library instead of its type declaration in a .d.ts file.
+
+Run `LSP-typescript: Goto Source Definition` from the Command Palette to invoke this functionality or bind `lsp_typescript_goto_source_definition` to a custom key binding.
+
 ## Find Callers command
 
 The `LSP-typescript: Find Callers` command can be used to find what is calling the given symbol. It has some overlap with the built-in `LSP: Find References` command but returns only the places where the symbol was called.
-
 
 ## Inlay hints
 
