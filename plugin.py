@@ -1,6 +1,6 @@
 from LSP.plugin import uri_to_filename
 from LSP.plugin.core.protocol import Point, TextDocumentPositionParams
-from LSP.plugin.core.typing import Callable
+from LSP.plugin.core.typing import Callable, Tuple
 from LSP.plugin.core.views import point_to_offset
 from lsp_utils import NpmClientHandler
 from lsp_utils import request_handler
@@ -20,6 +20,10 @@ class LspTypescriptPlugin(NpmClientHandler):
     package_name = __package__
     server_directory = 'typescript-language-server'
     server_binary_path = os.path.join(server_directory, 'node_modules', 'typescript-language-server', 'lib', 'cli.js')
+
+    @classmethod
+    def minimum_node_version(cls) -> Tuple[int, int, int]:
+        return (14, 16, 0)
 
     @request_handler('_typescript.rename')
     def on_typescript_rename(
