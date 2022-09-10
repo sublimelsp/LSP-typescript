@@ -1,6 +1,6 @@
 # LSP-typescript
 
-TypeScript and JavaScript support for Sublime's LSP plugin provided through [Theia TypeScript Language Server](https://github.com/typescript-language-server/typescript-language-server).
+TypeScript and JavaScript support for Sublime's LSP plugin provided through [TypeScript Language Server](https://github.com/typescript-language-server/typescript-language-server).
 
 ## Installation
 
