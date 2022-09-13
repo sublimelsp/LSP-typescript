@@ -9,6 +9,7 @@
 			"allowIncompleteCompletions": true,
 			"allowRenameOfImportPath": true,
 			"allowTextChangesInNewFiles": true,
+			"autoImportFileExcludePatterns": [],
 			"displayPartsForJSDoc": true,
 			"generateReturnInDocTemplate": true,
 			"includeAutomaticOptionalChainCompletions": true,
@@ -53,6 +54,7 @@
 		"javascript.inlayHints.includeInlayParameterNameHintsWhenArgumentMatchesName": false,
 		"javascript.inlayHints.includeInlayPropertyDeclarationTypeHints": false,
 		"javascript.inlayHints.includeInlayVariableTypeHints": false,
+		"javascript.inlayHints.includeInlayVariableTypeHintsWhenTypeMatchesName": false,
 		// Typescript formatting options.
 		"typescript.format.insertSpaceAfterCommaDelimiter": true,
 		"typescript.format.insertSpaceAfterConstructor": false,
@@ -81,6 +83,7 @@
 		"typescript.inlayHints.includeInlayParameterNameHintsWhenArgumentMatchesName": false,
 		"typescript.inlayHints.includeInlayPropertyDeclarationTypeHints": false,
 		"typescript.inlayHints.includeInlayVariableTypeHints": false,
+		"typescript.inlayHints.includeInlayVariableTypeHintsWhenTypeMatchesName": false,
 	},
 	"command": ["${node_bin}", "${server_path}", "--stdio"],
 	"selector": "source.js, source.jsx, source.ts, source.tsx",

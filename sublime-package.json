@@ -91,6 +91,11 @@
                             "single"
                           ],
                         },
+                        "autoImportFileExcludePatterns": {
+                          "type": "array",
+                          "default": [],
+                          "markdownDescription": "Glob patterns of files to exclude from auto imports. Requires using TypeScript 4.8 or newer in the workspace.\n\nRelative paths are resolved relative to the workspace root."
+                        },
                         "includeCompletionsForModuleExports": {
                           "type": "boolean",
                           "markdownDescription": "If enabled, TypeScript will search through all external modules' exports and add them to the completions list. This affects lone identifier completions but not completions on the right hand side of `obj.`."
@@ -153,6 +158,7 @@
                         },
                         "provideRefactorNotApplicableReason": {
                           "type": "boolean",
+                          "default": true,
                         },
                         "allowRenameOfImportPath": {
                           "type": "boolean",
@@ -331,6 +337,11 @@
                       "default": false,
                       "markdownDescription": "Enable/disable inlay hints for implicit variable types: \n\n ```typescript\n const foo /* :number */ = Date.now();\n ``` \n Require TypeScript 4.4+."
                     },
+                    "typescript.inlayHints.includeInlayVariableTypeHintsWhenTypeMatchesName": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "When disabled then type hints on variables whose name is identical to the type name won't be shown. Requires using TypeScript 4.8+ in the workspace."
+                    },
                     "javascript.format.insertSpaceAfterCommaDelimiter": {
                       "type": "boolean",
                       "default": true
@@ -456,7 +467,12 @@
                       "type": "boolean",
                       "default": false,
                       "markdownDescription": "Enable/disable inlay hints for implicit variable types: \n\n ```typescript\n const foo /* :number */ = Date.now();\n ``` \n Require TypeScript 4.4+."
-                    }
+                    },
+                    "javascript.inlayHints.includeInlayVariableTypeHintsWhenTypeMatchesName": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "When disabled then type hints on variables whose name is identical to the type name won't be shown. Requires using TypeScript 4.8+ in the workspace."
+                    },
                   }
                 }
               }
