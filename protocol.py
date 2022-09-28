@@ -1,5 +1,5 @@
-from LSP.plugin.core.protocol import Location, Position, RangeLsp, TextDocumentIdentifier
-from LSP.plugin.core.typing import Any, List, Literal, Optional, TypedDict, Union
+from LSP.plugin.core.protocol import Location, Position, Range, TextDocumentIdentifier
+from LSP.plugin.core.typing import List, Literal, Optional, TypedDict, Union
 
 
 CallsDirection = Union[Literal['incoming'], Literal['outgoing']]
@@ -15,7 +15,7 @@ DefinitionSymbol = TypedDict('DefinitionSymbol', {
     'detail': Optional[str],
     'kind': int,
     'location': Location,
-    'selectionRange': RangeLsp,
+    'selectionRange': Range,
 }, total=True)
 
 Call = TypedDict('Call', {
