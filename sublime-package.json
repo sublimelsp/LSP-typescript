@@ -191,7 +191,21 @@
                             "markdownDescription": "Preferred style for JSX attribute completions.\n\nRequires TypeScript 4.5+."
                         }
                       }
-                    }
+                    },
+                    "tsserver.logDirectory": {
+                      "type": "string",
+                      "default": "",
+                      "markdownDescription": "The path to the directory where the `tsserver` logs will be created. If not provided, the log files will be created within the workspace, inside the `.log` directory. If no workspace root is provided when initializating the server and no custom path is specified then the logs will not be created."
+                    },
+                    "tsserver.trace": {
+                      "enum": [
+                        "off",
+                        "messages",
+                        "verbose"
+                      ],
+                      "default": "off",
+                      "markdownDescription": "The verbosity of logging of the tsserver communication.\n\nDelivered through the LSP messages and not related to file logging."
+                    },
                   }
                 },
                 "settings": {
@@ -200,7 +214,8 @@
                   "properties": {
                     "completions.completeFunctionCalls": {
                       "type": "boolean",
-                      "default": false
+                      "default": false,
+                      "markdownDescription": "Complete functions with their parameter signature.\n\nThis functionality relies on LSP client resolving the completion using the `completionItem/resolve` call. If the client can't do that before inserting the completion then it's not safe to enable it as it will result in some completions having a snippet type without actually being snippets, which can then cause problems when inserting them."
                     },
                     "diagnostics.ignoredCodes": {
                       "type": "array",
