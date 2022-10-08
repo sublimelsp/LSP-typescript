@@ -23,6 +23,8 @@
 			"jsxAttributeCompletionStyle": "auto",
 			"providePrefixAndSuffixTextForRename": true,
 		},
+		"tsserver.logDirectory": "",
+		"tsserver.trace": "off",
 	},
 	"settings": {
 		"diagnostics.ignoredCodes": [],
