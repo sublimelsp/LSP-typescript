@@ -18,13 +18,13 @@ Open the configuration file using the Command Palette `Preferences: LSP-typescri
 To sort or remove unused imports you can trigger the `LSP-typescript: Organize Imports` command from the Command Palette or create a key binding. For example:
 
 ```json
-    { "keys": ["ctrl+k"], "command": "lsp_execute",
-        "args": {
-            "session_name": "LSP-typescript",
-            "command_name": "_typescript.organizeImports",
-            "command_args": ["${file}"]
-        }
-    },
+{ "keys": ["ctrl+k"], "command": "lsp_execute",
+  "args": {
+    "session_name": "LSP-typescript",
+    "command_name": "_typescript.organizeImports",
+    "command_args": ["${file}"]
+  }
+},
 ```
 
 ## Code Actions on Save
@@ -55,10 +55,12 @@ Inlay hints are short textual annotations that show parameter names, type hints.
 ![inlay-hints](./images/inlay-hints.png)
 
 To enable inlay hints:
+
 1. Open the command palette and select `Preferences: LSP Settings`, then enable `show_inlay_hints`:
+
 ```js
 {
-    "show_inlay_hints": true
+  "show_inlay_hints": true
 }
 ```
 
