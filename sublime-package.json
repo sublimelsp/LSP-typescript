@@ -30,16 +30,6 @@
                       "default": "en",
                       "markdownDescription": "The locale to use for showing diagnostics."
                     },
-                    "logVerbosity": {
-                      "enum": [
-                        "off",
-                        "terse",
-                        "normal",
-                        "requesttime",
-                        "verbose"
-                      ],
-                      "description": "Verbosity of the logging."
-                    },
                     "maxTsServerMemory": {
                       "type": "number",
                       "markdownDescription": "The maximum size of the V8's old memory section in megabytes (for example `4096` means 4GB). The default value is dynamically configured by Node so can differ per system. Increase for very big projects that exceed allowed memory usage."
@@ -195,7 +185,23 @@
                     "tsserver.logDirectory": {
                       "type": "string",
                       "default": "",
-                      "markdownDescription": "The path to the directory where the `tsserver` logs will be created. If not provided, the log files will be created within the workspace, inside the `.log` directory. If no workspace root is provided when initializating the server and no custom path is specified then the logs will not be created."
+                      "markdownDescription": "The path to the directory where the `tsserver` log files will be created. If not provided, the log files will be created within the workspace, inside the `.log` directory. If no workspace root is provided when initializating the server and no custom path is specified then the logs will not be created."
+                    },
+                    "tsserver.logVerbosity": {
+                      "enum": [
+                        "off",
+                        "terse",
+                        "normal",
+                        "requestTime",
+                        "verbose"
+                      ],
+                      "default": "off",
+                      "markdownDescription": "Verbosity of the information logged into the `tsserver` log files.\n\nLog levels from least to most amount of details: `'terse'`, `'normal'`, `'requestTime`', `'verbose'`. Enabling particular level also enables all lower levels.",
+                    },
+                    "tsserver.path": {
+                      "type": "string",
+                      "default": "",
+                      "markdownDescription": "The path to the `tsserver.js` file or the typescript lib directory. For example: `/Users/me/typescript/lib/tsserver.js`. By default the TypeScript from workspace is used and otherwise fall-backs to the bundled version of TypeScript."
                     },
                     "tsserver.trace": {
                       "enum": [

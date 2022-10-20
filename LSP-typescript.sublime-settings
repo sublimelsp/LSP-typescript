@@ -1,7 +1,6 @@
 {
 	"initializationOptions": {
 		"locale": "en",
-		"logVerbosity": "off",
 		"maxTsServerMemory": 0,
 		"npmLocation": "",
 		"plugins": [],
@@ -24,6 +23,8 @@
 			"providePrefixAndSuffixTextForRename": true,
 		},
 		"tsserver.logDirectory": "",
+		"tsserver.logVerbosity":  "off",
+		"tsserver.path": "",
 		"tsserver.trace": "off",
 	},
 	"settings": {
@@ -86,6 +87,13 @@
 		"typescript.inlayHints.includeInlayPropertyDeclarationTypeHints": false,
 		"typescript.inlayHints.includeInlayVariableTypeHints": false,
 		"typescript.inlayHints.includeInlayVariableTypeHintsWhenTypeMatchesName": false,
+		"implicitProjectConfiguration.checkJs": false,
+		"implicitProjectConfiguration.experimentalDecorators": false,
+		"implicitProjectConfiguration.module": "ESNext",
+		"implicitProjectConfiguration.strictFunctionTypes": true,
+		"implicitProjectConfiguration.strictNullChecks": true,
+		"implicitProjectConfiguration.target": "ES2020",
+
 	},
 	"command": ["${node_bin}", "${server_path}", "--stdio"],
 	"selector": "source.js, source.jsx, source.ts, source.tsx",
