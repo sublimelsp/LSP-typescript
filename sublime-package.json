@@ -232,6 +232,82 @@
                       "default": [],
                       "markdownDescription": "Diagnostics code to be omitted when reporting diagnostics. See https://github.com/microsoft/TypeScript/blob/master/src/compiler/diagnosticMessages.json for a full list of valid codes."
                     },
+                    "implicitProjectConfiguration.checkJs": {
+                      "description": "Enable error reporting in type-checked JavaScript files.",
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Enable error reporting in type-checked JavaScript files.\n\nSee more: https://www.typescriptlang.org/tsconfig#checkJs"
+                    },
+                    "implicitProjectConfiguration.experimentalDecorators": {
+                      "description": "Enable experimental support for TC39 stage 2 draft decorators.",
+                      "type": "boolean",
+                      "markdownDescription": "Enable experimental support for TC39 stage 2 draft decorators.\n\nSee more: https://www.typescriptlang.org/tsconfig#experimentalDecorators"
+                    },
+                    "implicitProjectConfiguration.module": {
+                      "description": "Specify what module code is generated.",
+                      "type": "string",
+                      "anyOf": [
+                        {
+                          "enum": [
+                            "CommonJS",
+                            "AMD",
+                            "System",
+                            "UMD",
+                            "ES6",
+                            "ES2015",
+                            "ES2020",
+                            "ESNext",
+                            "None",
+                            "ES2022",
+                            "Node16",
+                            "NodeNext"
+                          ]
+                        },
+                        {
+                          "pattern": "^([Cc][Oo][Mm][Mm][Oo][Nn][Jj][Ss]|[AaUu][Mm][Dd]|[Ss][Yy][Ss][Tt][Ee][Mm]|[Ee][Ss]([356]|20(1[567]|2[02])|[Nn][Ee][Xx][Tt])|[Nn][Oo][dD][Ee]16|[Nn][Oo][Dd][Ed][Nn][Ee][Xx][Tt]|[Nn][Oo][Nn][Ee])$"
+                        }
+                      ],
+                      "markdownDescription": "Specify what module code is generated.\n\nSee more: https://www.typescriptlang.org/tsconfig#module"
+                    },
+                    "implicitProjectConfiguration.strictFunctionTypes": {
+                      "description": "When assigning functions, check to ensure parameters and the return values are subtype-compatible.",
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "When assigning functions, check to ensure parameters and the return values are subtype-compatible.\n\nSee more: https://www.typescriptlang.org/tsconfig#strictFunctionTypes"
+                    },
+                    "implicitProjectConfiguration.strictNullChecks": {
+                      "description": "When type checking, take into account `null` and `undefined`.",
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "When type checking, take into account `null` and `undefined`.\n\nSee more: https://www.typescriptlang.org/tsconfig#strictNullChecks"
+                    },
+                    "implicitProjectConfiguration.target": {
+                      "description": "Set the JavaScript language version for emitted JavaScript and include compatible library declarations.",
+                      "type": "string",
+                      "default": "ES3",
+                      "anyOf": [
+                        {
+                          "enum": [
+                            "ES3",
+                            "ES5",
+                            "ES6",
+                            "ES2015",
+                            "ES2016",
+                            "ES2017",
+                            "ES2018",
+                            "ES2019",
+                            "ES2020",
+                            "ES2021",
+                            "ES2022",
+                            "ESNext"
+                          ]
+                        },
+                        {
+                          "pattern": "^([Ee][Ss]([356]|(20(1[56789]|2[012]))|[Nn][Ee][Xx][Tt]))$"
+                        }
+                      ],
+                      "markdownDescription": "Set the JavaScript language version for emitted JavaScript and include compatible library declarations.\n\nSee more: https://www.typescriptlang.org/tsconfig#target"
+                    },
                     "typescript.format.insertSpaceAfterCommaDelimiter": {
                       "type": "boolean",
                       "default": true

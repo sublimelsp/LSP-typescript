@@ -29,6 +29,13 @@
 	},
 	"settings": {
 		"diagnostics.ignoredCodes": [],
+		// Implicit Project Configuration
+		"implicitProjectConfiguration.checkJs": false,
+		"implicitProjectConfiguration.experimentalDecorators": false,
+		"implicitProjectConfiguration.module": "ESNext",
+		"implicitProjectConfiguration.strictFunctionTypes": true,
+		"implicitProjectConfiguration.strictNullChecks": true,
+		"implicitProjectConfiguration.target": "ES2020",
 		// Javascript formatting options.
 		"javascript.format.insertSpaceAfterCommaDelimiter": true,
 		"javascript.format.insertSpaceAfterConstructor": false,
@@ -87,12 +94,6 @@
 		"typescript.inlayHints.includeInlayPropertyDeclarationTypeHints": false,
 		"typescript.inlayHints.includeInlayVariableTypeHints": false,
 		"typescript.inlayHints.includeInlayVariableTypeHintsWhenTypeMatchesName": false,
-		"implicitProjectConfiguration.checkJs": false,
-		"implicitProjectConfiguration.experimentalDecorators": false,
-		"implicitProjectConfiguration.module": "ESNext",
-		"implicitProjectConfiguration.strictFunctionTypes": true,
-		"implicitProjectConfiguration.strictNullChecks": true,
-		"implicitProjectConfiguration.target": "ES2020",
 
 	},
 	"command": ["${node_bin}", "${server_path}", "--stdio"],
