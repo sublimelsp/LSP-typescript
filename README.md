@@ -44,10 +44,6 @@ This comes in handy most often when you need to peek at the implementation of a 
 
 Run `LSP-typescript: Goto Source Definition` from the Command Palette to invoke this functionality or bind `lsp_typescript_goto_source_definition` to a custom key binding.
 
-## Find Callers command
-
-The `LSP-typescript: Find Callers` command can be used to find what is calling the given symbol. It has some overlap with the built-in `LSP: Find References` command but returns only the places where the symbol was called.
-
 ## Inlay hints
 
 Inlay hints are short textual annotations that show parameter names, type hints.
