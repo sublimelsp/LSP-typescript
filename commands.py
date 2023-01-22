@@ -13,8 +13,8 @@ class LspTypescriptExecuteCommand(LspExecuteCommand):
 
 class LspTypescriptGotoSourceDefinitionCommand(LspTypescriptExecuteCommand):
     def handle_success_async(self, result: Union[List[Location], List[LocationLink]], command_name: str) -> None:
+        window = self.view.window()
         if not result:
-            window = self.view.window()
             if window:
                 window.status_message('No source definitions found')
             return
@@ -26,6 +26,7 @@ class LspTypescriptGotoSourceDefinitionCommand(LspTypescriptExecuteCommand):
                 'location': result[0],
                 'session_name': self.session_name,
             }
-            self.view.run_command('lsp_open_location', args)
+            if window:
+                window.run_command('lsp_open_location', args)
         else:
             LocationPicker(self.view, session, result, side_by_side=False)
