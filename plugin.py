@@ -46,7 +46,7 @@ class LspTypescriptPlugin(NpmClientHandler):
         session = self.weaksession()
         if not session:
             return
-        version_template = session.config.settings.get('settings.statusText')
+        version_template = session.config.settings.get('statusText')
         if not version_template or not isinstance(version_template, str):
             return
         status_text = version_template.replace('$version', params['version']).replace('$source', params['source'])
