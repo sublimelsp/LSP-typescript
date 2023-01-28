@@ -1,3 +1,4 @@
+from .plugin_types import TypescriptVersionNotificationParams
 from LSP.plugin import uri_to_filename
 from LSP.plugin.core.protocol import Point, TextDocumentPositionParams
 from LSP.plugin.core.typing import Callable, Dict, Tuple
@@ -41,7 +42,7 @@ class LspTypescriptPlugin(NpmClientHandler):
         respond(None)
 
     @notification_handler('$/typescriptVersion')
-    def on_typescript_version_async(self, params: Dict[str, str]) -> None:
+    def on_typescript_version_async(self, params: TypescriptVersionNotificationParams) -> None:
         session = self.weaksession()
         if not session:
             return
