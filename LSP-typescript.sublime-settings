@@ -28,6 +28,7 @@
 		"tsserver.trace": "off",
 	},
 	"settings": {
+		"statusText": "$version, $source",
 		"diagnostics.ignoredCodes": [],
 		// Implicit Project Configuration
 		"implicitProjectConfiguration.checkJs": false,
