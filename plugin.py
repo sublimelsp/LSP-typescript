@@ -1,7 +1,7 @@
 from .plugin_types import TypescriptVersionNotificationParams
 from LSP.plugin import uri_to_filename
 from LSP.plugin.core.protocol import Point, TextDocumentPositionParams
-from LSP.plugin.core.typing import Callable, Dict, Tuple
+from LSP.plugin.core.typing import Callable, Tuple
 from LSP.plugin.core.views import point_to_offset
 from lsp_utils import notification_handler
 from lsp_utils import NpmClientHandler
