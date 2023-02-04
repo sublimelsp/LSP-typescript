@@ -218,6 +218,11 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
+                    "statusText": {
+                      "type": "string",
+                      "default": "$version, $source",
+                      "markdownDescription": "The text to be shown next to the server indicator in the status bar. Can use two template variables `$version` and `$source` that carry information about used TypeScript version."
+                    },
                     "completions.completeFunctionCalls": {
                       "type": "boolean",
                       "default": false,
