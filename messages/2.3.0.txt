@@ -1,0 +1,4 @@
+# Features and Fixes
+
+Server now starts separate instance of the typescript (tsServer) process for handling semantic requests. This should
+improve performance in large projects (especially during loading).
