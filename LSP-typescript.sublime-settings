@@ -1,5 +1,7 @@
 {
 	"initializationOptions": {
+		"completionDisableFilterText": true,
+		"disableAutomaticTypingAcquisition": false,
 		"locale": "en",
 		"maxTsServerMemory": 0,
 		"npmLocation": "",
@@ -26,6 +28,7 @@
 		"tsserver.logVerbosity":  "off",
 		"tsserver.path": "",
 		"tsserver.trace": "off",
+		"tsserver.useSyntaxServer": "auto",
 	},
 	"settings": {
 		"statusText": "$version, $source",
