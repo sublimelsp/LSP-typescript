@@ -628,6 +628,31 @@
           }
         }
       },
+      {
+        "file_patterns": [
+          "LSP.sublime-settings"
+        ],
+        "schema": {
+          "properties": {
+            "lsp_code_actions_on_save": {
+              "properties": {
+                "source.addMissingImports.ts": {
+                  "type": "boolean"
+                },
+                "source.fixAll.ts": {
+                  "type": "boolean"
+                },
+                "source.organizeImports.ts": {
+                  "type": "boolean"
+                },
+                "source.removeUnused.ts": {
+                  "type": "boolean"
+                },
+              }
+            }
+          }
+        }
+      },
     ]
   }
 }
