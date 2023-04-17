@@ -31,7 +31,22 @@
                     "locale": {
                       "type": "string",
                       "pattern": "^([a-z]+)([_\\-]([a-z]+))?$",
-                      "enum": ["cs", "de", "en", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"],
+                      "enum": [
+                        "cs",
+                        "de",
+                        "en",
+                        "es",
+                        "fr",
+                        "it",
+                        "ja",
+                        "ko",
+                        "pl",
+                        "pt-br",
+                        "ru",
+                        "tr",
+                        "zh-cn",
+                        "zh-tw"
+                      ],
                       "default": "en",
                       "markdownDescription": "The locale to use for showing diagnostics."
                     },
@@ -148,6 +163,47 @@
                         "lazyConfiguredProjectsFromExternalProject": {
                           "type": "boolean",
                         },
+                        "organizeImportsIgnoreCase": {
+                          "enum": [
+                            "auto",
+                            true,
+                            false
+                          ],
+                          "default": "auto",
+                          "markdownDescription": "Indicates whether imports should be organized in a case-insensitive manner."
+                        },
+                        "organizeImportsCollation": {
+                          "enum": [
+                            "ordinal",
+                            "unicode",
+                          ],
+                          "default": "ordinal",
+                          "markdownDescription": "Indicates whether imports should be organized via an `\"ordinal\"` (binary) comparison using the numeric value of their code points, or via `\"unicode\"` collation (via the [Unicode Collation Algorithm](https://unicode.org/reports/tr10/#Scope)) using rules associated with the locale specified in `organizeImportsCollationLocale`."
+                        },
+                        "organizeImportsCollationLocale": {
+                          "type": "string",
+                          "default": "en",
+                          "markdownDescription": "Indicates the locale to use for `\"unicode\"` collation. If not specified, the locale `\"en\"` is used as an invariant for the sake of consistent sorting. Use `\"auto\"` to use the detected UI locale.\n\nThis preference is ignored if `organizeImportsCollation` is not `\"unicode\"`."
+                        },
+                        "organizeImportsNumericCollation": {
+                          "type": "boolean",
+                          "default": false,
+                          "markdownDescription": "Indicates whether numeric collation should be used for digit sequences in strings. When `true`, will collate strings such that `a1z < a2z < a100z`. When `false`, will collate strings such that `a1z < a100z < a2z`.\n\nThis preference is ignored if `organizeImportsCollation` is not `\"unicode\"`."
+                        },
+                        "organizeImportsAccentCollation": {
+                          "type": "boolean",
+                          "default": true,
+                          "markdownDescription": "Indicates whether accents and other diacritic marks are considered unequal for the purpose of collation. When `true`, characters with accents and other diacritics will be collated in the order defined by the locale specified in `organizeImportsCollationLocale`.\n\nThis preference is ignored if {@link organizeImportsCollation} is not `\"unicode\"`."
+                        },
+                        "organizeImportsCaseFirst": {
+                          "enum": [
+                            "upper",
+                            "lower",
+                            false,
+                          ],
+                          "default": false,
+                          "markdownDescription": "Indicates whether upper case or lower case should sort first. When `false`, the default order for the locale specified in `organizeImportsCollationLocale` is used.\n\nThis preference is ignored if `organizeImportsCollation` is not `\"unicode\"`. This preference is also ignored if we are using case-insensitive sorting, which occurs when `organizeImportsIgnoreCase` is `true`, or if `organizeImportsIgnoreCase` is `\"auto\"` and the auto-detected case sensitivity is determined to be case-insensitive."
+                        },
                         "providePrefixAndSuffixTextForRename": {
                           "type": "boolean",
                         },
@@ -172,18 +228,18 @@
                           "type": "boolean",
                         },
                         "jsxAttributeCompletionStyle": {
-                            "enum": [
-                              "auto",
-                              "braces",
-                              "none"
-                            ],
-                            "default": "auto",
-                            "markdownEnumDescriptions": [
-                              "Insert `={}` or `=\"\"` after attribute names based on the prop type.",
-                              "Insert `={}` after attribute names.",
-                              "Only insert attribute names."
-                            ],
-                            "markdownDescription": "Preferred style for JSX attribute completions.\n\nRequires TypeScript 4.5+."
+                          "enum": [
+                            "auto",
+                            "braces",
+                            "none"
+                          ],
+                          "default": "auto",
+                          "markdownEnumDescriptions": [
+                            "Insert `={}` or `=\"\"` after attribute names based on the prop type.",
+                            "Insert `={}` after attribute names.",
+                            "Only insert attribute names."
+                          ],
+                          "markdownDescription": "Preferred style for JSX attribute completions.\n\nRequires TypeScript 4.5+."
                         }
                       }
                     },
