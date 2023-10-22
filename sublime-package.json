@@ -227,6 +227,10 @@
                         "generateReturnInDocTemplate": {
                           "type": "boolean",
                         },
+                        "interactiveInlayHints": {
+                          "type": "boolean",
+                          "default": true
+                        },
                         "jsxAttributeCompletionStyle": {
                           "enum": [
                             "auto",
