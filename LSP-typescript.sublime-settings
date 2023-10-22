@@ -24,6 +24,7 @@
 			"includeCompletionsWithObjectLiteralMethodSnippets": true,
 			"includeCompletionsWithSnippetText": true,
 			"includePackageJsonAutoImports": "auto",
+			"interactiveInlayHints": true,
 			"jsxAttributeCompletionStyle": "auto",
 			"lazyConfiguredProjectsFromExternalProject": false,
 			"organizeImportsIgnoreCase": "auto",
@@ -111,7 +112,6 @@
 		"typescript.inlayHints.includeInlayPropertyDeclarationTypeHints": false,
 		"typescript.inlayHints.includeInlayVariableTypeHints": false,
 		"typescript.inlayHints.includeInlayVariableTypeHintsWhenTypeMatchesName": false,
-
 	},
 	"command": ["${node_bin}", "${server_path}", "--stdio"],
 	"selector": "source.js, source.jsx, source.ts, source.tsx",
