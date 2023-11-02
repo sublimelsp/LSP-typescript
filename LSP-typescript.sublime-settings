@@ -112,6 +112,14 @@
 		"typescript.inlayHints.includeInlayPropertyDeclarationTypeHints": false,
 		"typescript.inlayHints.includeInlayVariableTypeHints": false,
 		"typescript.inlayHints.includeInlayVariableTypeHintsWhenTypeMatchesName": false,
+		// Code Lens options.
+		"javascript.implementationsCodeLens.enabled": false,
+		"javascript.referencesCodeLens.enabled": false,
+		"javascript.referencesCodeLens.showOnAllFunctions": false,
+		"typescript.implementationsCodeLens.enabled": false,
+		"typescript.referencesCodeLens.enabled": false,
+		"typescript.referencesCodeLens.showOnAllFunctions": false,
+
 	},
 	"command": ["${node_bin}", "${server_path}", "--stdio"],
 	"selector": "source.js, source.jsx, source.ts, source.tsx",
