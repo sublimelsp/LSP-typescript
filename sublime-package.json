@@ -521,6 +521,36 @@
                       "default": false,
                       "markdownDescription": "When disabled then type hints on variables whose name is identical to the type name won't be shown. Requires using TypeScript 4.8+ in the workspace."
                     },
+                    "javascript.implementationsCodeLens.enabled": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Enable/disable implementations CodeLens. This CodeLens shows the implementers of an interface."
+                    },
+                    "javascript.referencesCodeLens.enabled": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Enable/disable references CodeLens in JavaScript files."
+                    },
+                    "javascript.referencesCodeLens.showOnAllFunctions": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Enable/disable references CodeLens on all functions in JavaScript files."
+                    },
+                    "typescript.implementationsCodeLens.enabled": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Enable/disable implementations CodeLens. This CodeLens shows the implementers of an interface."
+                    },
+                    "typescript.referencesCodeLens.enabled": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Enable/disable references CodeLens in TypeScript files."
+                    },
+                    "typescript.referencesCodeLens.showOnAllFunctions": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Enable/disable references CodeLens on all functions in TypeScript files."
+                    },
                     "javascript.format.insertSpaceAfterCommaDelimiter": {
                       "type": "boolean",
                       "default": true

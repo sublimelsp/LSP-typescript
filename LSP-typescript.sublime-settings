@@ -47,6 +47,7 @@
 	"settings": {
 		"statusText": "$version, $source",
 		"diagnostics.ignoredCodes": [],
+
 		// Implicit Project Configuration
 		"implicitProjectConfiguration.checkJs": false,
 		"implicitProjectConfiguration.experimentalDecorators": false,
@@ -54,7 +55,8 @@
 		"implicitProjectConfiguration.strictFunctionTypes": true,
 		"implicitProjectConfiguration.strictNullChecks": true,
 		"implicitProjectConfiguration.target": "ES2020",
-		// Javascript formatting options.
+
+		// Formatting options.
 		"javascript.format.insertSpaceAfterCommaDelimiter": true,
 		"javascript.format.insertSpaceAfterConstructor": false,
 		"javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": true,
@@ -74,16 +76,6 @@
 		"javascript.format.placeOpenBraceOnNewLineForFunctions": false,
 		"javascript.format.semicolons": "ignore", // ignore | insert | remove
 		"javascript.format.trimTrailingWhitespace": true,
-		// Javascript inlay hints options.
-		"javascript.inlayHints.includeInlayEnumMemberValueHints": false,
-		"javascript.inlayHints.includeInlayFunctionLikeReturnTypeHints": false,
-		"javascript.inlayHints.includeInlayFunctionParameterTypeHints": false,
-		"javascript.inlayHints.includeInlayParameterNameHints": "none", // none | literals | all
-		"javascript.inlayHints.includeInlayParameterNameHintsWhenArgumentMatchesName": false,
-		"javascript.inlayHints.includeInlayPropertyDeclarationTypeHints": false,
-		"javascript.inlayHints.includeInlayVariableTypeHints": false,
-		"javascript.inlayHints.includeInlayVariableTypeHintsWhenTypeMatchesName": false,
-		// Typescript formatting options.
 		"typescript.format.insertSpaceAfterCommaDelimiter": true,
 		"typescript.format.insertSpaceAfterConstructor": false,
 		"typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": true,
@@ -103,7 +95,16 @@
 		"typescript.format.placeOpenBraceOnNewLineForFunctions": false,
 		"typescript.format.semicolons": "ignore", // ignore | insert | remove
 		"typescript.format.trimTrailingWhitespace": true,
-		// Typescript inlay hints options.
+
+		// Inlay hints options.
+		"javascript.inlayHints.includeInlayEnumMemberValueHints": false,
+		"javascript.inlayHints.includeInlayFunctionLikeReturnTypeHints": false,
+		"javascript.inlayHints.includeInlayFunctionParameterTypeHints": false,
+		"javascript.inlayHints.includeInlayParameterNameHints": "none", // none | literals | all
+		"javascript.inlayHints.includeInlayParameterNameHintsWhenArgumentMatchesName": false,
+		"javascript.inlayHints.includeInlayPropertyDeclarationTypeHints": false,
+		"javascript.inlayHints.includeInlayVariableTypeHints": false,
+		"javascript.inlayHints.includeInlayVariableTypeHintsWhenTypeMatchesName": false,
 		"typescript.inlayHints.includeInlayEnumMemberValueHints": false,
 		"typescript.inlayHints.includeInlayFunctionLikeReturnTypeHints": false,
 		"typescript.inlayHints.includeInlayFunctionParameterTypeHints": false,
@@ -112,6 +113,14 @@
 		"typescript.inlayHints.includeInlayPropertyDeclarationTypeHints": false,
 		"typescript.inlayHints.includeInlayVariableTypeHints": false,
 		"typescript.inlayHints.includeInlayVariableTypeHintsWhenTypeMatchesName": false,
+
+		// Code Lens options.
+		"javascript.implementationsCodeLens.enabled": false,
+		"javascript.referencesCodeLens.enabled": false,
+		"javascript.referencesCodeLens.showOnAllFunctions": false,
+		"typescript.implementationsCodeLens.enabled": false,
+		"typescript.referencesCodeLens.enabled": false,
+		"typescript.referencesCodeLens.showOnAllFunctions": false,
 	},
 	"command": ["${node_bin}", "${server_path}", "--stdio"],
 	"selector": "source.js, source.jsx, source.ts, source.tsx",
