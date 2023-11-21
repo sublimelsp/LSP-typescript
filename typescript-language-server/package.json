@@ -2,7 +2,7 @@
   "name": "lsp-typescript",
   "private": true,
   "dependencies": {
-    "typescript": "5.2.2",
+    "typescript": "5.3.2",
     "typescript-language-server": "4.1.2"
   }
 }
