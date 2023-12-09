@@ -268,6 +268,11 @@
                       "default": "",
                       "markdownDescription": "The path to the `tsserver.js` file or the typescript lib directory. For example: `/Users/me/typescript/lib/tsserver.js`. By default the TypeScript from workspace is used and otherwise fall-backs to the bundled version of TypeScript."
                     },
+                    "tsserver.fallbackPath": {
+                      "type": "string",
+                      "default": "",
+                      "markdownDescription": "The path to the `tsserver.js` file or the typescript lib directory to use when `tsserver.path` is unspecified/invalid and the `tsserver` isn't available via the current workspace. For example: `/Users/me/typescript/lib/tsserver.js`. Note: The path should point at the `[...]/typescript/lib/tssserver.js` file or the `[...]/typescript/lib/` directory and not the shell script (`[...]/node_modules/.bin/tsserver`) but for backward-compatibility reasons, the server will try to do the right thing even when passed a path to the shell script."
+                    },
                     "tsserver.trace": {
                       "enum": [
                         "off",

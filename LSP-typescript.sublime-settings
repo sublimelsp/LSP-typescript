@@ -41,6 +41,7 @@
 		"tsserver.logDirectory": "",
 		"tsserver.logVerbosity":  "off",
 		"tsserver.path": "",
+		"tsserver.fallbackPath": "",
 		"tsserver.trace": "off",
 		"tsserver.useSyntaxServer": "auto",
 	},
