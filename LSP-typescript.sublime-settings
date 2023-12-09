@@ -13,6 +13,7 @@
 			"autoImportFileExcludePatterns": [],
 			"disableSuggestions": false,
 			"displayPartsForJSDoc": true,
+			"excludeLibrarySymbolsInNavTo": true,
 			"generateReturnInDocTemplate": true,
 			"importModuleSpecifierEnding": "auto",
 			"importModuleSpecifierPreference": "shortest",

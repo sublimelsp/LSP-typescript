@@ -209,10 +209,11 @@
                         },
                         "provideRefactorNotApplicableReason": {
                           "type": "boolean",
-                          "default": true,
+                          "default": true
                         },
                         "allowRenameOfImportPath": {
                           "type": "boolean",
+                          "default": true
                         },
                         "includePackageJsonAutoImports": {
                           "enum": [
@@ -220,12 +221,19 @@
                             "on",
                             "off"
                           ],
+                          "default": "auto"
                         },
                         "displayPartsForJSDoc": {
                           "type": "boolean",
+                          "default": true
+                        },
+                        "excludeLibrarySymbolsInNavTo": {
+                          "type": "boolean",
+                          "default": true
                         },
                         "generateReturnInDocTemplate": {
                           "type": "boolean",
+                          "default": true
                         },
                         "interactiveInlayHints": {
                           "type": "boolean",
