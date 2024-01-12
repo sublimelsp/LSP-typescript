@@ -71,6 +71,17 @@
                           "location": {
                             "type": "string",
                             "description": "The location of the plugin."
+                          },
+                          "languages": {
+                            "type": "array",
+                            "description": "The additional language IDs that extend what the language server allows by default.",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "configNamespace": {
+                            "type": "string",
+                            "description": "The namespace that the language server will use to request workspace configuration from for the corresponding `languages`. If `languages` is not specified then this has no effect."
                           }
                         },
                         "defaultSnippets": [
