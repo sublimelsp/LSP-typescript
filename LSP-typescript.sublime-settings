@@ -40,7 +40,7 @@
 			"useLabelDetailsInCompletionEntries": true,
 		},
 		"tsserver.logDirectory": "",
-		"tsserver.logVerbosity":  "off",
+		"tsserver.logVerbosity": "off",
 		"tsserver.path": "",
 		"tsserver.fallbackPath": "",
 		"tsserver.trace": "off",
@@ -124,6 +124,14 @@
 		"typescript.referencesCodeLens.enabled": false,
 		"typescript.referencesCodeLens.showOnAllFunctions": false,
 	},
-	"command": ["${node_bin}", "${server_path}", "--stdio"],
+	"command": [
+		"${node_bin}",
+		"${server_path}",
+		"--stdio"
+	],
 	"selector": "source.js, source.jsx, source.ts, source.tsx",
+	"schemes": [
+		"file", // regular files
+		"buffer", // in-memory buffers
+	],
 }
