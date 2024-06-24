@@ -31,8 +31,8 @@ To sort or remove unused imports you can trigger the `LSP-typescript: Organize I
 
 The server supports the following code actions that can be specified in the global `lsp_code_actions_on_save` setting and run on saving files:
 
- - `source.fixAll.ts` - despite the name, fixes a couple of specific issues: unreachable code, await in non-async functions, incorrectly implemented interface
  - `source.addMissingImports.ts` - adds imports for used but not imported symbols
+ - `source.fixAll.ts` - despite the name, fixes a couple of specific issues: unreachable code, await in non-async functions, incorrectly implemented interface
  - `source.organizeImports.ts` - organizes and removes unused imports
  - `source.removeUnused.ts` - removes declared but unused variables
  - `source.removeUnusedImports.ts` - removes unused imports
