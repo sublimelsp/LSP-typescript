@@ -762,6 +762,12 @@
                 "source.removeUnused.ts": {
                   "type": "boolean"
                 },
+                "source.removeUnusedImports.ts": {
+                  "type": "boolean"
+                },
+                "source.sortImports.ts": {
+                  "type": "boolean"
+                }
               }
             }
           }
