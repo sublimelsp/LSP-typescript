@@ -1,10 +1,14 @@
+from __future__ import annotations
 from .plugin_types import TypescriptVersionNotificationParams
+from LSP.plugin import ClientConfig
 from LSP.plugin import Session
 from LSP.plugin import uri_to_filename
+from LSP.plugin import WorkspaceFolder
 from LSP.plugin.core.protocol import Location, Point, TextDocumentPositionParams
 from LSP.plugin.core.typing import Any, Callable, List, Mapping, Tuple
 from LSP.plugin.core.views import point_to_offset
 from LSP.plugin.locationpicker import LocationPicker
+from lsp_utils import NodeRuntime
 from lsp_utils import notification_handler
 from lsp_utils import NpmClientHandler
 from lsp_utils import request_handler
@@ -28,6 +32,16 @@ class LspTypescriptPlugin(NpmClientHandler):
     @classmethod
     def minimum_node_version(cls) -> Tuple[int, int, int]:
         return (14, 16, 0)
+
+    @classmethod
+    def on_pre_start(
+        cls,
+        window: sublime.Window,
+        initiating_view: sublime.View,
+        workspace_folders: list[WorkspaceFolder],
+        configuration: ClientConfig,
+    ) -> str | None:
+        cls._support_vue_hybrid_mode(configuration)
 
     @request_handler('_typescript.rename')
     def on_typescript_rename(self, params: TextDocumentPositionParams, respond: Callable[[None], None]) -> None:
@@ -80,3 +94,35 @@ class LspTypescriptPlugin(NpmClientHandler):
             LocationPicker(view, session, references, side_by_side=False)
         else:
             sublime.status_message('No references found')
+
+    @classmethod
+    def _support_vue_hybrid_mode(cls, configuration: ClientConfig) -> None:
+        vue_settings = sublime.load_settings('LSP-vue.sublime-settings')
+        if not vue_settings:
+            return
+        vue_hybrid_mode = vue_settings.get('initializationOptions', {}).get('vue.hybridMode', False)
+        if not vue_hybrid_mode:
+            return
+        node_version = None
+        node_runtime = NodeRuntime.get('LSP-vue', cls.storage_path(), '*')
+        if node_runtime:
+            node_version = str(node_runtime.resolve_version())
+        if not node_version:
+            return
+        configuration.init_options.update({
+            "plugins": [
+                    {
+                        "languages": ["vue"],
+                        "location": os.path.join(cls._vue_package_storage_path(), node_version, 'server','node_modules'),
+                        "name": "@vue/typescript-plugin",
+                    }
+            ],
+        })
+        configuration.selector = 'source.js, source.jsx, source.ts, source.tsx, text.html.vue'
+
+    @classmethod
+    def _vue_package_storage_path(cls) -> str:
+        """
+        The storage path for this package. Its path is '$DATA/Package Storage/[Package_Name]'.
+        """
+        return os.path.join(cls.storage_path(), 'LSP-vue')
