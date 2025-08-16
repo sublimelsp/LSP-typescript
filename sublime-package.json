@@ -294,6 +294,11 @@
                             "Only insert attribute names."
                           ],
                           "markdownDescription": "Preferred style for JSX attribute completions.\n\nRequires TypeScript 4.5+."
+                        },
+                        "maximumHoverLength": {
+                          "type": "number",
+                          "default": 500,
+                          "description": "The maximum number of characters in a hover. If the hover is longer than this, it will be truncated. Requires TypeScript 5.9+.",
                         }
                       }
                     },

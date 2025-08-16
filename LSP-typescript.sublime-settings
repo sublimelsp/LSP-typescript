@@ -29,6 +29,7 @@
 			"interactiveInlayHints": true,
 			"jsxAttributeCompletionStyle": "auto",
 			"lazyConfiguredProjectsFromExternalProject": false,
+			"maximumHoverLength": 500,
 			"organizeImportsIgnoreCase": "auto",
 			"organizeImportsCollation": "ordinal",
 			"organizeImportsLocale": "en",
