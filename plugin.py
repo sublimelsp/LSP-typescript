@@ -6,7 +6,7 @@ from LSP.plugin import Session
 from LSP.plugin import uri_to_filename
 from LSP.plugin import WorkspaceFolder
 from LSP.plugin.core.protocol import Location, Point, TextDocumentPositionParams
-from LSP.plugin.core.typing import cast, Any, Callable, List, Mapping, Tuple
+from LSP.plugin.core.typing import cast, Any, Callable, List, Mapping, Optional, Tuple
 from LSP.plugin.core.views import point_to_offset
 from LSP.plugin.locationpicker import LocationPicker
 from lsp_utils import notification_handler
@@ -71,23 +71,30 @@ class LspTypescriptPlugin(NpmClientHandler):
         return (14, 16, 0)
 
     @classmethod
-    def on_configuration_loaded(cls, window: sublime.Window, workspace_folders: list[WorkspaceFolder],
-                                configuration: ClientConfig) -> None:
-        cls._handle_typescript_plugins(configuration)
+    def selector(cls, view: sublime.View, config: ClientConfig) -> str:
+        plugins = cls._get_typescript_plugins()
+        if plugins:
+            return f'{config.selector}, {", ".join([plugin["selector"] for plugin in plugins])}'
+        return config.selector
 
     @classmethod
-    def _handle_typescript_plugins(cls, configuration: ClientConfig) -> None:
+    def on_pre_start(cls, window: sublime.Window, initiating_view: sublime.View,
+                     workspace_folders: List[WorkspaceFolder], configuration: ClientConfig) -> Optional[str]:
+        plugins = configuration.init_options.get('plugins') or []
+        for ts_plugin in cls._get_typescript_plugins():
+            plugins.append({
+                'name': ts_plugin['name'],
+                'languages': ts_plugin['languages'],
+                'location': ts_plugin['location'],
+            })
+        configuration.init_options.set('plugins', plugins)
+        return None
+
+    @classmethod
+    def _get_typescript_plugins(cls) -> list[TypescriptPluginContribution]:
         if cls.typescript_plugins is None:
             cls.typescript_plugins = find_typescript_plugin_contributions()
-        plugins = configuration.init_options.get('plugins') or []
-        for plugin in cls.typescript_plugins:
-            plugins.append({
-                'name': plugin['name'],
-                'languages': plugin['languages'],
-                'location': plugin['location'],
-            })
-            configuration.selector += f', {plugin["selector"]}'
-        configuration.init_options.set('plugins', plugins)
+        return cls.typescript_plugins
 
     @request_handler('_typescript.rename')
     def on_typescript_rename(self, params: TextDocumentPositionParams, respond: Callable[[None], None]) -> None:
