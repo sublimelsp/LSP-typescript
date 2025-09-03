@@ -2,6 +2,8 @@
 .github/ export-ignore
 codecov.yml export-ignore
 mypy.ini export-ignore
+pyrightconfig.json export-ignore
+renovate.json export-ignore
 tests/ export-ignore
 tox.ini export-ignore
 unittesting.json export-ignore
