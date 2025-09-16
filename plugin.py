@@ -1,8 +1,9 @@
-from .plugin_types import TypescriptVersionNotificationParams
-from LSP.plugin import Session
+from __future__ import annotations
+from .plugin_types import ApplyRefactoringCommand, ShowReferencesCommand, TypescriptVersionNotificationParams
+from functools import partial
 from LSP.plugin import uri_to_filename
-from LSP.plugin.core.protocol import Location, Point, TextDocumentPositionParams
-from LSP.plugin.core.typing import Any, Callable, List, Mapping, Tuple
+from LSP.plugin.core.protocol import Point, TextDocumentPositionParams, ExecuteCommandParams
+from LSP.plugin.core.typing import Callable, Tuple, cast
 from LSP.plugin.core.views import point_to_offset
 from LSP.plugin.locationpicker import LocationPicker
 from lsp_utils import notification_handler
@@ -55,21 +56,28 @@ class LspTypescriptPlugin(NpmClientHandler):
         if status_text:
             session.set_config_status_async(status_text)
 
-    def on_pre_server_command(self, command: Mapping[str, Any], done_callback: Callable[[], None]) -> bool:
+    def on_pre_server_command(self, command: ExecuteCommandParams, done_callback: Callable[[], None]) -> bool:
         command_name = command['command']
         if command_name == 'editor.action.showReferences':
-            session = self.weaksession()
-            if not session:
-                return False
-            self._handle_show_references(session, command['arguments'][2])
+            references_command = cast(ShowReferencesCommand, command)
+            self._handle_show_references(references_command)
             done_callback()
             return True
+        if command_name == '_typescript.applyRefactoring':
+            refactor_command = cast('ApplyRefactoringCommand', command)
+            if self._handle_apply_refactoring(refactor_command):
+                done_callback()
+                return True
         return False
 
-    def _handle_show_references(self, session: Session, references: List[Location]) -> None:
+    def _handle_show_references(self, references_command: ShowReferencesCommand) -> None:
+        session = self.weaksession()
+        if not session:
+            return
         view = session.window.active_view()
         if not view:
             return
+        references = references_command['arguments'][2]
         if len(references) == 1:
             args = {
                 'location': references[0],
@@ -80,3 +88,25 @@ class LspTypescriptPlugin(NpmClientHandler):
             LocationPicker(view, session, references, side_by_side=False)
         else:
             sublime.status_message('No references found')
+
+    def _handle_apply_refactoring(self, command: ApplyRefactoringCommand) -> bool:
+        argument = command['arguments'][0]
+        if argument['action'] == 'Move to file':
+            if 'interactiveRefactorArguments' in argument:
+                # Already augmented.
+                return False
+            sublime.open_dialog(partial(self._on_file_selected, command), directory=argument['file'])
+            return True
+        return False
+
+    def _on_file_selected(self, command: ApplyRefactoringCommand, filename: str | list[str] | None) -> None:
+        if not filename or isinstance(filename, list):
+            sublime.status_message('No file selected')
+            return
+        command['arguments'][0]['interactiveRefactorArguments'] = {
+            'targetFile': filename
+        }
+        session = self.weaksession()
+        if not session:
+            return
+        session.execute_command(cast('ExecuteCommandParams', command), progress=False)
