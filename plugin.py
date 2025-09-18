@@ -153,7 +153,7 @@ class LspTypescriptPlugin(NpmClientHandler):
         command['arguments'][0]['interactiveRefactorArguments'] = {
             'targetFile': filename
         }
-        session.execute_command(cast('ExecuteCommandParams', command), progress=False) \
+        session.execute_command(cast('ExecuteCommandParams', command), progress=False, is_refactoring=True) \
             .then(self._handle_move_to_file_command_result)
 
     def _handle_move_to_file_command_result(self, result: Error | None) -> None:
