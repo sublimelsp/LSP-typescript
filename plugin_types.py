@@ -1,6 +1,6 @@
 from __future__ import annotations
 from LSP.plugin.core.protocol import Location, Position
-from LSP.plugin.core.typing import List, Literal, NotRequired, Tuple, TypedDict, Union
+from LSP.plugin.core.typing import List, Literal, NotRequired, StrEnum, Tuple, TypedDict, Union
 
 
 class TypescriptVersionNotificationParams(TypedDict):
@@ -21,6 +21,17 @@ class ApplyRefactoringArgument(TypedDict):
 class ApplyRefactoringCommand(TypedDict):
     command: str
     arguments: Tuple[ApplyRefactoringArgument]
+
+
+
+class MoveToFileQuickPanelItemId(StrEnum):
+    ExistingFile = 'existing_file'
+    NewFile = 'new_file'
+
+
+class MoveToFileQuickPanelItem(TypedDict):
+    id: MoveToFileQuickPanelItemId
+    title: str
 
 
 class ShowReferencesCommand(TypedDict):
