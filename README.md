@@ -106,7 +106,7 @@ Other packages can contribute TypeScript plugins that will be automatically load
 
 `name` specifies name of the plugin. It typically is a directory name within the `location` path.
 
-`languages` (optional) specifies which file extensions the plugin supports.
+`languages` (optional) specifies which file extensions the plugin wants to extends TypeScript support with.
 
 `selector` (optional) specifies the view's root selector for which `LSP-typescript` should be started in addition to its normal selector.
 
