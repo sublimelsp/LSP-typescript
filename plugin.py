@@ -1,20 +1,31 @@
 from __future__ import annotations
+from .plugin_types import ApplyRefactoringCommand
+from .plugin_types import MoveToFileQuickPanelItem
+from .plugin_types import MoveToFileQuickPanelItemId
+from .plugin_types import ShowReferencesCommand
 from .plugin_types import TypescriptPluginContribution
 from .plugin_types import TypescriptVersionNotificationParams
+from functools import partial
 from LSP.plugin import ClientConfig
-from LSP.plugin import Session
-from LSP.plugin import uri_to_filename
+from LSP.plugin import parse_uri
 from LSP.plugin import WorkspaceFolder
-from LSP.plugin.core.protocol import Location, Point, TextDocumentPositionParams
-from LSP.plugin.core.typing import cast, Any, Callable, List, Mapping, Optional, Tuple
+from LSP.plugin.core.protocol import Error, Point, TextDocumentPositionParams, ExecuteCommandParams
+from LSP.plugin.core.typing import cast, Callable, List, Optional, Tuple
 from LSP.plugin.core.views import point_to_offset
 from LSP.plugin.locationpicker import LocationPicker
 from lsp_utils import notification_handler
 from lsp_utils import NpmClientHandler
 from lsp_utils import request_handler
+from pathlib import Path
 from sublime_lib import ResourcePath
 import os
 import sublime
+
+
+MOVE_TO_FILE_QUICK_PANEL_ITEMS: list[MoveToFileQuickPanelItem] = [
+    {'id': MoveToFileQuickPanelItemId.ExistingFile, 'title':  'Select existing file...'},
+    {'id': MoveToFileQuickPanelItemId.NewFile, 'title': 'Enter new file path...'},
+]
 
 
 def log(message: str) -> None:
@@ -47,8 +58,8 @@ def find_typescript_plugin_contributions() -> list[TypescriptPluginContribution]
         for plugin in contributed_plugins:
             name = plugin['name']
             location = cast('str', sublime.expand_variables(plugin['location'], variables))
-            fullpath = os.path.join(location, name)
-            if not os.path.exists(fullpath):
+            fullpath = Path(location) / name
+            if not Path(fullpath).exists():
                 log(f'Ignoring non-existant plugin at "{fullpath}"')
                 continue
             plugins.append({
@@ -63,7 +74,7 @@ def find_typescript_plugin_contributions() -> list[TypescriptPluginContribution]
 class LspTypescriptPlugin(NpmClientHandler):
     package_name = __package__
     server_directory = 'typescript-language-server'
-    server_binary_path = os.path.join(server_directory, 'node_modules', 'typescript-language-server', 'lib', 'cli.mjs')
+    server_binary_path = Path(server_directory) / 'node_modules' / 'typescript-language-server' / 'lib' / 'cli.mjs'
     typescript_plugins: list[TypescriptPluginContribution] | None = None
 
     @classmethod
@@ -98,7 +109,7 @@ class LspTypescriptPlugin(NpmClientHandler):
 
     @request_handler('_typescript.rename')
     def on_typescript_rename(self, params: TextDocumentPositionParams, respond: Callable[[None], None]) -> None:
-        filename = uri_to_filename(params['textDocument']['uri'])
+        _, filename = parse_uri(params['textDocument']['uri'])
         view = sublime.active_window().open_file(filename)
         if view:
             lsp_point = Point.from_lsp(params['position'])
@@ -122,21 +133,28 @@ class LspTypescriptPlugin(NpmClientHandler):
         if status_text:
             session.set_config_status_async(status_text)
 
-    def on_pre_server_command(self, command: Mapping[str, Any], done_callback: Callable[[], None]) -> bool:
+    def on_pre_server_command(self, command: ExecuteCommandParams, done_callback: Callable[[], None]) -> bool:
         command_name = command['command']
         if command_name == 'editor.action.showReferences':
-            session = self.weaksession()
-            if not session:
-                return False
-            self._handle_show_references(session, command['arguments'][2])
+            references_command = cast(ShowReferencesCommand, command)
+            self._handle_show_references(references_command)
             done_callback()
             return True
+        if command_name == '_typescript.applyRefactoring':
+            refactor_command = cast('ApplyRefactoringCommand', command)
+            if self._handle_apply_refactoring(refactor_command):
+                done_callback()
+                return True
         return False
 
-    def _handle_show_references(self, session: Session, references: List[Location]) -> None:
+    def _handle_show_references(self, references_command: ShowReferencesCommand) -> None:
+        session = self.weaksession()
+        if not session:
+            return
         view = session.window.active_view()
         if not view:
             return
+        references = references_command['arguments'][2]
         if len(references) == 1:
             args = {
                 'location': references[0],
@@ -147,3 +165,67 @@ class LspTypescriptPlugin(NpmClientHandler):
             LocationPicker(view, session, references, side_by_side=False)
         else:
             sublime.status_message('No references found')
+
+    def _handle_apply_refactoring(self, command: ApplyRefactoringCommand) -> bool:
+        argument = command['arguments'][0]
+        if argument['action'] == 'Move to file':
+            return self._handle_move_to_file(command)
+        return False
+
+    def _handle_move_to_file(self, command: ApplyRefactoringCommand) -> bool:
+        argument = command['arguments'][0]
+        if 'interactiveRefactorArguments' in argument:
+            # Already augmented.
+            return False
+        session = self.weaksession()
+        if not session:
+            return True
+        session.window.show_quick_panel([i['title'] for i in MOVE_TO_FILE_QUICK_PANEL_ITEMS],
+                                        partial(self._on_move_file_action_select, command))
+        return True
+
+    def _on_move_file_action_select(self, command: ApplyRefactoringCommand, selected_index: int) -> None:
+        if selected_index == -1:
+            return
+        session = self.weaksession()
+        if not session:
+            return
+        item = MOVE_TO_FILE_QUICK_PANEL_ITEMS[selected_index]
+        argument = command['arguments'][0]
+        if item['id'] == MoveToFileQuickPanelItemId.ExistingFile:
+            sublime.open_dialog(partial(self._on_file_selector_dialog_done, command), directory=argument['file'])
+        elif item['id'] == MoveToFileQuickPanelItemId.NewFile:
+            session.window.show_input_panel('New filename',
+                                            str(Path(argument['file']).parent) + os.sep,
+                                            on_done=lambda filepath: self._on_filepath_selected(filepath, command),
+                                            on_change=None,
+                                            on_cancel=self._on_no_file_selected)
+
+    def _on_file_selector_dialog_done(self, command: ApplyRefactoringCommand, filename: str | list[str] | None) -> None:
+        if isinstance(filename, str) and filename:
+            self._on_filepath_selected(filename, command)
+        else:
+            self._on_no_file_selected()
+
+    def _on_filepath_selected(self, filename: str, command: ApplyRefactoringCommand) -> None:
+        if Path(filename).is_dir():
+            sublime.status_message('Error: selected path is a directory')
+            return
+        self._execute_move_to_file_command(filename, command)
+
+    def _on_no_file_selected(self) -> None:
+        sublime.status_message('No file selected')
+
+    def _execute_move_to_file_command(self, filename: str, command: ApplyRefactoringCommand) -> None:
+        session = self.weaksession()
+        if not session:
+            return
+        command['arguments'][0]['interactiveRefactorArguments'] = {
+            'targetFile': filename
+        }
+        session.execute_command(cast('ExecuteCommandParams', command), progress=False, is_refactoring=True) \
+            .then(self._handle_move_to_file_command_result)
+
+    def _handle_move_to_file_command_result(self, result: Error | None) -> None:
+        if isinstance(result, Error):
+            sublime.status_message(str(result))
