@@ -60,7 +60,7 @@ def find_typescript_plugin_contributions() -> list[TypescriptPluginContribution]
             location = cast('str', sublime.expand_variables(plugin['location'], variables))
             fullpath = Path(location) / name
             if not Path(fullpath).exists():
-                log(f'Ignoring non-existant plugin at "{fullpath}"')
+                log(f'Ignoring non-existent plugin at "{fullpath}"')
                 continue
             plugins.append({
                 'name': name,
