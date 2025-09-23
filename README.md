@@ -107,7 +107,7 @@ Other packages can contribute TypeScript plugins that will be automatically load
 - `name` specifies name of the plugin. It typically is a directory name within the `location` path.
 - `languages` (optional) specifies which file extensions the plugin wants to extends TypeScript support with.
 - `selector` (optional) specifies the view's root selector for which `LSP-typescript` should be started in addition to its normal selector.
-- `location` specifies a directory path that is accessible on the file system. It won't be possible to access the path points at at plugin within the shipped package if the package ships in a compressed form. It must be either shipped with a `.no-sublime-package` file or it must extract/copy the plugin file into some location on the system.
+- `location` specifies a directory path that is accessible on the file system. It won't be possible to access the path if it points to a plugin within the shipped package if package ships in a compressed form. It must be either shipped with a `.no-sublime-package` file or it must extract/copy the plugin file into some location on the system.
 
 ## Usage in projects that also use Flow
 
