@@ -62,12 +62,15 @@ def find_typescript_plugin_contributions() -> list[TypescriptPluginContribution]
             if not Path(fullpath).exists():
                 log(f'Ignoring non-existent plugin at "{fullpath}"')
                 continue
-            plugins.append({
+            contribution: TypescriptPluginContribution = {
                 'name': name,
-                'languages': plugin['languages'],
                 'location': location,
-                'selector': plugin['selector']
-            })
+            }
+            if 'selector' in plugin:
+                contribution['selector'] = plugin['selector']
+            if 'languages' in plugin:
+                contribution['languages'] = plugin['languages']
+            plugins.append(contribution)
     return plugins
 
 
@@ -84,20 +87,24 @@ class LspTypescriptPlugin(NpmClientHandler):
     @classmethod
     def selector(cls, view: sublime.View, config: ClientConfig) -> str:
         plugins = cls._get_typescript_plugins()
-        if plugins:
-            return f'{config.selector}, {", ".join([plugin["selector"] for plugin in plugins])}'
-        return config.selector
+        new_selector = config.selector
+        for plugin in plugins:
+            if "selector" in plugin:
+                new_selector += f', {plugin["selector"]}'
+        return new_selector
 
     @classmethod
     def on_pre_start(cls, window: sublime.Window, initiating_view: sublime.View,
                      workspace_folders: List[WorkspaceFolder], configuration: ClientConfig) -> Optional[str]:
         plugins = configuration.init_options.get('plugins') or []
         for ts_plugin in cls._get_typescript_plugins():
-            plugins.append({
+            plugin = {
                 'name': ts_plugin['name'],
-                'languages': ts_plugin['languages'],
                 'location': ts_plugin['location'],
-            })
+            }
+            if 'languages' in ts_plugin:
+                plugin['languages'] = ts_plugin['languages']
+            plugins.append(plugin)
         configuration.init_options.set('plugins', plugins)
         return None
 

@@ -9,9 +9,9 @@ class TypescriptVersionNotificationParams(TypedDict):
 
 class TypescriptPluginContribution(TypedDict):
     name: str
-    languages: List[str]
+    languages: NotRequired[List[str]]
     location: str
-    selector: str
+    selector: NotRequired[str]
 
 class ApplyRefactoringInteractiveRefactorArguments(TypedDict):
     targetFile: str  # noqa: N815
