@@ -302,10 +302,15 @@
                         }
                       }
                     },
+                    "supportsMoveToFileCodeAction": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Whether the client supports the `Move to file` interactive code action."
+                    },
                     "tsserver.logDirectory": {
                       "type": "string",
                       "default": "",
-                      "markdownDescription": "The path to the directory where the `tsserver` log files will be created. If not provided, the log files will be created within the workspace, inside the `.log` directory. If no workspace root is provided when initializating the server and no custom path is specified then the logs will not be created."
+                      "markdownDescription": "The path to the directory where the `tsserver` log files will be created. If not provided, the log files will be created within the workspace, inside the `.log` directory. If no workspace root is provided when initializing the server and no custom path is specified then the logs will not be created."
                     },
                     "tsserver.logVerbosity": {
                       "enum": [
