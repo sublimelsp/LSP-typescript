@@ -1,15 +1,23 @@
 from __future__ import annotations
-from .plugin_types import ApplyRefactoringCommand, MoveToFileQuickPanelItem, MoveToFileQuickPanelItemId, ShowReferencesCommand, TypescriptVersionNotificationParams
+from .plugin_types import ApplyRefactoringCommand
+from .plugin_types import MoveToFileQuickPanelItem
+from .plugin_types import MoveToFileQuickPanelItemId
+from .plugin_types import ShowReferencesCommand
+from .plugin_types import TypescriptPluginContribution
+from .plugin_types import TypescriptVersionNotificationParams
 from functools import partial
+from LSP.plugin import ClientConfig
 from LSP.plugin import parse_uri
+from LSP.plugin import WorkspaceFolder
 from LSP.plugin.core.protocol import Error, Point, TextDocumentPositionParams, ExecuteCommandParams
-from LSP.plugin.core.typing import Callable, Tuple, cast
+from LSP.plugin.core.typing import cast, Callable, List, Optional, Tuple
 from LSP.plugin.core.views import point_to_offset
 from LSP.plugin.locationpicker import LocationPicker
 from lsp_utils import notification_handler
 from lsp_utils import NpmClientHandler
 from lsp_utils import request_handler
 from pathlib import Path
+from sublime_lib import ResourcePath
 import os
 import sublime
 
@@ -20,22 +28,91 @@ MOVE_TO_FILE_QUICK_PANEL_ITEMS: list[MoveToFileQuickPanelItem] = [
 ]
 
 
+def log(message: str) -> None:
+    print(f'[{__package__}] {message}')
+
+
 def plugin_loaded() -> None:
     LspTypescriptPlugin.setup()
 
 
 def plugin_unloaded() -> None:
     LspTypescriptPlugin.cleanup()
+    LspTypescriptPlugin.typescript_plugins = None
+
+
+def find_typescript_plugin_contributions() -> list[TypescriptPluginContribution]:
+    variables = {'storage_path': LspTypescriptPlugin.storage_path()}
+    resources = ResourcePath.glob_resources('typescript-plugins.json')
+    plugins: list[TypescriptPluginContribution] = []
+    for resource in resources:
+        try:
+            contributed_plugins = sublime.decode_value(resource.read_text())
+        except Exception:
+            log(f'Failed parsing schema "{resource.file_path()}"')
+            continue
+        if not isinstance(contributed_plugins, list):
+            log(f'Invalid contents of schema "{resource.file_path()}"')
+            continue
+        contributed_plugins = cast('list[TypescriptPluginContribution]', contributed_plugins)
+        for plugin in contributed_plugins:
+            name = plugin['name']
+            location = cast('str', sublime.expand_variables(plugin['location'], variables))
+            fullpath = Path(location) / name
+            if not Path(fullpath).exists():
+                log(f'Ignoring non-existent plugin at "{fullpath}"')
+                continue
+            contribution: TypescriptPluginContribution = {
+                'name': name,
+                'location': location,
+            }
+            if 'selector' in plugin:
+                contribution['selector'] = plugin['selector']
+            if 'languages' in plugin:
+                contribution['languages'] = plugin['languages']
+            plugins.append(contribution)
+    return plugins
 
 
 class LspTypescriptPlugin(NpmClientHandler):
     package_name = __package__
     server_directory = 'typescript-language-server'
     server_binary_path = Path(server_directory) / 'node_modules' / 'typescript-language-server' / 'lib' / 'cli.mjs'
+    typescript_plugins: list[TypescriptPluginContribution] | None = None
 
     @classmethod
     def minimum_node_version(cls) -> Tuple[int, int, int]:
         return (14, 16, 0)
+
+    @classmethod
+    def selector(cls, view: sublime.View, config: ClientConfig) -> str:
+        plugins = cls._get_typescript_plugins()
+        new_selector = config.selector
+        for plugin in plugins:
+            if "selector" in plugin:
+                new_selector += f', {plugin["selector"]}'
+        return new_selector
+
+    @classmethod
+    def on_pre_start(cls, window: sublime.Window, initiating_view: sublime.View,
+                     workspace_folders: List[WorkspaceFolder], configuration: ClientConfig) -> Optional[str]:
+        plugins = configuration.init_options.get('plugins') or []
+        for ts_plugin in cls._get_typescript_plugins():
+            plugin = {
+                'name': ts_plugin['name'],
+                'location': ts_plugin['location'],
+            }
+            if 'languages' in ts_plugin:
+                plugin['languages'] = ts_plugin['languages']
+            plugins.append(plugin)
+        configuration.init_options.set('plugins', plugins)
+        return None
+
+    @classmethod
+    def _get_typescript_plugins(cls) -> list[TypescriptPluginContribution]:
+        if cls.typescript_plugins is None:
+            cls.typescript_plugins = find_typescript_plugin_contributions()
+        return cls.typescript_plugins
 
     @request_handler('_typescript.rename')
     def on_typescript_rename(self, params: TextDocumentPositionParams, respond: Callable[[None], None]) -> None:
