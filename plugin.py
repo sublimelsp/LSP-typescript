@@ -9,8 +9,7 @@ from functools import partial
 from LSP.plugin import ClientConfig
 from LSP.plugin import parse_uri
 from LSP.plugin import WorkspaceFolder
-from LSP.plugin.core.protocol import Error, Point, TextDocumentPositionParams, ExecuteCommandParams
-from LSP.plugin.core.typing import cast, Callable, List, Optional, Tuple
+from LSP.plugin.core.protocol import Error, Point
 from LSP.plugin.core.views import point_to_offset
 from LSP.plugin.locationpicker import LocationPicker
 from lsp_utils import notification_handler
@@ -18,8 +17,13 @@ from lsp_utils import NpmClientHandler
 from lsp_utils import request_handler
 from pathlib import Path
 from sublime_lib import ResourcePath
+from typing import TYPE_CHECKING, Any, cast, Callable
+from typing_extensions import override
 import os
 import sublime
+
+if TYPE_CHECKING:
+    from LSP.protocol import ConfigurationItem, ExecuteCommandParams, TextDocumentPositionParams
 
 
 MOVE_TO_FILE_QUICK_PANEL_ITEMS: list[MoveToFileQuickPanelItem] = [
@@ -81,7 +85,7 @@ class LspTypescriptPlugin(NpmClientHandler):
     typescript_plugins: list[TypescriptPluginContribution] | None = None
 
     @classmethod
-    def minimum_node_version(cls) -> Tuple[int, int, int]:
+    def minimum_node_version(cls) -> tuple[int, int, int]:
         return (14, 16, 0)
 
     @classmethod
@@ -95,10 +99,10 @@ class LspTypescriptPlugin(NpmClientHandler):
 
     @classmethod
     def on_pre_start(cls, window: sublime.Window, initiating_view: sublime.View,
-                     workspace_folders: List[WorkspaceFolder], configuration: ClientConfig) -> Optional[str]:
+                     workspace_folders: list[WorkspaceFolder], configuration: ClientConfig) -> str | None:
         plugins = configuration.init_options.get('plugins') or []
         for ts_plugin in cls._get_typescript_plugins():
-            plugin = {
+            plugin: TypescriptPluginContribution = {
                 'name': ts_plugin['name'],
                 'location': ts_plugin['location'],
             }
@@ -140,10 +144,24 @@ class LspTypescriptPlugin(NpmClientHandler):
         if status_text:
             session.set_config_status_async(status_text)
 
+    @override
+    def on_workspace_configuration(self, params: ConfigurationItem, configuration: Any) -> Any:
+        if params.get('section') == 'formattingOptions' and (scope_uri := params.get('scopeUri')) \
+                and (session := self.weaksession()) \
+                and (buf := session.get_session_buffer_for_uri_async(scope_uri)) \
+                and (session_view := next(iter(buf.session_views), None)):
+            view_settings = session_view.view.settings()
+            return {
+                **(configuration if isinstance(configuration, dict) else {}),
+                'tabSize': view_settings.get('tab_size'),
+                'insertSpaces': view_settings.get('translate_tabs_to_spaces'),
+            }
+        return configuration
+
     def on_pre_server_command(self, command: ExecuteCommandParams, done_callback: Callable[[], None]) -> bool:
         command_name = command['command']
         if command_name == 'editor.action.showReferences':
-            references_command = cast(ShowReferencesCommand, command)
+            references_command = cast('ShowReferencesCommand', command)
             self._handle_show_references(references_command)
             done_callback()
             return True
