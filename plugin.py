@@ -86,7 +86,7 @@ class LspTypescriptPlugin(NpmClientHandler):
 
     @classmethod
     def minimum_node_version(cls) -> tuple[int, int, int]:
-        return (14, 16, 0)
+        return (20, 0, 0)
 
     @classmethod
     def selector(cls, view: sublime.View, config: ClientConfig) -> str:
