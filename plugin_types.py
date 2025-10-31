@@ -1,16 +1,20 @@
 from __future__ import annotations
-from LSP.plugin.core.protocol import Location, Position
-from LSP.plugin.core.typing import List, Literal, NotRequired, StrEnum, Tuple, TypedDict, Union
+from LSP.plugin.core.typing import StrEnum
+from typing import TYPE_CHECKING, Literal, TypedDict
+from typing_extensions import NotRequired
+
+if TYPE_CHECKING:
+    from LSP.protocol import Location, Position
 
 
 class TypescriptVersionNotificationParams(TypedDict):
     version: str
-    source: Union[Literal['bundled'], Literal['user-setting'], Literal['workspace']]
+    source: Literal['bundled', 'user-setting', 'workspace']
 
 
 class TypescriptPluginContribution(TypedDict):
     name: str
-    languages: NotRequired[List[str]]
+    languages: NotRequired[list[str]]
     location: str
     selector: NotRequired[str]
 
@@ -27,7 +31,7 @@ class ApplyRefactoringArgument(TypedDict):
 
 class ApplyRefactoringCommand(TypedDict):
     command: str
-    arguments: Tuple[ApplyRefactoringArgument]
+    arguments: tuple[ApplyRefactoringArgument]
 
 
 class MoveToFileQuickPanelItemId(StrEnum):
@@ -42,4 +46,4 @@ class MoveToFileQuickPanelItem(TypedDict):
 
 class ShowReferencesCommand(TypedDict):
     command: str
-    arguments: Tuple[str, Position, List[Location]]
+    arguments: tuple[str, Position, list[Location]]
