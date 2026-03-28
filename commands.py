@@ -1,8 +1,10 @@
-from LSP.plugin.core.protocol import Location, LocationLink
-from LSP.plugin.core.typing import List, Union
+from __future__ import annotations
+
 from LSP.plugin.execute_command import LspExecuteCommand
 from LSP.plugin.locationpicker import LocationPicker
-
+from LSP.protocol import Location
+from LSP.protocol import LocationLink
+from typing import Any
 
 SESSION_NAME = __package__
 
@@ -12,7 +14,7 @@ class LspTypescriptExecuteCommand(LspExecuteCommand):
 
 
 class LspTypescriptGotoSourceDefinitionCommand(LspTypescriptExecuteCommand):
-    def handle_success_async(self, result: Union[List[Location], List[LocationLink]], command_name: str) -> None:
+    def handle_success_async(self, result: list[Location] | list[LocationLink], command_name: str) -> None:
         window = self.view.window()
         if not result:
             if window:
@@ -22,7 +24,7 @@ class LspTypescriptGotoSourceDefinitionCommand(LspTypescriptExecuteCommand):
         if not session:
             return
         if len(result) == 1:
-            args = {
+            args: dict[str, Any] = {
                 'location': result[0],
                 'session_name': self.session_name,
             }
