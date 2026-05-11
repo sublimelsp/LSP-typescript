@@ -49,7 +49,7 @@
 		"tsserver.path": "",
 		"tsserver.fallbackPath": "",
 		"tsserver.trace": "off",
-		"tsserver.useClientFileWatch": true,
+		"tsserver.useClientFileWatcher": true,
 		"tsserver.useSyntaxServer": "auto",
 	},
 	"settings": {
