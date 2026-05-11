@@ -342,6 +342,11 @@
                       "default": "off",
                       "markdownDescription": "The verbosity of logging of the tsserver communication.\n\nDelivered through the LSP messages and not related to file logging."
                     },
+                    "tsserver.useClientFileWatcher": {
+                      "type": "boolean",
+                      "default": true,
+                      "markdownDescription": "Use client's file watcher instead of TypeScript's built-in one. Requires TypeScript 5.4.4+ in the workspace."
+                    },
                     "tsserver.useSyntaxServer": {
                       "enum": [
                         "auto",
