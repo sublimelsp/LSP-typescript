@@ -18,6 +18,7 @@ from LSP.plugin import Promise
 from LSP.plugin import Request
 from LSP.plugin import request_handler
 from LSP.plugin import Session
+from LSP.plugin import ST_STORAGE_PATH
 from LSP.plugin import uri_from_view
 from LSP.plugin.core.protocol import Point
 from LSP.plugin.core.views import point_to_offset
@@ -48,7 +49,7 @@ def log(message: str) -> None:
 
 
 def find_typescript_plugin_contributions() -> list[TypescriptPluginContribution]:
-    variables = {'storage_path': str(LspTypescriptPlugin.plugin_storage_path.parent)}
+    variables = {'storage_path': ST_STORAGE_PATH}
     resources = ResourcePath.glob_resources('typescript-plugins.json')
     plugins: list[TypescriptPluginContribution] = []
     for resource in resources:
