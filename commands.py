@@ -6,7 +6,7 @@ from LSP.protocol import Location
 from LSP.protocol import LocationLink
 from typing import Any
 
-SESSION_NAME = __package__
+SESSION_NAME = str(__package__)
 
 
 class LspTypescriptExecuteCommand(LspExecuteCommand):
@@ -14,6 +14,7 @@ class LspTypescriptExecuteCommand(LspExecuteCommand):
 
 
 class LspTypescriptGotoSourceDefinitionCommand(LspTypescriptExecuteCommand):
+
     def handle_success_async(self, result: list[Location] | list[LocationLink], command_name: str) -> None:
         window = self.view.window()
         if not result:
