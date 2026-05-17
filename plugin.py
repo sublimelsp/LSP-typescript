@@ -106,7 +106,7 @@ class LspTypescriptPlugin(LspPlugin):
             cls.plugin_storage_path,
             ResourcePath('Packages', package_name, 'typescript-language-server'),
             Path('node_modules', 'typescript-language-server', 'lib', 'cli.mjs'),
-            '>=20',
+            node_version_requirement='>=20',
         )
         plugins = context.configuration.initialization_options.get('plugins') or []
         for ts_plugin in cls._get_typescript_plugins():
