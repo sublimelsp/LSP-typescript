@@ -1,29 +1,32 @@
 from __future__ import annotations
 
-from .plugin_types import ApplyRefactoringCommand
+from .plugin_types import ApplyRefactoringArgument
 from .plugin_types import MoveToFileQuickPanelItem
 from .plugin_types import MoveToFileQuickPanelItemId
-from .plugin_types import ShowReferencesArguments
 from .plugin_types import TypescriptPluginContribution
 from .plugin_types import TypescriptVersionNotificationParams
 from functools import partial
-from LSP.plugin import ClientConfig
+from LSP.plugin import ClientResponse
+from LSP.plugin import command_handler
+from LSP.plugin import Error
+from LSP.plugin import IsApplicableContext
+from LSP.plugin import LspPlugin
 from LSP.plugin import notification_handler
+from LSP.plugin import OnPreStartContext
 from LSP.plugin import parse_uri
 from LSP.plugin import Promise
+from LSP.plugin import Request
 from LSP.plugin import request_handler
+from LSP.plugin import Session
+from LSP.plugin import ST_STORAGE_PATH
 from LSP.plugin import uri_from_view
-from LSP.plugin import WorkspaceFolder
-from LSP.plugin.core.protocol import Error
 from LSP.plugin.core.protocol import Point
 from LSP.plugin.core.views import point_to_offset
-from LSP.plugin.locationpicker import LocationPicker
-from LSP.protocol import Location
-from lsp_utils import NpmClientHandler
+from LSP.protocol import ExecuteCommandParams
+from LSP.protocol import LSPAny
+from lsp_utils import NodeManager
 from pathlib import Path
 from sublime_lib import ResourcePath
-from typing import Any
-from typing import Callable
 from typing import cast
 from typing import final
 from typing import TYPE_CHECKING
@@ -32,8 +35,6 @@ import os
 import sublime
 
 if TYPE_CHECKING:
-    from LSP.protocol import ConfigurationItem
-    from LSP.protocol import ExecuteCommandParams
     from LSP.protocol import TextDocumentPositionParams
 
 
@@ -47,17 +48,8 @@ def log(message: str) -> None:
     print(f'[{__package__}] {message}')
 
 
-def plugin_loaded() -> None:
-    LspTypescriptPlugin.setup()
-
-
-def plugin_unloaded() -> None:
-    LspTypescriptPlugin.cleanup()
-    LspTypescriptPlugin.typescript_plugins = None
-
-
 def find_typescript_plugin_contributions() -> list[TypescriptPluginContribution]:
-    variables = {'storage_path': LspTypescriptPlugin.storage_path()}
+    variables = {'storage_path': ST_STORAGE_PATH}
     resources = ResourcePath.glob_resources('typescript-plugins.json')
     plugins: list[TypescriptPluginContribution] = []
     for resource in resources:
@@ -90,24 +82,16 @@ def find_typescript_plugin_contributions() -> list[TypescriptPluginContribution]
 
 
 @final
-class LspTypescriptPlugin(NpmClientHandler):
-    package_name = str(__package__)
-    server_directory = 'typescript-language-server'
-    server_binary_path = str(Path(server_directory) / 'node_modules' / 'typescript-language-server' / 'lib' / 'cli.mjs')
+class LspTypescriptPlugin(LspPlugin):
     typescript_plugins: list[TypescriptPluginContribution] | None = None
 
     @classmethod
     @override
-    def minimum_node_version(cls) -> tuple[int, int, int]:
-        return (20, 0, 0)
-
-    @classmethod
-    @override
-    def is_applicable(cls, view: sublime.View, config: ClientConfig) -> bool:
-        if super().is_applicable(view, config):
+    def is_applicable_async(cls, context: IsApplicableContext) -> bool:
+        if super().is_applicable_async(context):
             return True
-        scheme, _ = parse_uri(uri_from_view(view))
-        if scheme in config.schemes and (syntax := view.syntax()):
+        scheme, _ = parse_uri(uri_from_view(context.view))
+        if scheme in context.configuration.schemes and (syntax := context.view.syntax()):
             for plugin in cls._get_typescript_plugins():
                 if (selector := plugin.get('selector')) and sublime.score_selector(syntax.scope, selector) > 0:
                     return True
@@ -115,9 +99,16 @@ class LspTypescriptPlugin(NpmClientHandler):
 
     @classmethod
     @override
-    def on_pre_start(cls, window: sublime.Window, initiating_view: sublime.View,
-                     workspace_folders: list[WorkspaceFolder], configuration: ClientConfig) -> str | None:
-        plugins = configuration.initialization_options.get('plugins') or []
+    def on_pre_start_async(cls, context: OnPreStartContext) -> None:
+        package_name = cls.plugin_storage_path.name
+        NodeManager.on_pre_start_async(
+            context,
+            cls.plugin_storage_path,
+            ResourcePath('Packages', package_name, 'typescript-language-server'),
+            Path('node_modules', 'typescript-language-server', 'lib', 'cli.mjs'),
+            node_version_requirement='>=20',
+        )
+        plugins = context.configuration.initialization_options.get('plugins') or []
         for ts_plugin in cls._get_typescript_plugins():
             plugin: TypescriptPluginContribution = {
                 'name': ts_plugin['name'],
@@ -126,8 +117,7 @@ class LspTypescriptPlugin(NpmClientHandler):
             if 'languages' in ts_plugin:
                 plugin['languages'] = ts_plugin['languages']
             plugins.append(plugin)
-        configuration.initialization_options.set('plugins', plugins)
-        return None
+        context.configuration.initialization_options.set('plugins', plugins)
 
     @classmethod
     def _get_typescript_plugins(cls) -> list[TypescriptPluginContribution]:
@@ -151,124 +141,108 @@ class LspTypescriptPlugin(NpmClientHandler):
 
     @notification_handler('$/typescriptVersion')
     def on_typescript_version_async(self, params: TypescriptVersionNotificationParams) -> None:
-        session = self.weaksession()
-        if not session:
-            return
-        version_template = session.config.settings.get('statusText')
-        if not version_template or not isinstance(version_template, str):
-            return
-        status_text = version_template.replace('$version', params['version']).replace('$source', params['source'])
-        if status_text:
+        if (
+            (session := self.weaksession())
+            and (status_text := session.config.settings.get('statusText'))
+            and isinstance(status_text, str)
+            and (status_text := status_text.replace('$version', params['version']).replace('$source', params['source']))
+        ):
             session.set_config_status_async(status_text)
 
-    @override
-    def on_workspace_configuration(self, params: ConfigurationItem, configuration: Any) -> Any:
-        if params.get('section') == 'formattingOptions' and (scope_uri := params.get('scopeUri')) \
-                and (session := self.weaksession()) \
-                and (buf := session.get_session_buffer_for_uri_async(scope_uri)) \
-                and (session_view := next(iter(buf.session_views), None)):
-            view_settings = session_view.view.settings()
-            return {
-                **(configuration if isinstance(configuration, dict) else {}),
-                'tabSize': view_settings.get('tab_size'),
-                'insertSpaces': view_settings.get('translate_tabs_to_spaces'),
-            }
-        return configuration
-
-    @override
-    def on_pre_server_command(self, command: ExecuteCommandParams, done_callback: Callable[[], None]) -> bool:
-        command_name = command['command']
-        if 'arguments' not in command:
-            return False
-        if command_name == 'editor.action.showReferences':
-            _, __, references = cast('ShowReferencesArguments', cast('object', command['arguments']))
-            self._handle_show_references(references)
-            done_callback()
-            return True
-        if command_name == '_typescript.applyRefactoring':
-            refactoring_command = cast('ApplyRefactoringCommand', cast('object', command))
-            if self._handle_apply_refactoring(refactoring_command):
-                done_callback()
-                return True
-        return False
-
-    def _handle_show_references(self, references: list[Location]) -> None:
-        session = self.weaksession()
-        if not session:
+    def on_pre_send_response_async(self, response: ClientResponse) -> None:
+        if response['method'] == 'workspace/configuration':
+            if not (session := self.weaksession()):
+                return
+            for index, item in enumerate(response['params']['items']):
+                if (
+                    item.get('section') == 'formattingOptions'
+                    and (scope_uri := item.get('scopeUri'))
+                    and (buf := session.get_session_buffer_for_uri_async(scope_uri))
+                    and (session_view := next(iter(buf.session_views), None))
+                ):
+                    view_settings = session_view.view.settings()
+                    result = response['result'][index]
+                    response['result'][index] = {
+                        **(result if isinstance(result, dict) else {}),
+                        'tabSize': view_settings.get('tab_size'),
+                        'insertSpaces': view_settings.get('translate_tabs_to_spaces'),
+                    }
             return
-        view = session.window.active_view()
-        if not view:
-            return
-        if len(references) == 1:
-            args: dict[str, Any] = {
-                'location': references[0],
-                'session_name': session.config.name,
-            }
-            session.window.run_command('lsp_open_location', args)
-        elif references:
-            LocationPicker(view, session, references, side_by_side=False)
-        else:
-            sublime.status_message('No references found')
 
-    def _handle_apply_refactoring(self, command: ApplyRefactoringCommand) -> bool:
-        if command['arguments'][0]['action'] == 'Move to file':
-            return self._handle_move_to_file(command)
-        return False
+    @command_handler('_typescript.applyRefactoring')
+    def on_apply_refactoring(self, arguments: list[ApplyRefactoringArgument] | None) -> Promise[None]:
+        if not arguments or not (session := self.weaksession()):
+            return Promise.resolve(None)
+        argument = arguments[0]
+        if argument['action'] == 'Move to file':
+            if 'interactiveRefactorArguments' in argument:
+                # Already augmented.
+                return self._send_typescript_apply_refactoring_command(session, arguments)
+            session.window.show_quick_panel([i['title'] for i in MOVE_TO_FILE_QUICK_PANEL_ITEMS],
+                                            partial(self._on_move_file_action_select, arguments))
+            return Promise.resolve(None)
+        return self._send_typescript_apply_refactoring_command(session, arguments)
 
-    def _handle_move_to_file(self, command: ApplyRefactoringCommand) -> bool:
-        argument = command['arguments'][0]
-        if 'interactiveRefactorArguments' in argument:
-            # Already augmented.
-            return False
-        session = self.weaksession()
-        if not session:
-            return True
-        session.window.show_quick_panel([i['title'] for i in MOVE_TO_FILE_QUICK_PANEL_ITEMS],
-                                        partial(self._on_move_file_action_select, command))
-        return True
-
-    def _on_move_file_action_select(self, command: ApplyRefactoringCommand, selected_index: int) -> None:
+    def _on_move_file_action_select(self, arguments: list[ApplyRefactoringArgument], selected_index: int) -> None:
         if selected_index == -1:
             return
         session = self.weaksession()
         if not session:
             return
         item = MOVE_TO_FILE_QUICK_PANEL_ITEMS[selected_index]
-        argument = command['arguments'][0]
+        argument = arguments[0]
         if item['id'] == MoveToFileQuickPanelItemId.ExistingFile:
-            sublime.open_dialog(partial(self._on_file_selector_dialog_done, command), directory=argument['file'])
+            sublime.open_dialog(partial(self._on_file_selector_dialog_done, arguments), directory=argument['file'])
         elif item['id'] == MoveToFileQuickPanelItemId.NewFile:
             session.window.show_input_panel('New filename',
                                             str(Path(argument['file']).parent) + os.sep,
-                                            on_done=lambda filepath: self._on_filepath_selected(filepath, command),
+                                            on_done=lambda filepath: self._on_filepath_selected(filepath, arguments),
                                             on_change=None,
                                             on_cancel=self._on_no_file_selected)
 
-    def _on_file_selector_dialog_done(self, command: ApplyRefactoringCommand, filename: str | list[str] | None) -> None:
+    def _on_file_selector_dialog_done(self, arguments: list[ApplyRefactoringArgument], filename: str | list[str] | None) -> None:
         if isinstance(filename, str) and filename:
-            self._on_filepath_selected(filename, command)
+            self._on_filepath_selected(filename, arguments)
         else:
             self._on_no_file_selected()
 
-    def _on_filepath_selected(self, filename: str, command: ApplyRefactoringCommand) -> None:
+    def _on_filepath_selected(self, filename: str, arguments: list[ApplyRefactoringArgument]) -> None:
         if Path(filename).is_dir():
             sublime.status_message('Error: selected path is a directory')
             return
-        self._execute_move_to_file_command(filename, command)
+        self._execute_move_to_file_command(filename, arguments)
 
     def _on_no_file_selected(self) -> None:
         sublime.status_message('No file selected')
 
-    def _execute_move_to_file_command(self, filename: str, command: ApplyRefactoringCommand) -> None:
+    def _execute_move_to_file_command(self, filename: str, arguments: list[ApplyRefactoringArgument]) -> None:
         session = self.weaksession()
         if not session:
             return
-        command['arguments'][0]['interactiveRefactorArguments'] = {
+        arguments[0]['interactiveRefactorArguments'] = {
             'targetFile': filename
         }
-        session.execute_command(cast('ExecuteCommandParams', command), progress=False, is_refactoring=True) \
+        self._send_typescript_apply_refactoring_command(session, arguments)
+
+    def _send_typescript_apply_refactoring_command(
+        self, session: Session, arguments: list[ApplyRefactoringArgument]
+    ) -> Promise[None]:
+        command: ExecuteCommandParams = {
+            'command': '_typescript.applyRefactoring',
+            'arguments': cast('list[LSPAny]', arguments)
+        }
+        return session.send_request_task(Request.executeCommand(command)) \
             .then(self._handle_move_to_file_command_result)
 
     def _handle_move_to_file_command_result(self, result: Error | None) -> None:
         if isinstance(result, Error):
             sublime.status_message(str(result))
+
+
+def plugin_loaded() -> None:
+    LspTypescriptPlugin.register()
+
+
+def plugin_unloaded() -> None:
+    LspTypescriptPlugin.unregister()
+    LspTypescriptPlugin.typescript_plugins = None
