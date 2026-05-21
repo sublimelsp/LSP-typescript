@@ -26,7 +26,6 @@ from LSP.plugin import uri_handler
 from LSP.plugin.core.protocol import Point
 from LSP.plugin.core.views import point_to_offset
 from LSP.plugin.core.views import position_to_offset
-from LSP.protocol import ClientCapabilities
 from LSP.protocol import DocumentUri
 from LSP.protocol import ExecuteCommandParams
 from LSP.protocol import Hover
@@ -185,9 +184,6 @@ class LspTypescriptPlugin(LspPlugin):
             return
 
     def on_pre_send_request_async(self, request: ClientRequest, view: sublime.View | None) -> None:
-        if request['method'] == 'initialize':
-            self._verbosity_hover_handler.add_verbosity_hover_capability(request['params']['capabilities'])
-            return
         if request['method'] == 'textDocument/hover':
             self._verbosity_hover_handler.on_hover_request(cast('HoverParamsWithVerbosity', request['params']))
             return
@@ -295,9 +291,6 @@ class VerbosityHoverHandler:
 
     def __init__(self) -> None:
         self._last_hover_params: HoverParamsWithVerbosity | None = None
-
-    def add_verbosity_hover_capability(self, capabilities: ClientCapabilities) -> None:
-        capabilities['textDocument']['hover']['verbosityLevel'] = True  # pyright: ignore[reportTypedDictNotRequiredAccess, reportGeneralTypeIssues]
 
     def on_hover_request(self, hover_params: HoverParamsWithVerbosity) -> None:
         if (
