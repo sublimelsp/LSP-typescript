@@ -307,6 +307,11 @@
                         }
                       }
                     },
+                    "supportsHoverVerbosity": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Whether the client supports hover verbosity. When enabled, a `verbosityLevel` number may be passed in hover requests and a `canIncreaseVerbosityLevel` boolean will be included in hover responses. Requires TypeScript 5.9+."
+                    },
                     "supportsMoveToFileCodeAction": {
                       "type": "boolean",
                       "default": false,
