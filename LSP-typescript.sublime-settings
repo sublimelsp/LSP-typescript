@@ -43,6 +43,7 @@
 			"quotePreference": "auto",
 			"useLabelDetailsInCompletionEntries": true,
 		},
+		"supportsHoverVerbosity": false,
 		"supportsMoveToFileCodeAction": true,
 		"tsserver.logDirectory": "",
 		"tsserver.logVerbosity": "off",

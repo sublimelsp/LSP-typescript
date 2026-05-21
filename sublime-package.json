@@ -307,6 +307,11 @@
                         }
                       }
                     },
+                    "supportsHoverVerbosity": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Whether the client supports hover verbosity. When enabled, the hover info will include buttons to increase and decrease verbosity of the type related to the hovered symbol. Requires TypeScript 5.9+."
+                    },
                     "supportsMoveToFileCodeAction": {
                       "type": "boolean",
                       "default": false,
