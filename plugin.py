@@ -15,6 +15,7 @@ from LSP.plugin import LspPlugin
 from LSP.plugin import notification_handler
 from LSP.plugin import OnPreStartContext
 from LSP.plugin import parse_uri
+from LSP.plugin import position_to_offset
 from LSP.plugin import Promise
 from LSP.plugin import Request
 from LSP.plugin import request_handler
@@ -23,9 +24,6 @@ from LSP.plugin import Session
 from LSP.plugin import ST_STORAGE_PATH
 from LSP.plugin import uri_from_view
 from LSP.plugin import uri_handler
-from LSP.plugin.core.protocol import Point
-from LSP.plugin.core.views import point_to_offset
-from LSP.plugin.core.views import position_to_offset
 from LSP.protocol import DocumentUri
 from LSP.protocol import ExecuteCommandParams
 from LSP.protocol import Hover
@@ -144,8 +142,7 @@ class LspTypescriptPlugin(LspPlugin):
         _, filename = parse_uri(params['textDocument']['uri'])
         view = sublime.active_window().open_file(filename)
         if view:
-            lsp_point = Point.from_lsp(params['position'])
-            point = point_to_offset(lsp_point, view)
+            point = position_to_offset(view, params['position'])
             sel = view.sel()
             sel.clear()
             sel.add_all([point])
@@ -329,5 +326,5 @@ class VerbosityHoverHandler:
         hover_params['verbosityLevel'] = verbosity_level
         if session_buffer := session.get_session_buffer_for_uri_async(hover_params['textDocument']['uri']):
             view = session_buffer.get_view_in_group()
-            point = position_to_offset(hover_params['position'], view)
+            point = position_to_offset(view, hover_params['position'])
             view.run_command('lsp_hover', {'point': point})

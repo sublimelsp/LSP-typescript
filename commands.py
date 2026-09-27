@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from LSP.plugin.execute_command import LspExecuteCommand
-from LSP.plugin.locationpicker import LocationPicker
+from LSP.plugin import LocationPicker
+from LSP.plugin import LspExecuteCommand
 from LSP.protocol import Location
 from LSP.protocol import LocationLink
 from typing import Any
