@@ -72,10 +72,6 @@ def find_typescript_plugin_contributions() -> list[TypescriptPluginContribution]
         for plugin in contributed_plugins:
             name = plugin['name']
             location = cast('str', sublime.expand_variables(plugin['location'], variables))
-            fullpath = Path(location) / name
-            if not Path(fullpath).exists():
-                log(f'Ignoring non-existent plugin at "{fullpath}"')
-                continue
             contribution: TypescriptPluginContribution = {
                 'name': name,
                 'location': location,
@@ -86,6 +82,10 @@ def find_typescript_plugin_contributions() -> list[TypescriptPluginContribution]
                 contribution['languages'] = plugin['languages']
             plugins.append(contribution)
     return plugins
+
+
+def typescript_plugin_path(plugin: TypescriptPluginContribution) -> Path:
+    return Path(plugin['location']) / plugin['name']
 
 
 @final
@@ -100,7 +100,11 @@ class LspTypescriptPlugin(LspPlugin):
         scheme, _ = parse_uri(uri_from_view(context.view))
         if scheme in context.configuration.schemes and (syntax := context.view.syntax()):
             for plugin in cls._get_typescript_plugins():
-                if (selector := plugin.get('selector')) and sublime.score_selector(syntax.scope, selector) > 0:
+                if (
+                    (selector := plugin.get('selector'))
+                    and sublime.score_selector(syntax.scope, selector) > 0
+                    and typescript_plugin_path(plugin).exists()
+                ):
                     return True
         return False
 
@@ -117,6 +121,9 @@ class LspTypescriptPlugin(LspPlugin):
         )
         plugins = context.configuration.initialization_options.get('plugins') or []
         for ts_plugin in cls._get_typescript_plugins():
+            if not (path := typescript_plugin_path(ts_plugin)).exists():
+                log(f'Ignoring non-existent plugin at "{path}"')
+                continue
             plugin: TypescriptPluginContribution = {
                 'name': ts_plugin['name'],
                 'location': ts_plugin['location'],
@@ -133,6 +140,8 @@ class LspTypescriptPlugin(LspPlugin):
 
     @classmethod
     def _get_typescript_plugins(cls) -> list[TypescriptPluginContribution]:
+        # Includes plugins that don't exist yet, since they can be installed after this package has loaded, for example
+        # by the package that contributes them when its server starts for the first time.
         if cls.typescript_plugins is None:
             cls.typescript_plugins = find_typescript_plugin_contributions()
         return cls.typescript_plugins
