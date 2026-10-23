@@ -115,7 +115,7 @@ class LspTypescriptPlugin(LspPlugin):
         NodeManager.on_pre_start_async(
             context,
             cls.plugin_storage_path,
-            ResourcePath('Packages', package_name, 'typescript-language-server'),
+            ResourcePath('Packages', package_name, 'language-server'),
             Path('node_modules', 'typescript-language-server', 'lib', 'cli.mjs'),
             node_version_requirement='>=20',
         )

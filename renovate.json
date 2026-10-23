@@ -3,18 +3,5 @@
   "extends": [
     "github>sublimelsp/renovate-preset",
     "github>sublimelsp/renovate-preset:automerge-server"
-  ],
-  "packageRules": [
-    {
-      "description": "The automerge-server preset only matches language-server/ and server/, so apply it to the server here too",
-      "matchFileNames": ["typescript-language-server/**"],
-      "semanticCommitType": "fix",
-      "minimumReleaseAge": "3 days"
-    },
-    {
-      "matchFileNames": ["typescript-language-server/**"],
-      "matchUpdateTypes": ["patch", "minor"],
-      "automerge": true
-    }
   ]
 }
