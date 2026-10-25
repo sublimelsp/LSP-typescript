@@ -800,7 +800,8 @@
       },
       {
         "file_patterns": [
-          "LSP.sublime-settings"
+          "/LSP.sublime-settings",
+          "/Preferences.sublime-settings"
         ],
         "schema": {
           "properties": {
