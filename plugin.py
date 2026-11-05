@@ -21,7 +21,6 @@ from LSP.plugin import Request
 from LSP.plugin import request_handler
 from LSP.plugin import ServerResponse
 from LSP.plugin import Session
-from LSP.plugin import ST_STORAGE_PATH
 from LSP.plugin import uri_from_view
 from LSP.plugin import uri_handler
 from LSP.protocol import DocumentUri
@@ -34,12 +33,15 @@ from pathlib import Path
 from sublime_lib import ResourcePath
 from typing import Any
 from typing import cast
+from typing import ClassVar
 from typing import final
 from typing import TYPE_CHECKING
 from typing_extensions import NotRequired
 from typing_extensions import override
 import os
 import sublime
+import sublime_plugin
+import weakref
 
 if TYPE_CHECKING:
     from LSP.protocol import TextDocumentPositionParams
@@ -55,42 +57,26 @@ def log(message: str) -> None:
     print(f'[{__package__}] {message}')
 
 
-def find_typescript_plugin_contributions() -> list[TypescriptPluginContribution]:
-    variables = {'storage_path': ST_STORAGE_PATH}
-    resources = ResourcePath.glob_resources('typescript-plugins.json')
-    plugins: list[TypescriptPluginContribution] = []
-    for resource in resources:
-        try:
-            contributed_plugins = sublime.decode_value(resource.read_text())
-        except ValueError:
-            log(f'Failed parsing schema "{resource.file_path()}"')
-            continue
-        if not isinstance(contributed_plugins, list):
-            log(f'Invalid contents of schema "{resource.file_path()}"')
-            continue
-        contributed_plugins = cast('list[TypescriptPluginContribution]', contributed_plugins)
-        for plugin in contributed_plugins:
-            name = plugin['name']
-            location = cast('str', sublime.expand_variables(plugin['location'], variables))
-            contribution: TypescriptPluginContribution = {
-                'name': name,
-                'location': location,
-            }
-            if 'selector' in plugin:
-                contribution['selector'] = plugin['selector']
-            if 'languages' in plugin:
-                contribution['languages'] = plugin['languages']
-            plugins.append(contribution)
-    return plugins
-
-
 def typescript_plugin_path(plugin: TypescriptPluginContribution) -> Path:
     return Path(plugin['location']) / plugin['name']
 
 
+def to_server_plugin(plugin: TypescriptPluginContribution) -> TypescriptPluginContribution:
+    """Return the plugin as passed to the server in the `plugins` initialization option."""
+    server_plugin: TypescriptPluginContribution = {
+        'name': plugin['name'],
+        'location': plugin['location'],
+    }
+    if 'languages' in plugin:
+        server_plugin['languages'] = plugin['languages']
+    return server_plugin
+
+
 @final
 class LspTypescriptPlugin(LspPlugin):
-    typescript_plugins: list[TypescriptPluginContribution] | None = None
+    registered_plugins: ClassVar[dict[int, dict[str, TypescriptPluginContribution]]] = {}
+    """Plugins registered with the `lsp_typescript_register_plugin` command, by window ID and plugin name."""
+    instances: ClassVar[weakref.WeakSet[LspTypescriptPlugin]] = weakref.WeakSet()
 
     @classmethod
     @override
@@ -99,7 +85,7 @@ class LspTypescriptPlugin(LspPlugin):
             return True
         scheme, _ = parse_uri(uri_from_view(context.view))
         if scheme in context.configuration.schemes and (syntax := context.view.syntax()):
-            for plugin in cls._get_typescript_plugins():
+            for plugin in cls._get_window_plugins(context.view.window()):
                 if (
                     (selector := plugin.get('selector'))
                     and sublime.score_selector(syntax.scope, selector) > 0
@@ -107,6 +93,35 @@ class LspTypescriptPlugin(LspPlugin):
                 ):
                     return True
         return False
+
+    @classmethod
+    def register_plugin_async(cls, window: sublime.Window, plugin: TypescriptPluginContribution) -> None:
+        """
+        Load the plugin in the window's servers. Running servers that didn't load it are restarted.
+
+        Called by packages whose plugin is only known once their server starts, for example because it has to match the
+        version of that server, which the user can point to a custom location.
+        """
+        window_plugins = cls.registered_plugins.setdefault(window.id(), {})
+        if window_plugins.get(plugin['name']) == plugin:
+            return
+        window_plugins[plugin['name']] = plugin
+        server_plugin = to_server_plugin(plugin)
+        for instance in list(cls.instances):
+            if (
+                (session := instance.weaksession())
+                and session.window == window
+                and not session.exiting
+                and server_plugin not in (session.config.initialization_options.get('plugins') or [])
+                and (session_view := next(iter(list(session.session_views_async())), None))
+            ):
+                # Restarting checks again which views the server applies to, including those of the plugin. The command
+                # is only enabled in a view that has a session.
+                session_view.view.run_command('lsp_restart_server', {'config_name': cls.name})
+                return
+        # Not running yet, or running without views. Start it for views that the plugin applies to.
+        for view in window.views():
+            view.run_command('lsp_check_applicable', {'session_name': cls.name})
 
     @classmethod
     @override
@@ -120,31 +135,23 @@ class LspTypescriptPlugin(LspPlugin):
             node_version_requirement='>=20',
         )
         plugins = context.configuration.initialization_options.get('plugins') or []
-        for ts_plugin in cls._get_typescript_plugins():
+        for ts_plugin in cls._get_window_plugins(context.view.window()):
             if not (path := typescript_plugin_path(ts_plugin)).exists():
                 log(f'Ignoring non-existent plugin at "{path}"')
                 continue
-            plugin: TypescriptPluginContribution = {
-                'name': ts_plugin['name'],
-                'location': ts_plugin['location'],
-            }
-            if 'languages' in ts_plugin:
-                plugin['languages'] = ts_plugin['languages']
-            plugins.append(plugin)
+            plugins.append(to_server_plugin(ts_plugin))
         context.configuration.initialization_options.set('plugins', plugins)
 
     @override
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self._verbosity_hover_handler = VerbosityHoverHandler()
+        LspTypescriptPlugin.instances.add(self)
 
     @classmethod
-    def _get_typescript_plugins(cls) -> list[TypescriptPluginContribution]:
-        # Includes plugins that don't exist yet, since they can be installed after this package has loaded, for example
-        # by the package that contributes them when its server starts for the first time.
-        if cls.typescript_plugins is None:
-            cls.typescript_plugins = find_typescript_plugin_contributions()
-        return cls.typescript_plugins
+    def _get_window_plugins(cls, window: sublime.Window | None) -> list[TypescriptPluginContribution]:
+        """Return the plugins registered for the window."""
+        return list(cls.registered_plugins.get(window.id(), {}).values()) if window else []
 
     @request_handler('_typescript.rename')
     def on_typescript_rename(self, params: TextDocumentPositionParams) -> Promise[None]:
@@ -282,7 +289,39 @@ def plugin_loaded() -> None:
 
 def plugin_unloaded() -> None:
     LspTypescriptPlugin.unregister()
-    LspTypescriptPlugin.typescript_plugins = None
+    LspTypescriptPlugin.registered_plugins.clear()
+
+
+class LspTypescriptRegisterPluginCommand(sublime_plugin.WindowCommand):
+    """
+    Register a TypeScript plugin to load in this window.
+
+    For packages that know where their plugin is only once their server starts. Run it from `on_pre_start_async`:
+
+    .. code:: py
+
+        window.run_command('lsp_typescript_register_plugin', {
+            'name': '@vue/typescript-plugin',
+            'location': '/path/to/node_modules',
+            'languages': ['vue'],
+            'selector': 'text.html.vue',
+        })
+
+    Registering it again with the same arguments does nothing. Registering a different `location` for the same `name`
+    replaces it and restarts the servers that loaded the previous one.
+    """
+
+    def is_visible(self) -> bool:
+        return False
+
+    def run(self, name: str, location: str, languages: list[str] | None = None, selector: str | None = None) -> None:
+        plugin: TypescriptPluginContribution = {'name': name, 'location': location}
+        if languages:
+            plugin['languages'] = languages
+        if selector:
+            plugin['selector'] = selector
+        window = self.window
+        sublime.set_timeout_async(lambda: LspTypescriptPlugin.register_plugin_async(window, plugin))
 
 
 class HoverParamsWithVerbosity(HoverParams):

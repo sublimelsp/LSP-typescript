@@ -115,23 +115,23 @@ Note: Inlay hints require TypeScript 4.4+.
 
 ## TypeScript Plugins Contribution
 
-Other packages can contribute TypeScript plugins that `LSP-typescript` will automatically load on start. This is achieved by including a `typescript-plugins.json` file in the package with the following contents (example taken from `LSP-vue`):
+Other packages can register TypeScript plugins for `LSP-typescript` to load. Register a plugin from the package's `on_pre_start_async`, once it knows where its server, and so the plugin, is. Example taken from `LSP-vue`:
 
-```json
-[
-    {
-        "name": "@vue/typescript-plugin",
-        "languages": ["vue"],
-        "selector": "text.html.vue",
-        "location": "${storage_path}/LSP-vue/server/node_modules/"
-    }
-]
+```py
+window.run_command('lsp_typescript_register_plugin', {
+    'name': '@vue/typescript-plugin',
+    'location': '/path/to/node_modules',
+    'languages': ['vue'],
+    'selector': 'text.html.vue',
+})
 ```
 
-- `name` specifies name of the plugin. It typically is a directory name within the `location` path.
+- `name` specifies the name of the plugin. It typically is a directory name within the `location` path.
+- `location` specifies a directory path that is accessible on the file system and contains the plugin.
 - `languages` (optional) specifies which file extensions the plugin wants to extend TypeScript support with.
 - `selector` (optional) specifies the view's root selector for which `LSP-typescript` should be started in addition to its normal selector.
-- `location` specifies a directory path that is accessible on the file system. Warning: It won't be possible to access the path if it points to a plugin within the shipped package if package ships in a compressed form. It must be either shipped with a `.no-sublime-package` file or extract/copy the plugin file into some location on the system.
+
+The registration applies to the window it is run in. `LSP-typescript` then starts for the views matching `selector`, and restarts in that window if it is already running without the plugin. Registering the same plugin again does nothing, while registering a different `location` for the same `name` replaces it.
 
 ## Usage in projects that also use Flow
 
