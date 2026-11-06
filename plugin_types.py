@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from LSP.plugin.core.typing import StrEnum
+from enum import Enum
 from LSP.protocol import Location
 from LSP.protocol import Position
 from LSP.protocol import URI
@@ -38,7 +38,7 @@ class ApplyRefactoringCommand(TypedDict):
     arguments: tuple[ApplyRefactoringArgument]
 
 
-class MoveToFileQuickPanelItemId(StrEnum):
+class MoveToFileQuickPanelItemId(str, Enum):
     ExistingFile = 'existing_file'
     NewFile = 'new_file'
 
