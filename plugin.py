@@ -25,9 +25,13 @@ from LSP.plugin import uri_from_view
 from LSP.plugin import uri_handler
 from LSP.protocol import DocumentUri
 from LSP.protocol import ExecuteCommandParams
-from LSP.protocol import Hover
-from LSP.protocol import HoverParams
 from LSP.protocol import LSPAny
+from LSP.protocol import MarkedString
+from LSP.protocol import MarkupContent
+from LSP.protocol import Position
+from LSP.protocol import ProgressToken
+from LSP.protocol import Range
+from LSP.protocol import TextDocumentIdentifier
 from lsp_utils import NodeManager
 from pathlib import Path
 from sublime_lib import ResourcePath
@@ -38,6 +42,7 @@ from typing import final
 from typing import TYPE_CHECKING
 from typing_extensions import NotRequired
 from typing_extensions import override
+from typing_extensions import TypedDict
 import os
 import sublime
 import sublime_plugin
@@ -324,11 +329,18 @@ class LspTypescriptRegisterPluginCommand(sublime_plugin.WindowCommand):
         sublime.set_timeout_async(lambda: LspTypescriptPlugin.register_plugin_async(window, plugin))
 
 
-class HoverParamsWithVerbosity(HoverParams):
+class HoverParamsWithVerbosity(TypedDict):
+    """`HoverParams` with the `verbosityLevel` extension."""
+    textDocument: TextDocumentIdentifier
+    position: Position
+    workDoneToken: NotRequired[ProgressToken]
     verbosityLevel: NotRequired[int]
 
 
-class VerbosityHover(Hover):
+class VerbosityHover(TypedDict):
+    """`Hover` with the `canIncreaseVerbosityLevel` extension."""
+    contents: MarkupContent | MarkedString | list[MarkedString]
+    range: NotRequired[Range]
     canIncreaseVerbosityLevel: NotRequired[bool]
 
 
